@@ -35,3 +35,67 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+/* Fondo blanco y texto negro */
+body, ion-content {
+  --background: #ffffff; /* Fondo blanco */
+  --color: #000000;      /* Texto negro */
+}
+
+/* Estilo para el encabezado */
+ion-toolbar {
+  --background: #ffe600; /* Fondo amarillo */
+  --color: #000000;      /* Texto negro */
+  --border-radius: 0;    /* Sin bordes redondeados para un encabezado limpio */
+  text-align: center;    /* Centrar el texto en el encabezado */
+}
+
+/* Estilo para el botón de iniciar sesión */
+ion-button {
+  --background: #0b4a8e; /* Azul oscuro para mayor contraste */
+  --color: #ffffff;      /* Texto blanco */
+  --border-radius: 8px;  /* Botón redondeado */
+  --padding: 12px 24px;  /* Relleno para los botones */
+  margin: 10px 0;        /* Espaciado entre botones */
+}
+
+/* Estilo para los botones de registro */
+ion-button.transparent {
+  --background: transparent;   /* Fondo transparente */
+  --border: 2px solid #007bff; /* Borde azul */
+  --color: #007bff;            /* Texto azul */
+  --border-radius: 8px;        /* Botones más redondeados */
+  --padding: 10px 20px;        /* Relleno de los botones */
+  font-weight: bold;           /* Texto en negrita */
+  margin-top: 10px;            /* Espacio superior para separación */
+  margin-bottom: 5px;          /* Espacio inferior para separación */
+}
+
+/* Estilo para los elementos del formulario */
+ion-item, ion-input {
+  --background: #f0f0f0; /* Fondo claro para entradas */
+  --border-radius: 5px;  /* Borde redondeado */
+  --color: #000000;      /* Texto negro */
+  margin-bottom: 15px;   /* Espacio entre elementos del formulario */
+}
+
+/* Imagen de logotipo */
+ion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+  padding: 20px; /* Padding alrededor del contenido para evitar que se pegue a los bordes */
+}
+
+ion-img {
+  max-width: 150px;  /* Ajusta el tamaño de la imagen según tus necesidades */
+  height: auto;
+  margin-bottom: 20px; /* Espaciado debajo de la imagen */
+  display: block;      /* Para asegurarse de que la imagen se renderice como un bloque */
+  margin-left: auto;   /* Centrando la imagen horizontalmente */
+  margin-right: auto;  /* Centrando la imagen horizontalmente */
+}

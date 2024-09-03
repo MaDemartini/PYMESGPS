@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Usuario } from '../models/usuario'; // Ajusta la ruta según tu estructura de carpetas
+import { Usuario } from '../models/usuario';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ServiceUsuarioService {
       id_usuario: 1,
       nombre_completo: "Juan Perez",
       correo_us: "jperez@example.com",
-      contraseña_us: bcrypt.hashSync("jperez123", 10),
+      contrasena_us: bcrypt.hashSync("jperez123", 10),
       rol: { 
         id_rol: 1, 
         nombre_rol: "admin", 
@@ -23,8 +23,8 @@ export class ServiceUsuarioService {
     {
       id_usuario: 2,
       nombre_completo: "Mario Demartini",
-      correo_us: "mdemartini@example.com",
-      contraseña_us: bcrypt.hashSync("mdemartini123", 10),
+      correo_us: "ma.demartini@duocuc.com",
+      contrasena_us: bcrypt.hashSync("demartini123", 10),
       rol: { 
         id_rol: 2, 
         nombre_rol: "emprendedor", 
@@ -36,9 +36,9 @@ export class ServiceUsuarioService {
 
   constructor() { }
 
-  validar_usuario(correo: string, contraseña: string): Usuario | null {
+  validar_usuario(correo: string, contrasena: string): Usuario | null {
     const usuario = this.lista_de_usuarios.find(u => u.correo_us === correo);
-    if (usuario && bcrypt.compareSync(contraseña, usuario.contraseña_us)) {
+    if (usuario && bcrypt.compareSync(contrasena, usuario.contrasena_us)) {
       return usuario;
     }
     return null;
@@ -48,13 +48,11 @@ export class ServiceUsuarioService {
     const usuarioExistente = this.lista_de_usuarios.find(u => u.correo_us === usuario.correo_us);
     if (!usuarioExistente) {
       const salt = bcrypt.genSaltSync(10);
-      usuario.contraseña_us = bcrypt.hashSync(usuario.contraseña_us, salt);
+      usuario.contrasena_us = bcrypt.hashSync(usuario.contrasena_us, salt);
       usuario.fecha_creacion = new Date();  // Asignar la fecha de creación actual
       this.lista_de_usuarios.push(usuario);
     } else {
       console.error('El usuario ya está registrado con este correo electrónico.');
     }
   }
-
-  
 }

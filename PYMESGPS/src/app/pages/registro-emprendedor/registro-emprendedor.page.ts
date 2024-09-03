@@ -40,4 +40,8 @@ export class RegistroEmprendedorPage implements OnInit {
       console.error('Formulario no válido');
     }
   }
+
+  volver() {
+    this.router.navigate(['/login']); // Redirige al usuario a la página de login
+  }
 }
