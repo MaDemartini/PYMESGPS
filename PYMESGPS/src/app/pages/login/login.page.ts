@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ServiceUsuarioService } from 'src/app/services/service-usuario.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private usuarioService: ServiceUsuarioService,
+    private supabaseService: SupabaseService,
     private router: Router
   ) {
     // Inicializamos el formulario de login con validaciones
@@ -26,29 +26,23 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   // Función para manejar el inicio de sesión
-  onLogin() {
+  async onLogin() {
     if (this.loginForm.valid) {
       const { correo_us, contrasena_us } = this.loginForm.value;
-      const usuarioValido = this.usuarioService.validar_usuario(correo_us, contrasena_us);
+      const usuarioValido = await this.supabaseService.validarUsuario(correo_us, contrasena_us);
+      
       if (usuarioValido) {
         console.log('Usuario autenticado:', usuarioValido);
-
         // Redirige a la página correspondiente según el rol
-        switch (usuarioValido.rol.nombre_rol) {
-          case 'admin':
-            this.router.navigate(['/home-admin']);
-            break;
-          case 'cliente':
-            this.router.navigate(['/home-cliente']);
-            break;
-          case 'emprendedor':
-            this.router.navigate(['/home-emprendedor']);
-            break;
-          case 'repartidor':
-            this.router.navigate(['/home-repartidor']);
-            break;
-          default:
-            console.error('Rol no reconocido');
+        // Puedes redirigir al home u otra página dependiendo del rol
+        if (usuarioValido.rol === 1) {
+          this.router.navigate(['/home-admin']);
+        } else if (usuarioValido.rol === 2) {
+          this.router.navigate(['/home-emprendedor']);
+        } else if (usuarioValido.rol === 3) {
+          this.router.navigate(['/home-repartidor']);
+        } else if (usuarioValido.rol === 4) {
+          this.router.navigate(['/home-cliente']);
         }
       } else {
         console.error('Credenciales incorrectas');

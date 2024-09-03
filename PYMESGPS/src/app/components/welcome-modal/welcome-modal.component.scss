@@ -1,7 +1,16 @@
-ion-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
+:host {
+  display: block;
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  max-height: 40%;
+  margin: 20% auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+ion-header, ion-toolbar, ion-content {
+  --background: transparent;
+}

@@ -99,3 +99,15 @@ ion-img {
   margin-left: auto;   /* Centrando la imagen horizontalmente */
   margin-right: auto;  /* Centrando la imagen horizontalmente */
 }
+
+
+
+.small-modal {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --max-height: 80%;
+  --border-radius: 10px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --background: #ffffff;
+}
