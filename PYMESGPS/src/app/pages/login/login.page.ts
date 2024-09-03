@@ -15,15 +15,15 @@ export class LoginPage implements OnInit {
   constructor(private fb: FormBuilder, private _usuarioService: ServiceUsuarioService, private router: Router) {
     this.loginForm = this.fb.group({
       correo_us: ['', [Validators.required, Validators.email]],
-      contraseña_us: ['', [Validators.required, Validators.minLength(6)]]
+      contrasena_us: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   ngOnInit() {}
 
   onLogin() {
-    const { correo_us, contraseña_us } = this.loginForm.value;
-    if (this._usuarioService.validar_usuario(correo_us, contraseña_us)) {
+    const { correo_us, contrasena_us } = this.loginForm.value;
+    if (this._usuarioService.validar_usuario(correo_us, contrasena_us)) {
       console.log("Usuario existe");
       this.router.navigate(['home']);
     } else {

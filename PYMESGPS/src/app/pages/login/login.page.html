@@ -1,19 +1,24 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Iniciar Sesión</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
     <ion-item>
-      <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input type="email" formControlName="correo_us"></ion-input>
+      <ion-label position="floating">Usuario</ion-label>
+      <ion-input formControlName="correo_us" type="email"></ion-input>
     </ion-item>
+
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" formControlName="contraseña_us"></ion-input>
+      <ion-input formControlName="contrasena_us" type="password"></ion-input>
     </ion-item>
+
     <ion-button expand="full" type="submit" [disabled]="loginForm.invalid">Iniciar Sesión</ion-button>
   </form>
+
+  <ion-button expand="full" fill="clear" routerLink="/registro-cliente">Registro Cliente</ion-button>
+  <ion-button expand="full" fill="clear" routerLink="/registro-emprendedor">Registro Emprendedor</ion-button>
 </ion-content>

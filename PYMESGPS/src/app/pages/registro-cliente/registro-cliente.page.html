@@ -1,13 +1,26 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>registro-cliente</ion-title>
+    <ion-title>Registro Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">registro-cliente</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="registroForm" (ngSubmit)="onRegister()">
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input formControlName="correo_us" type="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input formControlName="contrasena_us" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Nombre Completo</ion-label>
+      <ion-input formControlName="nombre_completo" type="text"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="registroForm.invalid">Registrar Cliente</ion-button>
+  </form>
 </ion-content>

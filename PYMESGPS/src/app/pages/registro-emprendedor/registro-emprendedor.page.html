@@ -4,20 +4,23 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <form [formGroup]="registroForm" (ngSubmit)="onRegister()">
     <ion-item>
-      <ion-label position="floating">Nombre Completo</ion-label>
-      <ion-input type="text" formControlName="nombre_completo"></ion-input>
-    </ion-item>
-    <ion-item>
       <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input type="email" formControlName="correo_us"></ion-input>
+      <ion-input formControlName="correo_us" type="email"></ion-input>
     </ion-item>
+
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" formControlName="contraseña_us"></ion-input>
+      <ion-input formControlName="contrasena_us" type="password"></ion-input>
     </ion-item>
-    <ion-button expand="full" type="submit" [disabled]="registroForm.invalid">Registrar</ion-button>
+
+    <ion-item>
+      <ion-label position="floating">Nombre Completo</ion-label>
+      <ion-input formControlName="nombre_completo" type="text"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="registroForm.invalid">Registrar Emprendedor</ion-button>
   </form>
 </ion-content>

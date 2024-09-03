@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario'; // Ajusta la ruta según tu estructura de carpetas
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,17 +36,25 @@ export class ServiceUsuarioService {
 
   constructor() { }
 
-  validar_usuario(correo: string, contraseña: string): boolean {
+  validar_usuario(correo: string, contraseña: string): Usuario | null {
     const usuario = this.lista_de_usuarios.find(u => u.correo_us === correo);
     if (usuario && bcrypt.compareSync(contraseña, usuario.contraseña_us)) {
-      return true;
+      return usuario;
     }
-    return false;
+    return null;
+  }
+  
+  registrarUsuario(usuario: Usuario): void {
+    const usuarioExistente = this.lista_de_usuarios.find(u => u.correo_us === usuario.correo_us);
+    if (!usuarioExistente) {
+      const salt = bcrypt.genSaltSync(10);
+      usuario.contraseña_us = bcrypt.hashSync(usuario.contraseña_us, salt);
+      usuario.fecha_creacion = new Date();  // Asignar la fecha de creación actual
+      this.lista_de_usuarios.push(usuario);
+    } else {
+      console.error('El usuario ya está registrado con este correo electrónico.');
+    }
   }
 
-  registrarUsuario(usuario: Usuario): void {
-    const salt = bcrypt.genSaltSync(10);
-    usuario.contraseña_us = bcrypt.hashSync(usuario.contraseña_us, salt);
-    this.lista_de_usuarios.push(usuario);
-  }
+  
 }
