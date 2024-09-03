@@ -32,8 +32,24 @@ export class LoginPage implements OnInit {
       const usuarioValido = this.usuarioService.validar_usuario(correo_us, contrasena_us);
       if (usuarioValido) {
         console.log('Usuario autenticado:', usuarioValido);
+
         // Redirige a la página correspondiente según el rol
-        this.router.navigate(['/home']); // Ajusta esta ruta según la lógica de tu aplicación
+        switch (usuarioValido.rol.nombre_rol) {
+          case 'admin':
+            this.router.navigate(['/home-admin']);
+            break;
+          case 'cliente':
+            this.router.navigate(['/home-cliente']);
+            break;
+          case 'emprendedor':
+            this.router.navigate(['/home-emprendedor']);
+            break;
+          case 'repartidor':
+            this.router.navigate(['/home-repartidor']);
+            break;
+          default:
+            console.error('Rol no reconocido');
+        }
       } else {
         console.error('Credenciales incorrectas');
         // Aquí podrías agregar una notificación de error en la interfaz
