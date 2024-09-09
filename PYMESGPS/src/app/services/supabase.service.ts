@@ -1,32 +1,31 @@
-import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import * as bcrypt from 'bcryptjs';
+import { Injectable } from '@angular/core'; // Permite que este servicio sea inyectado en otros componentes.
+import { createClient, SupabaseClient } from '@supabase/supabase-js'; // Crea un cliente de Supabase para interactuar con la base de datos.
+import * as bcrypt from 'bcryptjs'; // Importa bcrypt para encriptar y verificar contraseñas.
 
-const supabaseUrl = 'https://fsopvegvowmpvnmzemlc.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzb3B2ZWd2b3dtcHZubXplbWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzOTk2MzcsImV4cCI6MjA0MDk3NTYzN30.32gXrl7hrfNXndiG4wru92fkVI-BJQirbYW5M17s1dY';
-const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://fsopvegvowmpvnmzemlc.supabase.co'; // URL de la base de datos en Supabase.
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzb3B2ZWd2b3dtcHZubXplbWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzOTk2MzcsImV4cCI6MjA0MDk3NTYzN30.32gXrl7hrfNXndiG4wru92fkVI-BJQirbYW5M17s1dY'; // Clave API de Supabase.
+const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey); // Crea una instancia del cliente Supabase.
 
 @Injectable({
   providedIn: 'root'
-})
+}) // Define el servicio como disponible en todo el proyecto.
 export class SupabaseService {
 
-  constructor() {}
+  constructor() {} // Constructor vacío.
 
   // Función para registrar un usuario con rol
   async registrarUsuario(usuario: any, rol: number): Promise<boolean> {
-    // Encriptar la contraseña antes de enviarla a la base de datos
-    const salt = bcrypt.genSaltSync(10);
-    usuario.contrasena_us = bcrypt.hashSync(usuario.contrasena_us, salt);
-    usuario.rol = rol; // Asignar el ID del rol
+    const salt = bcrypt.genSaltSync(10); // Genera un salt para encriptar la contraseña.
+    usuario.contrasena_us = bcrypt.hashSync(usuario.contrasena_us, salt); // Encripta la contraseña del usuario.
+    usuario.rol = rol; // Asigna el rol al usuario.
 
-    const { data, error } = await supabase.from('usuario').insert([usuario]);
+    const { data, error } = await supabase.from('usuario').insert([usuario]); // Inserta el usuario en la tabla 'usuario'.
     if (error) {
-      console.error('Error al registrar usuario:', error.message);
+      console.error('Error al registrar usuario:', error.message); // Imprime error si la inserción falla.
       return false;
     }
-    console.log('Usuario registrado:', data);
-    return true;
+    console.log('Usuario registrado:', data); // Imprime el usuario registrado.
+    return true; // Retorna true si el registro fue exitoso.
   }
 
   // Función para validar un usuario
@@ -35,46 +34,40 @@ export class SupabaseService {
       .from('usuario')
       .select('*')
       .eq('correo_us', correo)
-      .single();
-
+      .single(); // Busca el usuario por correo en la tabla 'usuario'.
     if (error) {
-      console.error('Error al validar usuario:', error.message);
+      console.error('Error al validar usuario:', error.message); // Imprime error si falla la validación.
       return null;
     }
-
-    // Comparar la contraseña ingresada con la almacenada en la base de datos
-    if (data && bcrypt.compareSync(contrasena, data.contrasena_us)) {
-      return data;
+    if (data && bcrypt.compareSync(contrasena, data.contrasena_us)) { // Compara la contraseña ingresada con la encriptada en la base de datos.
+      return data; // Retorna los datos del usuario si la validación es correcta.
     }
-    return null;
+    return null; // Retorna null si la validación falla.
   }
 
   // Función para obtener el usuario actual
   async obtenerUsuarioActual(): Promise<any> {
-    const { data, error } = await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser(); // Obtiene el usuario autenticado.
     if (error) {
-      throw new Error('Error al obtener el usuario: ' + error.message);
+      throw new Error('Error al obtener el usuario: ' + error.message); // Lanza un error si falla la obtención.
     }
 
-    // Aquí deberías obtener más detalles del usuario desde la base de datos si es necesario
     const { data: usuario, error: usuarioError } = await supabase
       .from('usuario')
       .select('*')
       .eq('id_usuario', data?.user?.id)
-      .single();
-
+      .single(); // Busca detalles del usuario por ID.
     if (usuarioError) {
-      throw new Error('Error al obtener detalles del usuario: ' + usuarioError.message);
+      throw new Error('Error al obtener detalles del usuario: ' + usuarioError.message); // Lanza un error si falla la consulta.
     }
-
-    return usuario;
+    return usuario; // Retorna los detalles del usuario.
   }
 
   // Función para cerrar sesión
   async logout(): Promise<void> {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut(); // Cierra la sesión del usuario autenticado.
     if (error) {
-      throw new Error('Error al cerrar sesión: ' + error.message);
+      throw new Error('Error al cerrar sesión: ' + error.message); // Lanza un error si la salida falla.
     }
   }
 }
