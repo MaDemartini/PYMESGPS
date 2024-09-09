@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SupabaseService } from 'src/app/services/supabase.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { SupabaseService } from 'src/app/services/supabase.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   loginForm: FormGroup;
 
   constructor(
@@ -16,48 +16,34 @@ export class LoginPage implements OnInit {
     private supabaseService: SupabaseService,
     private router: Router
   ) {
-    // Inicializamos el formulario de login con validaciones
     this.loginForm = this.fb.group({
       correo_us: ['', [Validators.required, Validators.email]],
-      contrasena_us: ['', [Validators.required, Validators.minLength(6)]],
+      contrasena_us: ['', Validators.required],
     });
   }
 
-  ngOnInit() {}
-
-  // Función para manejar el inicio de sesión
   async onLogin() {
     if (this.loginForm.valid) {
       const { correo_us, contrasena_us } = this.loginForm.value;
-      const usuarioValido = await this.supabaseService.validarUsuario(correo_us, contrasena_us);
-      
-      if (usuarioValido) {
-        console.log('Usuario autenticado:', usuarioValido);
-        // Redirige a la página correspondiente según el rol
-        // Puedes redirigir al home u otra página dependiendo del rol
-        if (usuarioValido.rol === 1) {
-          this.router.navigate(['/home-admin']);
-        } else if (usuarioValido.rol === 2) {
-          this.router.navigate(['/home-emprendedor']);
-        } else if (usuarioValido.rol === 3) {
-          this.router.navigate(['/home-repartidor']);
-        } else if (usuarioValido.rol === 4) {
-          this.router.navigate(['/home-cliente']);
-        }
+
+      const usuario = await this.supabaseService.validarUsuario(correo_us, contrasena_us);
+
+      if (usuario) {
+        // Redirigir al usuario a la página de inicio
+        this.router.navigate(['/home']);
       } else {
-        console.error('Credenciales incorrectas');
-        // Aquí podrías agregar una notificación de error en la interfaz
+        console.error('Error al iniciar sesión');
       }
+    } else {
+      console.error('Formulario no válido');
     }
   }
 
-  // Función para redirigir al registro de cliente
   irARegistroCliente() {
-    this.router.navigate(['/registro-cliente']);
+    this.router.navigate(['/registro'], { state: { rol: 4 } });
   }
 
-  // Función para redirigir al registro de emprendedor
   irARegistroEmprendedor() {
-    this.router.navigate(['/registro-emprendedor']);
+    this.router.navigate(['/registro'], { state: { rol: 2 } });
   }
 }

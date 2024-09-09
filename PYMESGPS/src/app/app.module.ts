@@ -1,6 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';  // Importa ReactiveFormsModule aquí
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -15,6 +16,7 @@ import { WelcomeModalComponent } from './components/welcome-modal/welcome-modal.
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,  
     IonicModule.forRoot(),
     AppRoutingModule
   ],
