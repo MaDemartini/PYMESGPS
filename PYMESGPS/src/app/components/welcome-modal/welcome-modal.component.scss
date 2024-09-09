@@ -1,4 +1,4 @@
-:host {
+:host {          /*en Angular es una pseudo-clase que se utiliza para aplicar estilos al elemento raíz del componente*/
   display: block;
   width: 90%;
   max-width: 400px;
@@ -13,4 +13,6 @@
 
 ion-header, ion-toolbar, ion-content {
   --background: transparent;
+
+  /* comentario */
 }
