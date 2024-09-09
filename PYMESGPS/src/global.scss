@@ -1,0 +1,113 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+
+/* Fondo blanco y texto negro */
+body, ion-content {
+  --background: #ffffff; /* Fondo blanco */
+  --color: #000000;      /* Texto negro */
+}
+
+/* Estilo para el encabezado */
+ion-toolbar {
+  --background: #c5b315; /* Fondo amarillo */
+  --color: #000000;      /* Texto negro */
+  --border-radius: 0;    /* Sin bordes redondeados para un encabezado limpio */
+  text-align: center;    /* Centrar el texto en el encabezado */
+}
+
+/* Estilo para el botón de iniciar sesión */
+ion-button {
+  --background: #0b4a8e; /* Azul oscuro para mayor contraste */
+  --color: #ffffff;      /* Texto blanco */
+  --border-radius: 8px;  /* Botón redondeado */
+  --padding: 12px 24px;  /* Relleno para los botones */
+  margin: 10px 0;        /* Espaciado entre botones */
+}
+
+/* Estilo para los botones de registro */
+ion-button.transparent {
+  --background: transparent;   /* Fondo transparente */
+  --border: 2px solid #007bff; /* Borde azul */
+  --color: #007bff;            /* Texto azul */
+  --border-radius: 8px;        /* Botones más redondeados */
+  --padding: 10px 20px;        /* Relleno de los botones */
+  font-weight: bold;           /* Texto en negrita */
+  margin-top: 10px;            /* Espacio superior para separación */
+  margin-bottom: 5px;          /* Espacio inferior para separación */
+}
+
+/* Estilo para los elementos del formulario */
+ion-item, ion-input {
+  --background: #f0f0f0; /* Fondo claro para entradas */
+  --border-radius: 5px;  /* Borde redondeado */
+  --color: #000000;      /* Texto negro */
+  margin-bottom: 15px;   /* Espacio entre elementos del formulario */
+}
+
+/* Imagen de logotipo */
+ion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+  padding: 20px; /* Padding alrededor del contenido para evitar que se pegue a los bordes */
+}
+
+ion-img {
+  max-width: 150px;  /* Ajusta el tamaño de la imagen según tus necesidades */
+  height: auto;
+  margin-bottom: 20px; /* Espaciado debajo de la imagen */
+  display: block;      /* Para asegurarse de que la imagen se renderice como un bloque */
+  margin-left: auto;   /* Centrando la imagen horizontalmente */
+  margin-right: auto;  /* Centrando la imagen horizontalmente */
+}
+
+
+
+.small-modal {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --max-height: 80%;
+  --border-radius: 10px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --background: #ffffff;
+}
