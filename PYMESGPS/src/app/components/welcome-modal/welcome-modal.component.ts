@@ -11,7 +11,7 @@ export class WelcomeModalComponent implements OnInit {
 
   constructor(private modalController: ModalController) {}
 
-  ngOnInit() {}
+  ngOnInit() {}   //se utiliza para ejecutar lógica cuando el componente se inicializa
 
   close() {
     this.modalController.dismiss();
