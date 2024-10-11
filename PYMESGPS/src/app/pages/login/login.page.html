@@ -1,3 +1,4 @@
+<!-- login.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>PYME's GPS</ion-title>
@@ -14,18 +15,18 @@
     </ion-row>
   </ion-grid>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <form (ngSubmit)="login()">
     <ion-item>
       <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input type="email" formControlName="correo_us"></ion-input>
+      <ion-input type="email" [(ngModel)]="username" name="username"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" formControlName="contrasena_us"></ion-input>
+      <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
     </ion-item>
 
-    <ion-button expand="full" type="submit" [disabled]="loginForm.invalid">Iniciar Sesión</ion-button>
+    <ion-button expand="full" type="submit">Iniciar Sesión</ion-button>
   </form>
 
   <ion-button expand="full" class="transparent" (click)="irARegistroCliente()">Crear Cuenta Cliente</ion-button>

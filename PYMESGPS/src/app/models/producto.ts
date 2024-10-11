@@ -1,12 +1,14 @@
-import { Lote } from './lote';
+import { Usuario } from "./usuario";
 
 export interface Producto {
-  id_producto: number;
+  id_producto?: number;
   nombre_producto: string;
-  descripcion_producto: string;
-  codigo_qr_producto: string;
-  lote: Lote; // Relación directa con la tabla de lotes
-  cantidad_inventario: number;
-  precio: number; // Precio agregado para tener datos de venta
-  ultima_actualizacion: Date;
+  descripcion_producto?: string;
+  codigo_qr_producto?: string;
+  id_emprendedor: Usuario;
+  cantidad_inventario?: number;
+  precio_producto?: number;
+  estado_prod?: string;
+  fecha_creacion?: Date;
+  fecha_modificacion?: Date;
 }

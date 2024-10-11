@@ -1,53 +1,89 @@
-import { Component, OnInit } from '@angular/core'; // Decorador de componente.
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Módulos para manejo de formularios.
-import { Router } from '@angular/router'; // Servicio de navegación entre rutas.
-import { SupabaseService } from 'src/app/services/supabase.service'; // Servicio que gestiona la comunicación con Supabase.
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
+import * as bcrypt from "bcryptjs";
+import { AutentificacionService } from 'src/app/services/autentificacion/autentificacion.service';
 
 @Component({
-  selector: 'app-login', // Selector del componente.
-  templateUrl: './login.page.html', // Ruta a la plantilla HTML.
-  styleUrls: ['./login.page.scss'], // Ruta al archivo de estilos.
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
-  loginForm: FormGroup; // Definición del formulario de login.
+export class LoginPage implements OnInit {
+
+  username: string = "";
+  password: string = "";
 
   constructor(
-    private fb: FormBuilder, // FormBuilder para gestionar los formularios reactivos.
-    private supabaseService: SupabaseService, // Inyección del servicio de Supabase para interactuar con la base de datos.
-    private router: Router // Inyección del servicio Router para manejar la navegación.
-  ) {
-    // Definición y validación del formulario.
-    this.loginForm = this.fb.group({
-      correo_us: ['', [Validators.required, Validators.email]], // Campo de email con validaciones.
-      contrasena_us: ['', Validators.required], // Campo de contraseña con validación requerida.
-    });
+    private _authService: AutentificacionService,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    // Inicialización adicional si es necesaria
   }
 
-  // Método para iniciar sesión.
-  async onLogin() {
-    if (this.loginForm.valid) {
-      const { correo_us, contrasena_us } = this.loginForm.value;
+  // Función de inicio de sesión para administrador
+async loginAdmin(username: string, password: string) {
+  // Verificar si el nombre de usuario es 'admin'
+  if (username !== 'admin') {
+    console.warn("Nombre de usuario incorrecto");
+    return false;
+  }
 
-      const usuario = await this.supabaseService.validarUsuario(correo_us, contrasena_us); // Verificar las credenciales.
+  // Obtener la información del usuario desde el almacenamiento
+  const { value } = await Preferences.get({ key: 'user-info' });
 
-      if (usuario) {
-        // Si las credenciales son correctas, redirige a la página de inicio.
-        this.router.navigate(['/home']);
-      } else {
-        console.error('Error al iniciar sesión'); // Error en caso de credenciales incorrectas.
-      }
+    if (!value) {
+      console.warn("No se encontró la información del usuario");
+      return false;
+    }
+
+    const userInfo = JSON.parse(value);
+
+    // Verificar la contraseña con bcrypt
+    const passwordCorrect = await bcrypt.compare(password, userInfo.contraseña_us);
+
+    if (passwordCorrect) {
+      console.log("Inicio de sesión exitoso");
+      return true;
     } else {
-      console.error('Formulario no válido'); // Error si el formulario no pasa las validaciones.
+      console.warn("Contraseña incorrecta");
+      return false;
     }
   }
 
-  // Navegación a la página de registro para clientes.
-  irARegistroCliente() {
-    this.router.navigate(['/registro'], { state: { rol: 4 } }); // Redirige a la página de registro con el rol de cliente (rol = 4).
+  // Método para manejar el inicio de sesión
+  async login() {
+    if (this.username && this.password) {
+      try {
+        const usuarioExiste = await this._authService.autenticar(this.username, this.password).toPromise();
+
+        if (usuarioExiste) {
+          console.info("Usuario Existe");
+          this.router.navigate(['dashboard'], {
+            state: {
+              usuario: this.username
+            }
+          });
+        } else {
+          console.error("Usuario No existe");
+        }
+      } catch (error) {
+        console.error('Error durante la autenticación:', error);
+      }
+    } else {
+      console.error("Debes ingresar el usuario y la contraseña");
+    }
   }
 
-  // Navegación a la página de registro para emprendedores.
+  // Navegación a la página de registro para clientes
+  irARegistroCliente() {
+    this.router.navigate(['/registro'], { state: { rol: 4 } });
+  }
+
+  // Navegación a la página de registro para emprendedores
   irARegistroEmprendedor() {
-    this.router.navigate(['/registro'], { state: { rol: 2 } }); // Redirige a la página de registro con el rol de emprendedor (rol = 2).
+    this.router.navigate(['/registro'], { state: { rol: 2 } });
   }
 }

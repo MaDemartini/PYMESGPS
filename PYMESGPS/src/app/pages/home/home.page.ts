@@ -1,50 +1,119 @@
-import { Component, OnInit } from '@angular/core'; // Decorador para definir el componente.
-import { Router } from '@angular/router'; // Servicio para manejar la navegación.
-import { SupabaseService } from 'src/app/services/supabase.service'; // Servicio para interactuar con Supabase.
-import { Usuario } from 'src/app/models/usuario'; // Importa el modelo de Usuario.
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { Producto } from 'src/app/models/producto';
+import { Usuario } from 'src/app/models/usuario';
+import { ProductosService } from 'src/app/services/productos/productos.service';
+import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
 
 @Component({
-  selector: 'app-home', // Selector del componente.
-  templateUrl: './home.page.html', // Ruta a la plantilla HTML.
-  styleUrls: ['./home.page.scss'], // Ruta al archivo de estilos.
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  usuario!: Usuario; // Variable para almacenar la información del usuario.
+  productos: Producto[] = [];
+  usuario: Usuario | undefined;
+  codigoSeguimiento: string = ''; // Variable para el código de seguimiento
 
-  constructor(private router: Router, private supabaseService: SupabaseService) {}
+  constructor(
+    private _serviceProducto: ProductosService,
+    private _serviceUsuario: UsuarioService,
+    private router: Router,
+    private menuCtrl: MenuController
+  ) { }
 
   ngOnInit() {
-    // Obtener la información del usuario desde la navegación.
-    const navigate = this.router.getCurrentNavigation();
-    if (navigate?.extras.state) {
-      this.usuario = navigate.extras.state['userInfo']; // Extrae la información del usuario.
-    }
+    this.cargarUsuario();
+    this.cargarProductos();
   }
 
-  // Función para abrir el menú lateral.
   openMenu() {
-    document.querySelector('ion-menu')?.open(); // Abre el menú de Ionic.
+    this.menuCtrl.open(); // Abre el menú
   }
 
-  // Función para cerrar el menú lateral.
   closeMenu() {
-    document.querySelector('ion-menu')?.close(); // Cierra el menú de Ionic.
+    this.menuCtrl.close(); // Cierra el menú
   }
 
-  // Navega a la página del perfil del usuario.
-  goToProfile() {
-    this.router.navigate(['/perfil']); // Redirige a la página de perfil.
-    this.closeMenu(); // Cierra el menú tras la redirección.
-  }
-
-  // Función para cerrar la sesión del usuario.
-  async logout() {
-    try {
-      await this.supabaseService.logout(); // Cierra sesión usando el servicio Supabase.
-      this.router.navigate(['/login']); // Redirige al login.
-    } catch (error) {
-      console.error('Error al cerrar sesión', error); // Muestra el error en caso de fallo.
+  async cargarUsuario() {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation && navigation.extras.state) {
+      const username = navigation.extras.state['usuario'];
+      if (username) {
+        this.usuario = await this._serviceUsuario.obtenerUsuarios().toPromise().then(
+          usuarios => usuarios ? usuarios.find(u => u.username === username) : undefined
+        );
+      }
     }
-    this.closeMenu(); // Cierra el menú tras cerrar sesión.
+  }
+
+  async cargarProductos() {
+    try {
+      const productos = await this._serviceProducto.obtenerProductos().toPromise();
+      this.productos = productos ? productos : [];
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+    }
+  }
+
+  goToProfile() {
+    // Navegar a la página de perfil del usuario
+    console.log('Navegando al perfil del usuario...');
+    this.router.navigate(['/perfil'], { state: { usuario: this.usuario } });
+  }
+
+  logout() {
+    // Lógica para cerrar sesión
+    console.log('Cerrando sesión...');
+    // Aquí puedes agregar la lógica para limpiar datos del usuario o tokens de sesión
+    this.router.navigate(['/login']);
+  }
+
+  escanear() {
+    // Lógica para la funcionalidad de escanear
+    console.log('Escaneando código QR...');
+    // Aquí puedes agregar la integración con el plugin de la cámara o escáner QR
+  }
+
+  gestionarProductos() {
+    // Navegar a la página de gestión de productos
+    console.log('Navegando a la gestión de productos...');
+    this.router.navigate(['/productos']);
+  }
+
+  gestionarLotes() {
+    // Navegar a la página de gestión de lotes
+    console.log('Navegando a la gestión de lotes...');
+    this.router.navigate(['/lotes']);
+  }
+
+  verPedidos() {
+    // Navegar a la página de pedidos
+    console.log('Navegando a la página de pedidos...');
+    this.router.navigate(['/pedidos']);
+  }
+
+  rastrearPedido() {
+    // Lógica para rastrear el pedido con el código de seguimiento
+    if (this.codigoSeguimiento) {
+      console.log(`Rastreando pedido con código: ${this.codigoSeguimiento}`);
+      // Agregar la navegación o lógica para mostrar el resultado del rastreo
+      this.router.navigate(['/rastrear'], { state: { codigo: this.codigoSeguimiento } });
+    } else {
+      console.error('Por favor ingresa un código de seguimiento');
+    }
+  }
+
+  gestionarUsuarios() {
+    // Navegar a la página de gestión de usuarios
+    console.log('Navegando a la gestión de usuarios...');
+    this.router.navigate(['/usuarios']);
+  }
+
+  verReportes() {
+    // Navegar a la página de reportes
+    console.log('Navegando a la página de reportes...');
+    this.router.navigate(['/reportes']);
   }
 }

@@ -1,3 +1,4 @@
+<!-- home.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>Bienvenido a PYMEsGPS</ion-title>
@@ -9,6 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Menú lateral -->
 <ion-menu side="end" contentId="main-content">
   <ion-header>
     <ion-toolbar>
@@ -30,36 +32,75 @@
 </ion-menu>
 
 <ion-content id="main-content" class="ion-padding">
-  <!-- Mensaje de bienvenida -->
+  <!-- Contenido principal -->
   <ng-container *ngIf="usuario">
-    <h2>Bienvenido, {{ usuario.nombre_completo }}!</h2>
+    <div *ngIf="usuario.rol.nombre_rol === 'Repartidor'">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col size="12" class="ion-text-center">
+            <ion-img src="assets/img/qr-scan.png" alt="QR Scan" class="logo-img"></ion-img>
+            <h2>¡Hola, {{ usuario.nombre_completo }}!</h2>
+            <p>Escanea los códigos QR de las entregas.</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-button expand="full" color="primary" (click)="escanear()">Escanear</ion-button>
+    </div>
 
-    <!-- Opciones basadas en el rol del usuario -->
-    <div *ngIf="usuario.rol.nombre_rol === 'admin'">
-      <p>Acciones para administradores</p>
-      <!-- Agrega acciones exclusivas del administrador  -->
+    <div *ngIf="usuario.rol.nombre_rol === 'Emprendedor'">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col size="12" class="ion-text-center">
+            <ion-img src="assets/img/welcome.png" alt="Welcome" class="logo-img"></ion-img>
+            <h2>¡Bienvenido, {{ usuario.nombre_completo }}!</h2>
+            <p>Gestiona tus productos, lotes y pedidos.</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-button expand="full" color="primary" (click)="gestionarProductos()">Gestionar Productos</ion-button>
+      <ion-button expand="full" color="primary" (click)="gestionarLotes()">Gestionar Lotes</ion-button>
+      <ion-button expand="full" color="primary" (click)="verPedidos()">Ver Pedidos</ion-button>
     </div>
-    <div *ngIf="usuario.rol.nombre_rol === 'emprendedor'">
-      <p>Acciones para emprendedores</p>
-      <!-- Agrega acciones exclusivas del emprendedor  -->
+
+    <div *ngIf="usuario.rol.nombre_rol === 'Cliente'">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col size="12" class="ion-text-center">
+            <ion-img src="assets/img/track-order.png" alt="Track Order" class="logo-img"></ion-img>
+            <h2>¡Hola, {{ usuario.nombre_completo }}!</h2>
+            <p>Introduce el código de seguimiento para rastrear tu entrega.</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-label position="floating">Código de Seguimiento</ion-label>
+        <ion-input type="text" [(ngModel)]="codigoSeguimiento"></ion-input>
+      </ion-item>
+      <ion-button expand="full" color="primary" (click)="rastrearPedido()">Rastrear</ion-button>
     </div>
-    <div *ngIf="usuario.rol.nombre_rol === 'cliente'">
-      <p>Acciones para clientes</p>
-      <!-- Agrega acciones exclusivas del cliente  -->
-    </div>
-    <div *ngIf="usuario.rol.nombre_rol === 'repartidor'">
-      <p>Acciones para repartidores</p>
-      <!-- Agrega acciones exclusivas del repartidor  -->
+
+    <div *ngIf="usuario.rol.nombre_rol === 'Admin'">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col size="12" class="ion-text-center">
+            <ion-img src="assets/img/admin.png" alt="Admin" class="logo-img"></ion-img>
+            <h2>¡Hola, Administrador {{ usuario.nombre_completo }}!</h2>
+            <p>Gestiona la aplicación y los usuarios.</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-button expand="full" color="primary" (click)="gestionarUsuarios()">Gestionar Usuarios</ion-button>
+      <ion-button expand="full" color="primary" (click)="verReportes()">Ver Reportes</ion-button>
     </div>
   </ng-container>
 
-  <!-- Enlace a la página de contexto -->
+  <!-- Tarjeta informativa sobre el proyecto -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>Conoce más sobre PYMEsGPS</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Descubre más sobre cómo PYMEsGPS puede ayudarte a optimizar las operaciones de tu empresa.</p>
+      <p>Descubre cómo PYMEsGPS puede ayudarte a optimizar las operaciones de tu empresa.</p>
       <ion-button [routerLink]="['/contexto']">Ir a Contexto del Proyecto</ion-button>
     </ion-card-content>
   </ion-card>

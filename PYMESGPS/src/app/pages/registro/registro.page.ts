@@ -1,53 +1,64 @@
-import { Component } from '@angular/core'; // Importa el decorador de componente.
-import { Router } from '@angular/router'; // Servicio para la navegación entre rutas.
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Módulos para formularios reactivos.
-import { SupabaseService } from 'src/app/services/supabase.service'; // Servicio de Supabase.
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/usuarios/usuario.service';
+import { CrearUsuario } from 'src/app/models/Crear/crearUsuario';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
-  selector: 'app-registro', // Selector del componente.
-  templateUrl: './registro.page.html', // Ruta al template HTML del componente.
-  styleUrls: ['./registro.page.scss'], // Estilos específicos del componente.
+  selector: 'app-registro',
+  templateUrl: './registro.page.html',
+  styleUrls: ['./registro.page.scss'],
 })
-export class RegistroPage {
-  registroForm: FormGroup; // Grupo de formulario reactivo.
-  rol: number; // Variable para almacenar el rol del usuario.
+export class RegistroPage implements OnInit {
+  nombreCompleto: string = '';
+  correo: string = '';
+  username: string = '';
+  password: string = '';
+  rol: number | undefined;
 
   constructor(
-    private fb: FormBuilder, // Inyección de dependencia para construir formularios.
-    private supabaseService: SupabaseService, // Servicio para interactuar con Supabase.
-    private router: Router // Servicio para manejar la navegación.
-  ) {
-    this.registroForm = this.fb.group({
-      nombre_completo: ['', Validators.required], // Campo obligatorio para el nombre.
-      correo_us: ['', [Validators.required, Validators.email]], // Campo obligatorio para el correo, con validación de email.
-      contrasena_us: ['', Validators.required], // Campo obligatorio para la contraseña.
-    });
+    private _serviceUsuario: UsuarioService,
+    private router: Router
+  ) { }
 
-    // Obtener el rol desde el estado de la navegación
-    const navigation = this.router.getCurrentNavigation(); // Obtiene la navegación actual.
-    this.rol = (navigation?.extras?.state as any)?.rol || 4; // Default a rol 4 (Cliente) si no se proporciona otro.
+  ngOnInit() {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation && navigation.extras.state) {
+      this.rol = navigation.extras.state['rol'];
+    }
   }
 
-  async onRegister() {
-    if (this.registroForm.valid) { // Verifica si el formulario es válido.
-      const usuario = {
-        ...this.registroForm.value,
-        fecha_creacion: new Date(), // Asigna la fecha de creación actual al usuario.
+  async registrar() {
+    if (!this.nombreCompleto || !this.correo || !this.username || !this.password || this.rol === undefined) {
+      console.error("Debe completar todos los campos.");
+      return;
+    }
+
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(this.password, salt);
+
+      const nuevoUsuario: CrearUsuario = {
+        nombre_completo: this.nombreCompleto,
+        correo_us: this.correo,
+        username: this.username,
+        contraseña_us: hashedPassword,
+        rol: {
+          id_rol: this.rol, // Asegúrate de pasar un objeto completo con las propiedades necesarias
+          nombre_rol: '', // Puedes asignar un nombre vacío o manejarlo como lo necesites
+          descripcion_rol: '' // También puedes manejar esto según tu lógica de negocio
+        }
       };
 
-      const registrado = await this.supabaseService.registrarUsuario(usuario, this.rol); // Llama al servicio para registrar al usuario.
-
-      if (registrado) {
-        this.router.navigate(['/login']); // Redirige al login si el registro fue exitoso.
-      } else {
-        console.error('Error al registrar usuario'); // Muestra error si el registro falla.
-      }
-    } else {
-      console.error('Formulario no válido'); // Muestra error si el formulario no es válido.
+      await this._serviceUsuario.agregarNuevoUsuario(nuevoUsuario).toPromise();
+      console.info("Usuario registrado con éxito");
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error durante el registro del usuario:', error);
     }
   }
 
   volver() {
-    this.router.navigate(['/login']); // Navega de vuelta al login o ruta deseada.
+    this.router.navigate(['/login']);
   }
 }

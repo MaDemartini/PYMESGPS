@@ -1,6 +1,8 @@
+// Importamos los módulos necesarios para realizar las pruebas unitarias
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
+// Importamos el componente que queremos probar
 import { WelcomeModalComponent } from './welcome-modal.component';
 
 describe('WelcomeModalComponent', () => {
