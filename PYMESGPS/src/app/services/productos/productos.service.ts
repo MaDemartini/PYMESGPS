@@ -3,20 +3,18 @@ import { HttpParams } from '@angular/common/http';
 import { ApiConfigService } from '../apiconfig/apiconfig.service';
 import { Producto } from 'src/app/models/producto';
 import { Observable } from 'rxjs';
-import { ActualizarProducto } from 'src/app/models/Actualizar/actualizarProducto';
-import { CrearProducto } from 'src/app/models/Crear/crearProducto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductosService {
+export class ProductoService {
   private path = 'producto';
 
   constructor(private apiService: ApiConfigService) { }
 
-  // Obtener todos los productos con estado activo
+  // Obtener todos los productos
   obtenerProductos(): Observable<Producto[]> {
-    const params = new HttpParams().set('select', '*').set('estado_prod', 'eq.activo');
+    const params = new HttpParams().set('select', '*');
     return this.apiService.get<Producto[]>(this.path, { params });
   }
 
@@ -26,26 +24,19 @@ export class ProductosService {
     return this.apiService.get<Producto>(`${this.path}?id_producto=eq.${id}`, { params });
   }
 
-  // Agregar un nuevo producto con estado activo
-  agregarNuevoProducto(producto: CrearProducto): Observable<Producto> {
-    producto.estado_prod = 'activo';  // Estado inicial por defecto
+  // Agregar un nuevo producto
+  agregarProducto(producto: Producto): Observable<Producto> {
     return this.apiService.post<Producto>(this.path, producto);
   }
 
   // Actualizar un producto existente
-  actualizarProducto(id: number, productoActualizar: ActualizarProducto): Observable<Producto> {
-    return this.apiService.put<Producto>(`${this.path}?id_producto=eq.${id}`, productoActualizar);
+  actualizarProducto(id: number, producto: Partial<Producto>): Observable<Producto> {
+    return this.apiService.put<Producto>(`${this.path}?id_producto=eq.${id}`, producto);
   }
 
-  // Cambiar el estado de un producto (por ejemplo, a 'eliminado' o 'sin stock')
-  cambiarEstadoProducto(id: number, nuevoEstado: string): Observable<Producto> {
-    const data = { estado_prod: nuevoEstado };
-    return this.apiService.put<Producto>(`${this.path}?id_producto=eq.${id}`, data);
-  }
-
-  // Eliminar un producto (cambiar su estado a "eliminado")
+  // Eliminar un producto
   eliminarProducto(id: number): Observable<void> {
-    const data = { estado_prod: 'eliminado' };
+    const data = { estado_prod: 'inactivo' };
     return this.apiService.put<void>(`${this.path}?id_producto=eq.${id}`, data);
   }
 }

@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as bcrypt from 'bcryptjs';
 import { Preferences } from '@capacitor/preferences';
-import * as bcrypt from "bcryptjs";
-import { AutentificacionService } from 'src/app/services/autentificacion/autentificacion.service';
+import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
+import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartidor.service';
+import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
+import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
+import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
 
 @Component({
   selector: 'app-login',
@@ -10,80 +14,84 @@ import { AutentificacionService } from 'src/app/services/autentificacion/autenti
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-  username: string = "";
-  password: string = "";
+  username: string = '';
+  password: string = '';
 
   constructor(
-    private _authService: AutentificacionService,
-    private router: Router
-  ) { }
+    private clienteService: ClienteService,
+    private emprendedorService: EmprendedorService,
+    private repartidorService: RepartidorService,
+    private adminService: AdminService,
+    private router: Router,
+    private authService: AuthServiceService 
+  ) {}
 
-  ngOnInit() {
-    // Inicialización adicional si es necesaria
-  }
+  ngOnInit() {}
 
-  // Función de inicio de sesión para administrador
-async loginAdmin(username: string, password: string) {
-  // Verificar si el nombre de usuario es 'admin'
-  if (username !== 'admin') {
-    console.warn("Nombre de usuario incorrecto");
-    return false;
-  }
-
-  // Obtener la información del usuario desde el almacenamiento
-  const { value } = await Preferences.get({ key: 'user-info' });
-
-    if (!value) {
-      console.warn("No se encontró la información del usuario");
-      return false;
-    }
-
-    const userInfo = JSON.parse(value);
-
-    // Verificar la contraseña con bcrypt
-    const passwordCorrect = await bcrypt.compare(password, userInfo.contraseña_us);
-
-    if (passwordCorrect) {
-      console.log("Inicio de sesión exitoso");
-      return true;
-    } else {
-      console.warn("Contraseña incorrecta");
-      return false;
-    }
-  }
-
-  // Método para manejar el inicio de sesión
   async login() {
-    if (this.username && this.password) {
-      try {
-        const usuarioExiste = await this._authService.autenticar(this.username, this.password).toPromise();
+    if (!this.username || !this.password) {
+      console.error('Nombre de usuario y contraseña son obligatorios.');
+      return;
+    }
 
-        if (usuarioExiste) {
-          console.info("Usuario Existe");
-          this.router.navigate(['dashboard'], {
-            state: {
-              usuario: this.username
-            }
-          });
-        } else {
-          console.error("Usuario No existe");
-        }
-      } catch (error) {
-        console.error('Error durante la autenticación:', error);
+    try {
+      let persona: any;
+
+      const [clientes, emprendedores, repartidores, admins] = await Promise.all([
+        this.clienteService.obtenerClientePorUsername(this.username).toPromise(),
+        this.emprendedorService.obtenerEmprendedorPorUsername(this.username).toPromise(),
+        this.repartidorService.obtenerRepartidorPorUsername(this.username).toPromise(),
+        this.adminService.obtenerAdminPorUsername(this.username).toPromise(),
+      ]);
+
+      if (clientes?.length) {
+        persona = clientes[0];
+      } else if (emprendedores?.length) {
+        persona = emprendedores[0];
+      } else if (repartidores?.length) {
+        persona = repartidores[0];
+      } else if (admins?.length) {
+        persona = admins[0];
+      } else {
+        console.error('Usuario no encontrado.');
+        return;
       }
-    } else {
-      console.error("Debes ingresar el usuario y la contraseña");
+
+      const isPasswordCorrect = await bcrypt.compare(this.password, persona.contrasena);
+
+      if (!isPasswordCorrect) {
+        console.error('Contraseña incorrecta.');
+        return;
+      }
+
+      // Guardar la información del usuario en Preferences usando el authService
+      await this.authService.setEncryptedUserData(persona);
+
+      // Redirigir según el tipo de usuario
+      const esAdmin = await this.adminService.esAdmin(persona.id_admin).toPromise();
+      const esCliente = await this.clienteService.esCliente(persona.id_cliente).toPromise();
+      const esEmprendedor = await this.emprendedorService.esEmprendedor(persona.id_emprendedor).toPromise();
+      const esRepartidor = await this.repartidorService.esRepartidor(persona.id_repartidor).toPromise();
+
+      if (esAdmin) {
+        this.router.navigate(['/home-admin']);
+      } else if (esCliente) {
+        this.router.navigate(['/home-cliente']);
+      } else if (esEmprendedor || esRepartidor) {
+        this.router.navigate(['/home']);
+      }
+
+      console.info('Inicio de sesión exitoso.');
+    } catch (error) {
+      console.error('Error durante el inicio de sesión:', error);
     }
   }
 
-  // Navegación a la página de registro para clientes
   irARegistroCliente() {
-    this.router.navigate(['/registro'], { state: { rol: 4 } });
+    this.router.navigate(['/registro-cliente']);
   }
 
-  // Navegación a la página de registro para emprendedores
   irARegistroEmprendedor() {
-    this.router.navigate(['/registro'], { state: { rol: 2 } });
+    this.router.navigate(['/registro-emprendedor']);
   }
 }

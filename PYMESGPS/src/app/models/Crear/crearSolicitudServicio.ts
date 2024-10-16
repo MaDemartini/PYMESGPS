@@ -1,12 +1,8 @@
-import { Usuario } from '../usuario';
-import { Cliente } from '../cliente';
-
 export interface CrearSolicitudServicio {
-  id_emprendedor: Usuario;  // Relación con el emprendedor
-  id_reparador?: Usuario;   // Relación con el repartidor, puede ser opcional
-  id_cliente: Cliente;      // Relación con el cliente
-  nombre_servicio: string;
+  id_emprendedor: number;  // Relación con la tabla Emprendedor
+  id_repartidor: number;  // Relación con la tabla Repartidor
+  id_cliente: number;  // Relación con la tabla Cliente
+  id_lote: number;  // Relación con la tabla Lote
   estado_solicitud: string;
-  fecha_solicitud?: Date;   
-  observacion?: string;     // Campo opcional para agregar una nota o comentario
+  observacion?: string;
 }

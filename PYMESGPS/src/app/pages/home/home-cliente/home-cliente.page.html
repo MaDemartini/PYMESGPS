@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Bienvenido a PYMEsGPS</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openMenu()">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu side="end" contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menú</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeMenu()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item button (click)="goToProfile()">Perfil</ion-item>
+      <ion-item button (click)="logout()">Cerrar sesión</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-content id="main-content" class="ion-padding">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col size="12" class="ion-text-center">
+        <ion-img src="assets/img/track-order.png" alt="Track Order" class="logo-img"></ion-img>
+        <h2>¡Hola, {{ cliente?.nombre_completo }}!</h2>
+        <p>Introduce el código de seguimiento para rastrear tu entrega.</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item>
+    <ion-label position="floating">Código de Seguimiento</ion-label>
+    <ion-input type="text" [(ngModel)]="codigoSeguimiento"></ion-input>
+  </ion-item>
+  <ion-button expand="full" color="primary" (click)="rastrearPedido()">Rastrear</ion-button>
+</ion-content>

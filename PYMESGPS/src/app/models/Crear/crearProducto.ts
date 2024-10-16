@@ -1,11 +1,9 @@
-import { Usuario } from '../usuario';
-
 export interface CrearProducto {
-  nombre_prod: string;  
-  descripcion_prod?: string;  
-  codigo_qr_prod?: string;  
-  id_emprendedor: Usuario;  // Relación con el emprendedor (Usuario)
+  nombre_producto: string;
+  descripcion_producto?: string;
+  codigo_qr_producto?: string;
+  id_emprendedor: number;  // Relación con la tabla Emprendedor
   cantidad_inventario?: number;
-  precio_prod?: number; 
+  precio_producto?: number;
   estado_prod?: string;  // Estado inicial del producto
 }

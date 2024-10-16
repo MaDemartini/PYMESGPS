@@ -1,9 +1,7 @@
-import { Usuario } from '../usuario';
-
 export interface CrearLote {
+  nombre_lote: string;
+  id_cliente: number;  // Relación con la tabla Cliente
+  id_emprendedor: number;  // Relación con la tabla Emprendedor
+  precio_lote: number;
   codigo_seguimiento: string;
-  id_cliente: Usuario; // Relación con el cliente
-  id_emprendedor: Usuario; // Relación con el emprendedor
-  estado_lote: string; // Estado inicial del lote
-  fecha_creacion?: Date;
 }
