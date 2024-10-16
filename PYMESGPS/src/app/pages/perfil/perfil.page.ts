@@ -1,35 +1,64 @@
-import { Component, OnInit } from '@angular/core'; // Importa los decoradores para el componente.
-import { Router } from '@angular/router'; // Servicio para la navegación.
-import { SupabaseService } from 'src/app/services/supabase.service'; // Servicio de Supabase.
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
+import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
+import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartidor.service';
+import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
+import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
 
 @Component({
-  selector: 'app-perfil', // Selector del componente.
-  templateUrl: './perfil.page.html', // Ruta al archivo HTML del perfil.
-  styleUrls: ['./perfil.page.scss'], // Ruta al archivo de estilos.
+  selector: 'app-perfil',
+  templateUrl: './perfil.page.html',
+  styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  usuario: any; // Variable para almacenar los datos del usuario actual.
+  emprendedor: any;
+  cliente: any;
+  repartidor: any;
+  admin: any;
 
-  constructor(private supabaseService: SupabaseService, private router: Router) {} // Inyección de dependencias.
+  constructor(
+    private clienteService: ClienteService,
+    private repartidorService: RepartidorService,
+    private emprendedorService: EmprendedorService,
+    private adminService: AdminService,
+    private router: Router
+  ) {}
 
-  async ngOnInit() {
-    try {
-      this.usuario = await this.supabaseService.obtenerUsuarioActual(); // Carga los datos del usuario al iniciar el componente.
-    } catch (error) {
-      console.error('Error al cargar el perfil:', error); // Muestra error si falla la carga del perfil.
+  ngOnInit() {
+    this.cargarPerfilUsuario();
+  }
+
+  async cargarPerfilUsuario() {
+    const { value } = await Preferences.get({ key: 'user-info' });
+    if (value) {
+      const usuario = JSON.parse(value);
+
+      if (usuario.id_cliente) {
+        this.clienteService.obtenerClientePorId(usuario.id_cliente).subscribe((data) => {
+          this.cliente = data;
+        });
+      } else if (usuario.id_emprendedor) {
+        this.emprendedorService.obtenerEmprendedorPorId(usuario.id_emprendedor).subscribe((data) => {
+          this.emprendedor = data;
+        });
+      } else if (usuario.id_repartidor) {
+        this.repartidorService.obtenerRepartidorPorId(usuario.id_repartidor).subscribe((data) => {
+          this.repartidor = data;
+        });
+      } else if (usuario.id_admin) {
+        this.adminService.obtenerAdminPorId(usuario.id_admin).subscribe((data) => {
+          this.admin = data;
+        });
+      }
     }
   }
 
-  async logout() {
-    try {
-      await this.supabaseService.logout(); // Llama al servicio para cerrar sesión.
-      this.router.navigate(['/login']); // Navega a la página de login tras cerrar sesión.
-    } catch (error) {
-      console.error('Error al cerrar sesión', error); // Muestra error si falla el cierre de sesión.
-    }
+  logout() {
+    this.router.navigate(['/login']);
   }
 
   volver() {
-    this.router.navigate(['/home']); // Navega de vuelta a la página principal.
+    this.router.navigate(['/home']);
   }
 }

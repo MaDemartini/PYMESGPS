@@ -1,4 +1,3 @@
-<!-- perfil.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>Perfil</ion-title>
@@ -14,8 +13,17 @@
       <ion-card-title>Mi Perfil</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p><strong>Nombre:</strong> {{ usuario?.nombre_completo }}</p>
-      <p><strong>Rol:</strong> {{ usuario?.nombre_rol }}</p>
+      <p *ngIf="emprendedor"><strong>Nombre:</strong> {{ emprendedor?.nombre_completo }}</p>
+      <p *ngIf="cliente"><strong>Nombre:</strong> {{ cliente?.nombre_completo }}</p>
+      <p *ngIf="repartidor"><strong>Nombre:</strong> {{ repartidor?.nombre_completo }}</p>
+      <p *ngIf="admin"><strong>Nombre:</strong> {{ admin?.nombre_completo }}</p>
+      
+      <p><strong>Rol:</strong> 
+        <span *ngIf="emprendedor">Emprendedor</span>
+        <span *ngIf="cliente">Cliente</span>
+        <span *ngIf="repartidor">Repartidor</span>
+        <span *ngIf="admin">Administrador</span>
+      </p>
       <ion-button expand="full" (click)="logout()">Cerrar sesión</ion-button>
     </ion-card-content>
   </ion-card>
