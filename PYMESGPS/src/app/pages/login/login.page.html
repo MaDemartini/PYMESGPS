@@ -1,34 +1,40 @@
-<!-- login.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>PYME's GPS</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-col size="12" class="ion-text-center">
-        <ion-img src="assets/img/PYME-LOGO.png" alt="Logo" class="logo-img"></ion-img>
-        <h2 style="margin-top: 10px;">PYME's GPS</h2>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content class="ion-padding" id="login-content">
+  <div class="logo-container">
+    <img src="assets/img/PYME-LOGO.png" alt="PYME's GPS Logo" class="logo-img" />
+    <h1>PYME's GPS</h1>
+    <p class="context-text">Optimiza la logística y gestión de tus PYMEs con nuestra aplicación.</p>
+  </div>
 
-  <form (ngSubmit)="login()">
-    <ion-item>
-      <ion-label position="floating">Nombre de Usuario</ion-label>
-      <ion-input type="username" [(ngModel)]="username" name="username"></ion-input>
-    </ion-item>
+  <ion-item class="input-item">
+    <ion-label position="floating">Nombre de Usuario</ion-label>
+    <ion-input type="text" [(ngModel)]="username"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
-    </ion-item>
+  <ion-item class="input-item">
+    <ion-label position="floating">Contraseña</ion-label>
+    <ion-input [type]="passwordType" [(ngModel)]="password"></ion-input>
+    <ion-icon slot="end" [name]="passwordIcon" (click)="togglePassword()"></ion-icon>
+  </ion-item>
 
-    <ion-button expand="full" type="submit">Iniciar Sesión</ion-button>
-  </form>
+  <ion-button expand="full" color="primary" (click)="login()" class="login-btn">
+    INICIAR SESIÓN
+  </ion-button>
 
-  <ion-button expand="full" class="transparent" (click)="irARegistroCliente()">Crear Cuenta Cliente</ion-button>
-  <ion-button expand="full" class="transparent" (click)="irARegistroEmprendedor()">Crear Cuenta Emprendedor</ion-button>
+  <ion-button expand="full" fill="clear" color="dark" (click)="irARegistroCliente()">
+    CREAR CUENTA CLIENTE
+  </ion-button>
+
+  <ion-button expand="full" fill="clear" color="dark" (click)="irARegistroEmprendedor()">
+    CREAR CUENTA EMPRENDEDOR
+  </ion-button>
+
+  <ion-button expand="full" fill="clear" color="dark" (click)="irAContexto()">
+    ¿QUÉ ES PYMESGPS?
+  </ion-button>
 </ion-content>

@@ -1,0 +1,106 @@
+<ion-header> 
+  <ion-toolbar color="primary">
+    <ion-title>Gestionar Repartidores</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="solicitarRepartidor()" [disabled]="!tieneRepartidores()" fill="clear">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>     
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Sección Mis Repartidores -->
+  <h2 class="section-title">Mis Repartidores</h2>
+  <ion-grid *ngIf="repartidores.length > 0; else noRepartidores">
+    <ion-row>
+      <ion-col size="12" *ngFor="let repartidor of repartidores">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ repartidor.nombre_completo }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Correo:</strong> {{ repartidor.correo }}</p>
+            <p><strong>Username:</strong> {{ repartidor.username }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ng-template #noRepartidores>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p>No tienes repartidores actualmente.</p>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+
+  <!-- Sección Solicitudes Aprobadas -->
+  <h2 class="section-title">Solicitudes Aprobadas</h2>
+  <ion-list *ngIf="solicitudesAprobadas.length > 0; else noSolicitudesAprobadas">
+    <ion-item *ngFor="let solicitud of solicitudesAprobadas">
+      <ion-label>
+        <h2>{{ solicitud.nombre_completo }}</h2>
+        <p>{{ solicitud.correo }}</p>
+        <p><strong>Estado:</strong> Aprobada</p>
+      </ion-label>
+      <ion-button *ngIf="solicitud.id_solicitud" color="primary" fill="outline" (click)="registrarRepartidor(solicitud.id_solicitud)">
+        Registrar Repartidor
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noSolicitudesAprobadas>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p>No tienes solicitudes aprobadas.</p>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+
+  <!-- Sección Solicitudes Pendientes -->
+  <h2 class="section-title">Solicitudes Pendientes</h2>
+  <ion-list *ngIf="solicitudesPendientes.length > 0; else noSolicitudesPendientes">
+    <ion-item *ngFor="let solicitud of solicitudesPendientes">
+      <ion-label>
+        <h2>{{ solicitud.nombre_completo }}</h2>
+        <p>{{ solicitud.correo }}</p>
+        <p><strong>Estado:</strong> Pendiente</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noSolicitudesPendientes>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p>No tienes solicitudes pendientes.</p>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+
+  <!-- Sección Solicitudes Rechazadas -->
+  <h2 class="section-title">Solicitudes Rechazadas</h2>
+  <ion-list *ngIf="solicitudesRechazadas.length > 0; else noSolicitudesRechazadas">
+    <ion-item *ngFor="let solicitud of solicitudesRechazadas">
+      <ion-label>
+        <h2>{{ solicitud.nombre_completo }}</h2>
+        <p>{{ solicitud.correo }}</p>
+        <p><strong>Estado:</strong> Rechazada</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noSolicitudesRechazadas>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p>No tienes solicitudes rechazadas.</p>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+</ion-content>

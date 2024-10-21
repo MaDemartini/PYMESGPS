@@ -18,7 +18,10 @@ export class ClienteService {
   // Obtener un cliente por ID usando HttpParams
   obtenerClientePorId(id: number): Observable<Cliente> {
     const params = new HttpParams().set('id_cliente', `eq.${id}`);
-    return this.apiService.get<Cliente>(this.path, { params });
+    return this.apiService.get<Cliente[]>(this.path, { params })
+      .pipe(
+        map((cliente: Cliente[]) => cliente[0])
+      );
   }
 
   obtenerClientePorUsername(username: string): Observable<any> {

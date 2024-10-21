@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Revisión de Solicitudes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>Solicitudes Pendientes</h2>
+  
+  <ion-list *ngIf="solicitudesPendientes.length > 0; else noSolicitudes">
+    <ion-item *ngFor="let solicitud of solicitudesPendientes">
+      <ion-label>
+        <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
+        <p>Emprendedor: {{ solicitud.nombre_completo }}</p>
+        <p><strong>Estado:</strong> {{ solicitud.id_estado_solicitud }}</p> <!-- Aquí muestra el estado directamente -->
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button color="success" (click)="actualizarEstadoSolicitud(solicitud.id_solicitud, 'aprobada')">
+          <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+          Aprobar
+        </ion-button>
+        <ion-button color="danger" (click)="actualizarEstadoSolicitud(solicitud.id_solicitud, 'rechazada')">
+          <ion-icon slot="start" name="close-outline"></ion-icon>
+          Rechazar
+        </ion-button>
+      </ion-buttons>
+    </ion-item>    
+  </ion-list>
+
+  <ng-template #noSolicitudes>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p>No hay solicitudes pendientes.</p>
+      </ion-col>
+    </ion-row>
+  </ng-template>
+</ion-content>

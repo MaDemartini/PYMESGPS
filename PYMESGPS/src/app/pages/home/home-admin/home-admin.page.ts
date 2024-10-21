@@ -4,6 +4,8 @@ import { MenuController } from '@ionic/angular';
 import { Preferences } from '@capacitor/preferences';
 import { Admin } from 'src/app/models/Usuarios/admin';
 import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
+import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home-admin',
@@ -11,16 +13,20 @@ import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
   styleUrls: ['./home-admin.page.scss'],
 })
 export class HomeAdminPage implements OnInit {
-  admin: Admin | undefined;
+  admin: boolean = false;
+  adminData: any;
+
 
   constructor(
     private menuCtrl: MenuController,
     private adminService: AdminService,
+    private authService: AuthServiceService,  // Usamos AuthService para la autenticación
     private router: Router
   ) {}
 
   ngOnInit() {
     this.cargarAdmin();
+    this.menuCtrl.enable(true);  // Asegúrate de habilitar el menú cuando la página se carga
   }
 
   openMenu() {
@@ -32,9 +38,16 @@ export class HomeAdminPage implements OnInit {
   }
 
   async cargarAdmin() {
-    const { value } = await Preferences.get({ key: 'user-info' });
-    if (value) {
-      this.admin = JSON.parse(value);
+    const usuario = await this.authService.getDecryptedUserData();
+    if (usuario && usuario.id_admin) {
+      this.admin = true;
+      const adminInfo = await lastValueFrom(this.adminService.obtenerAdminPorId(usuario.id_admin));
+
+      this.adminData = Array.isArray(adminInfo) ? adminInfo[0] : adminInfo;
+
+    } else {
+      this.admin = false;
+      this.adminData = null;
     }
   }
 
@@ -53,4 +66,17 @@ export class HomeAdminPage implements OnInit {
   logout() {
     this.router.navigate(['/login']);
   }
+
+  goToConfig() {
+    this.router.navigate(['/configuracion']);
+  }
+
+  goToSupport() {
+    this.router.navigate(['/soporte']);
+  }
+  
+  verSolicitudesEmprendedorReparto() {
+    this.router.navigate(['/solicitudes-emprendedores-reparto']);
+  }  
+
 }

@@ -1,8 +1,10 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Perfil</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="volver()">Volver</ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -19,10 +21,10 @@
       <p *ngIf="admin"><strong>Nombre:</strong> {{ admin?.nombre_completo }}</p>
       
       <p><strong>Rol:</strong> 
-        <span *ngIf="emprendedor">Emprendedor</span>
-        <span *ngIf="cliente">Cliente</span>
-        <span *ngIf="repartidor">Repartidor</span>
-        <span *ngIf="admin">Administrador</span>
+        <span *ngIf="emprendedor"> Emprendedor</span>
+        <span *ngIf="cliente"> Cliente</span>
+        <span *ngIf="repartidor"> Repartidor</span>
+        <span *ngIf="admin"> Administrador</span>
       </p>
       <ion-button expand="full" (click)="logout()">Cerrar sesión</ion-button>
     </ion-card-content>

@@ -15,7 +15,7 @@ export class ContextoPage implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/login']); 
   }
   
 }

@@ -17,7 +17,10 @@ export class AdminService {
   // Obtener un admin por ID usando HttpParams
   obtenerAdminPorId(id: number): Observable<Admin> {
     const params = new HttpParams().set('id_admin', `eq.${id}`);
-    return this.apiService.get<Admin>(this.path, { params });
+    return this.apiService.get<Admin[]>(this.path, { params })
+      .pipe(
+        map((admin: Admin[]) => admin[0])
+      );
   }
 
   // Obtener un admin por su username
@@ -25,6 +28,11 @@ export class AdminService {
     const params = new HttpParams().set('username', `eq.${username}`);
     return this.apiService.get<Admin[]>(`${this.path}`, { params });
   }
+
+  //Registrar un nuevo admin
+  //registrarAdmin(admin: CrearAdmin): Observable<any> {
+  //  return this.apiService.post(this.path, admin);
+  //}
 
   // Verificar si es Admin
   esAdmin(id_admin: number): Observable<boolean> {

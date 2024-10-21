@@ -1,0 +1,28 @@
+ion-header, ion-toolbar {
+    --background: #007bff; /* Color principal */
+    --color: #fff;         /* Texto blanco */
+  }
+  
+  h2 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+  }
+  
+  ion-card {
+    --background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  ion-button {
+    --border-radius: 8px;
+    margin: 8px 0;
+  }
+  

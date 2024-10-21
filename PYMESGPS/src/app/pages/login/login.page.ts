@@ -7,6 +7,7 @@ import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartid
 import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
 import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
+import { firstValueFrom } from 'rxjs'; // Importamos firstValueFrom
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,8 @@ import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
 export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
+  passwordType: string = 'password';  // Controla el tipo de input para la contraseña
+  passwordIcon: string = 'eye-off';   // Controla el icono de mostrar/ocultar
 
   constructor(
     private clienteService: ClienteService,
@@ -28,6 +31,12 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
+  // Lógica para cambiar el tipo de input de la contraseña
+  togglePassword() {
+    this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+    this.passwordIcon = this.passwordType === 'password' ? 'eye-off' : 'eye';
+  }
+
   async login() {
     if (!this.username || !this.password) {
       console.error('Nombre de usuario y contraseña son obligatorios.');
@@ -35,29 +44,29 @@ export class LoginPage implements OnInit {
     }
 
     try {
-      let persona: any;
+      let usuario: any;
 
       const [clientes, emprendedores, repartidores, admins] = await Promise.all([
-        this.clienteService.obtenerClientePorUsername(this.username).toPromise(),
-        this.emprendedorService.obtenerEmprendedorPorUsername(this.username).toPromise(),
-        this.repartidorService.obtenerRepartidorPorUsername(this.username).toPromise(),
-        this.adminService.obtenerAdminPorUsername(this.username).toPromise(),
+        firstValueFrom(this.clienteService.obtenerClientePorUsername(this.username)),
+        firstValueFrom(this.emprendedorService.obtenerEmprendedorPorUsername(this.username)),
+        firstValueFrom(this.repartidorService.obtenerRepartidorPorUsername(this.username)),
+        firstValueFrom(this.adminService.obtenerAdminPorUsername(this.username)),
       ]);
 
       if (clientes?.length) {
-        persona = clientes[0];
+        usuario = clientes[0];
       } else if (emprendedores?.length) {
-        persona = emprendedores[0];
+        usuario = emprendedores[0];
       } else if (repartidores?.length) {
-        persona = repartidores[0];
+        usuario = repartidores[0];
       } else if (admins?.length) {
-        persona = admins[0];
+        usuario = admins[0];
       } else {
         console.error('Usuario no encontrado.');
         return;
       }
 
-      const isPasswordCorrect = await bcrypt.compare(this.password, persona.contrasena);
+      const isPasswordCorrect = await bcrypt.compare(this.password, usuario.contrasena);
 
       if (!isPasswordCorrect) {
         console.error('Contraseña incorrecta.');
@@ -65,13 +74,13 @@ export class LoginPage implements OnInit {
       }
 
       // Guardar la información del usuario en Preferences usando el authService
-      await this.authService.setEncryptedUserData(persona);
+      await this.authService.setEncryptedUserData(usuario);
 
-      // Redirigir según el tipo de usuario
-      const esAdmin = await this.adminService.esAdmin(persona.id_admin).toPromise();
-      const esCliente = await this.clienteService.esCliente(persona.id_cliente).toPromise();
-      const esEmprendedor = await this.emprendedorService.esEmprendedor(persona.id_emprendedor).toPromise();
-      const esRepartidor = await this.repartidorService.esRepartidor(persona.id_repartidor).toPromise();
+      // Verificar y redirigir según el tipo de usuario
+      const esAdmin = usuario.id_admin ? await firstValueFrom(this.adminService.esAdmin(usuario.id_admin)) : false;
+      const esCliente = usuario.id_cliente ? await firstValueFrom(this.clienteService.esCliente(usuario.id_cliente)) : false;
+      const esEmprendedor = usuario.id_emprendedor ? await firstValueFrom(this.emprendedorService.esEmprendedor(usuario.id_emprendedor)) : false;
+      const esRepartidor = usuario.id_repartidor ? await firstValueFrom(this.repartidorService.esRepartidor(usuario.id_repartidor)) : false;
 
       if (esAdmin) {
         this.router.navigate(['/home-admin']);
@@ -93,5 +102,9 @@ export class LoginPage implements OnInit {
 
   irARegistroEmprendedor() {
     this.router.navigate(['/registro-emprendedor']);
+  }
+
+  irAContexto(){
+    this.router.navigate(['/contexto']);
   }
 }

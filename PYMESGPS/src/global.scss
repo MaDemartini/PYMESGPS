@@ -5,8 +5,6 @@
  * the entire app and not just one component. Additionally, this file can be
  * used as an entry point to import other CSS/Sass files to be included in the
  * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -25,62 +23,82 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
+/* Dark Mode Palettes (optional) */
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
 
-/* Fondo blanco y texto negro */
+/* --------- Global Styles --------- */
+
+/* Fondo blanco y texto negro por defecto */
 body, ion-content {
   --background: #ffffff; /* Fondo blanco */
   --color: #000000;      /* Texto negro */
 }
 
-/* Estilo para el encabezado */
+/* Estilo para el encabezado (ajuste de color del fondo y texto) */
 ion-toolbar {
-  --background: #c5b315; /* Fondo amarillo */
-  --color: #000000;      /* Texto negro */
-  --border-radius: 0;    /* Sin bordes redondeados para un encabezado limpio */
-  text-align: center;    /* Centrar el texto en el encabezado */
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0); /* Fondo gradiente */
+  --color: #ffffff;   /* Texto blanco */
+  --border-radius: 0; /* Sin bordes redondeados */
+  --height: 60px;     /* Altura personalizada */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  text-align: center;
 }
 
-/* Estilo para el botón de iniciar sesión */
+/* Título del encabezado */
+ion-title {
+  font-size: 1.2rem; /* Ajustar tamaño del texto */
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Manejar títulos largos */
+}
+
+/* Estilo para los botones de la app */
 ion-button {
-  --background: #0b4a8e; /* Azul oscuro para mayor contraste */
+  --background: #0b4a8e; /* Azul oscuro */
   --color: #ffffff;      /* Texto blanco */
-  --border-radius: 8px;  /* Botón redondeado */
-  --padding: 12px 24px;  /* Relleno para los botones */
+  --border-radius: 8px;  /* Botones redondeados */
+  --padding: 12px 24px;  /* Padding para botones */
   margin: 10px 0;        /* Espaciado entre botones */
+  width: 100%;           /* Botones ocupan todo el ancho del contenedor */
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
-/* Estilo para los botones de registro */
+/* Botones con transparencia (para botones secundarios) */
 ion-button.transparent {
   --background: transparent;   /* Fondo transparente */
   --border: 2px solid #007bff; /* Borde azul */
   --color: #007bff;            /* Texto azul */
-  --border-radius: 8px;        /* Botones más redondeados */
-  --padding: 10px 20px;        /* Relleno de los botones */
-  font-weight: bold;           /* Texto en negrita */
-  margin-top: 10px;            /* Espacio superior para separación */
-  margin-bottom: 5px;          /* Espacio inferior para separación */
+  --border-radius: 8px;        /* Bordes redondeados */
+  --padding: 10px 20px;        /* Padding */
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+/* Estilo para los botones de íconos */
+ion-button ion-icon {
+  font-size: 20px; /* Tamaño ajustado para íconos */
+  margin-right: 8px; /* Separar el ícono del texto */
 }
 
 /* Estilo para los elementos del formulario */
 ion-item, ion-input {
-  --background: #f0f0f0; /* Fondo claro para entradas */
-  --border-radius: 5px;  /* Borde redondeado */
+  --background: #f0f0f0; /* Fondo claro */
+  --border-radius: 5px;  /* Bordes redondeados */
   --color: #000000;      /* Texto negro */
-  margin-bottom: 15px;   /* Espacio entre elementos del formulario */
+  margin-bottom: 15px;   /* Espacio entre campos del formulario */
 }
 
-/* Imagen de logotipo */
+/* Estilo para la imagen del logotipo */
 ion-content {
   display: flex;
   justify-content: center;
@@ -88,20 +106,110 @@ ion-content {
   flex-direction: column;
   height: 100%;
   text-align: center;
-  padding: 20px; /* Padding alrededor del contenido para evitar que se pegue a los bordes */
+  padding: 20px; /* Padding para evitar que el contenido se pegue a los bordes */
 }
 
 ion-img {
-  max-width: 150px;  /* Ajusta el tamaño de la imagen según tus necesidades */
+  max-width: 150px;    /* Ajusta el tamaño de la imagen según tus necesidades */
   height: auto;
-  margin-bottom: 20px; /* Espaciado debajo de la imagen */
-  display: block;      /* Para asegurarse de que la imagen se renderice como un bloque */
-  margin-left: auto;   /* Centrando la imagen horizontalmente */
-  margin-right: auto;  /* Centrando la imagen horizontalmente */
+  margin-bottom: 20px; /* Espacio debajo de la imagen */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* Estilo para los cards */
+ion-card {
+  --box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  --background: #f9f9f9;
+  border-radius: 12px; /* Bordes redondeados */
+  margin-bottom: 15px; /* Espacio entre las tarjetas */
+  padding: 10px;       /* Espacio interno para mejor presentación */
+}
 
+ion-card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
 
+ion-card p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Estilo para los ítems */
+ion-item {
+  --background: white;
+  --border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  --padding-start: 12px;
+}
+
+ion-item h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+ion-item p {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* Ajuste del texto para mejorar legibilidad */
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Estilo para el menú lateral */
+ion-menu {
+  --background: #ffffff;
+  --color: #333333;
+  --width: 260px; /* Ajustar el ancho del menú */
+}
+
+ion-list ion-item {
+  --color: #333333;
+  --background: #f5f5f5;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+ion-list ion-label.menu-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* Espaciado y organización de las tarjetas */
+ion-col {
+  padding: 10px;
+}
+
+ion-card h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+ion-card p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Modal pequeño */
 .small-modal {
   --width: 90%;
   --max-width: 400px;
@@ -111,3 +219,15 @@ ion-img {
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   --background: #ffffff;
 }
+
+/* Sombra y mejora para la barra de navegación */
+ion-toolbar {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Ajustes de hover para botones */
+ion-button:hover {
+  --background: #0a3c73; /* Color más oscuro en hover */
+}
+
+/* --------- Fin de Global Styles --------- */

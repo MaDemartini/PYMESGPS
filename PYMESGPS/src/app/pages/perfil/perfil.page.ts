@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Preferences } from '@capacitor/preferences';
+import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
 import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartidor.service';
 import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
 import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
+import { lastValueFrom } from 'rxjs';  // Importamos lastValueFrom para manejar las promesas
 
 @Component({
   selector: 'app-perfil',
@@ -16,8 +17,10 @@ export class PerfilPage implements OnInit {
   cliente: any;
   repartidor: any;
   admin: any;
+  previousUrl: string = '';
 
   constructor(
+    private authService: AuthServiceService,  // Usamos AuthService para la autenticación
     private clienteService: ClienteService,
     private repartidorService: RepartidorService,
     private emprendedorService: EmprendedorService,
@@ -26,39 +29,52 @@ export class PerfilPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cargarPerfilUsuario();
+    this.cargarPerfilUsuario();  // Cargar los datos del perfil del usuario logueado
+    this.previousUrl = this.router.getCurrentNavigation()?.extras?.state?.['previousUrl'] || '/home';
   }
 
   async cargarPerfilUsuario() {
-    const { value } = await Preferences.get({ key: 'user-info' });
-    if (value) {
-      const usuario = JSON.parse(value);
+    const usuario = await this.authService.getDecryptedUserData();  // Obtener datos desencriptados del usuario
 
-      if (usuario.id_cliente) {
-        this.clienteService.obtenerClientePorId(usuario.id_cliente).subscribe((data) => {
-          this.cliente = data;
-        });
-      } else if (usuario.id_emprendedor) {
-        this.emprendedorService.obtenerEmprendedorPorId(usuario.id_emprendedor).subscribe((data) => {
-          this.emprendedor = data;
-        });
-      } else if (usuario.id_repartidor) {
-        this.repartidorService.obtenerRepartidorPorId(usuario.id_repartidor).subscribe((data) => {
-          this.repartidor = data;
-        });
-      } else if (usuario.id_admin) {
-        this.adminService.obtenerAdminPorId(usuario.id_admin).subscribe((data) => {
-          this.admin = data;
-        });
+    if (usuario) {
+      try {
+        if (usuario.id_cliente) {
+          this.cliente = await lastValueFrom(this.clienteService.obtenerClientePorId(usuario.id_cliente));
+          //console.log('Datos del cliente:', this.cliente);
+        } else if (usuario.id_emprendedor) {
+          this.emprendedor = await lastValueFrom(this.emprendedorService.obtenerEmprendedorPorId(usuario.id_emprendedor));
+          //console.log('Datos del emprendedor:', this.emprendedor);
+        } else if (usuario.id_repartidor) {
+          this.repartidor = await lastValueFrom(this.repartidorService.obtenerRepartidorPorId(usuario.id_repartidor));
+          //console.log('Datos del repartidor:', this.repartidor);
+        } else if (usuario.id_admin) {
+          this.admin = await lastValueFrom(this.adminService.obtenerAdminPorId(usuario.id_admin));
+          //console.log('Datos del admin:', this.admin);
+        }
+      } catch (error) {
+        console.error('Error al cargar el perfil del usuario:', error);
       }
+    }
+  }
+
+  async volver() {
+    const usuario = await this.authService.getDecryptedUserData();  // Obtener datos desencriptados del usuario
+    if (usuario) {
+      if (usuario.id_cliente) {
+        this.router.navigate(['/home-cliente']);
+      } else if (usuario.id_emprendedor) {
+        this.router.navigate(['/home']);
+      } else if (usuario.id_repartidor) {
+        this.router.navigate(['/home']);
+      } else if (usuario.id_admin) {
+        this.router.navigate(['/home-admin']);
+      }
+    } else {
+      this.router.navigate(['/login']);  // En caso de que no se pueda determinar el tipo de usuario, redirigir al login
     }
   }
 
   logout() {
     this.router.navigate(['/login']);
-  }
-
-  volver() {
-    this.router.navigate(['/home']);
   }
 }

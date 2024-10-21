@@ -23,8 +23,37 @@
 
   <ion-content>
     <ion-list>
-      <ion-item button (click)="goToProfile()">Perfil</ion-item>
-      <ion-item button (click)="logout()">Cerrar sesión</ion-item>
+      <!-- Perfil -->
+      <ion-item button (click)="goToProfile()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="person-circle-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Perfil</ion-label>
+      </ion-item>
+
+      <!-- Configuración -->
+      <ion-item button (click)="goToConfig()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="settings-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Configuración</ion-label>
+      </ion-item>
+
+      <!-- Soporte -->
+      <ion-item button (click)="goToSupport()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="help-circle-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Soporte</ion-label>
+      </ion-item>
+
+      <!-- Cerrar sesión -->
+      <ion-item button (click)="logout()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="log-out-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Cerrar sesión</ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -34,11 +63,36 @@
     <ion-row class="ion-justify-content-center ion-align-items-center">
       <ion-col size="12" class="ion-text-center">
         <ion-img src="assets/img/admin.png" alt="Admin" class="logo-img"></ion-img>
-        <h2>¡Hola, Administrador {{ admin?.nombre_completo }}!</h2>
+        <h2>¡Hola, {{ adminData?.nombre_completo }}!</h2>
         <p>Gestiona la aplicación y los usuarios.</p>
       </ion-col>
     </ion-row>
+
+    <!-- Botones de administración -->
+    <ion-row>
+      <ion-col size="6">
+        <ion-card button (click)="gestionarUsuarios()">
+          <ion-icon name="people-outline"></ion-icon>
+          <h3>Gestionar Usuarios</h3>
+          <p>Administra a los usuarios</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="verSolicitudesEmprendedorReparto()">
+          <ion-icon name="file-tray-full-outline"></ion-icon>
+          <h3>Solicitudes de Repartidores</h3>
+          <p>Revisa las solicitudes pendientes</p>
+        </ion-card>
+      </ion-col>      
+
+      <ion-col size="6">
+        <ion-card button (click)="verReportes()">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <h3>Ver Reportes</h3>
+          <p>Revisa los reportes del sistema</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-  <ion-button expand="full" color="primary" (click)="gestionarUsuarios()">Gestionar Usuarios</ion-button>
-  <ion-button expand="full" color="primary" (click)="verReportes()">Ver Reportes</ion-button>
 </ion-content>

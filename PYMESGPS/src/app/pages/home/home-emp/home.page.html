@@ -9,7 +9,6 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Menú lateral -->
 <ion-menu side="end" contentId="main-content">
   <ion-header>
     <ion-toolbar>
@@ -21,44 +20,112 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-
+  
   <ion-content>
     <ion-list>
-      <ion-item button (click)="goToProfile()">Perfil</ion-item>
-      <ion-item button (click)="logout()">Cerrar sesión</ion-item>
+      <!-- Perfil -->
+      <ion-item button (click)="goToProfile()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="person-circle-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Perfil</ion-label>
+      </ion-item>
+      
+      <!-- Configuración -->
+      <ion-item button (click)="goToConfig()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="settings-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Configuración</ion-label>
+      </ion-item>
+
+      <!-- Soporte -->
+      <ion-item button (click)="goToSupport()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="help-circle-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Soporte</ion-label>
+      </ion-item>
+
+      <!-- Cerrar sesión -->
+      <ion-item button (click)="logout()">
+        <ion-avatar slot="start">
+          <ion-icon class="menu-icon" name="log-out-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label class="menu-title">Cerrar sesión</ion-label>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
 
 <ion-content id="main-content" class="ion-padding">
-  <!-- Contenido principal -->
-  <ng-container *ngIf="emprendedor || repartidor">
-    <div *ngIf="repartidor">
-      <ion-grid>
-        <ion-row class="ion-justify-content-center ion-align-items-center">
-          <ion-col size="12" class="ion-text-center">
-            <ion-img src="assets/img/qr-scan.png" alt="QR Scan" class="logo-img"></ion-img>
-            <h2>¡Hola, {{ repartidor.nombre_completo }}!</h2>
-            <p>Escanea los códigos QR de las entregas.</p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      <ion-button expand="full" color="primary" (click)="escanear()">Escanear</ion-button>
-    </div>
+  <ion-grid>
+    <!-- Emprendedor -->
+    <ion-row *ngIf="emprendedor">
+      <ion-col size="12" class="ion-text-center">
+        <ion-img src="assets/img/Welcome.png" alt="Welcome" class="logo-img"></ion-img>
+        <h2>¡Bienvenido, {{ emprendedorData?.nombre_completo }}!</h2>
+        <p>Gestiona tus productos, lotes y pedidos.</p>
+      </ion-col>
+      
+      <!-- Opciones para Emprendedor -->
+      <ion-col size="6">
+        <ion-card button (click)="gestionarProductos()">
+          <ion-icon name="cube-outline"></ion-icon>
+          <h3>Gestionar Productos</h3>
+          <p>Administra tus productos</p>
+        </ion-card>
+      </ion-col>
 
-    <div *ngIf="emprendedor">
-      <ion-grid>
-        <ion-row class="ion-justify-content-center ion-align-items-center">
-          <ion-col size="12" class="ion-text-center">
-            <ion-img src="assets/img/welcome.png" alt="Welcome" class="logo-img"></ion-img>
-            <h2>¡Bienvenido, {{ emprendedor.nombre_completo }}!</h2>
-            <p>Gestiona tus productos, lotes y pedidos.</p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      <ion-button expand="full" color="primary" (click)="gestionarProductos()">Gestionar Productos</ion-button>
-      <ion-button expand="full" color="primary" (click)="gestionarLotes()">Gestionar Lotes</ion-button>
-      <ion-button expand="full" color="primary" (click)="verPedidos()">Ver Pedidos</ion-button>
-    </div>
-  </ng-container>
+      <ion-col size="6">
+        <ion-card button (click)="gestionarLotes()">
+          <ion-icon name="layers-outline"></ion-icon>
+          <h3>Gestionar Lotes</h3>
+          <p>Administra tus lotes</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="verPedidos()">
+          <ion-icon name="list-outline"></ion-icon>
+          <h3>Ver Pedidos</h3>
+          <p>Revisa tus pedidos</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="gestionarRepartidores()">
+          <ion-icon name="people-outline"></ion-icon>
+          <h3>Gestionar Repartidores</h3>
+          <p>Administra los repartidores</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Repartidor -->
+    <ion-row *ngIf="repartidor">
+      <ion-col size="12" class="ion-text-center">
+        <ion-img src="assets/img/Welcome.png" alt="Welcome" class="logo-img"></ion-img>
+        <h2>¡Bienvenido, {{ repartidorData?.nombre_completo }}!</h2>
+        <p>Aquí puedes gestionar tus entregas y ver tu historial de pedidos.</p>
+      </ion-col>
+      
+      <!-- Opciones para Repartidor -->
+      <ion-col size="6">
+        <ion-card button (click)="verRutas()">
+          <ion-icon name="navigate-outline"></ion-icon>
+          <h3>Ver Rutas</h3>
+          <p>Revisa las rutas asignadas</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="verHistorialEntregas()">
+          <ion-icon name="document-outline"></ion-icon>
+          <h3>Historial de Entregas</h3>
+          <p>Consulta tus entregas anteriores</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

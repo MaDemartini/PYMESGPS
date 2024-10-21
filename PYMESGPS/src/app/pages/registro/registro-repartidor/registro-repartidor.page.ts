@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CrearRepartidor } from 'src/app/models/Crear/Usuarios/crearRepartidor';
 import * as bcrypt from 'bcryptjs';
 import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartidor.service';
@@ -14,13 +14,23 @@ export class RegistroRepartidorPage implements OnInit {
   correo: string = '';
   username: string = '';
   password: string = '';
+  id_solicitud: number | undefined;
 
   constructor(
     private repartidorService: RepartidorService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Recibir los parámetros desde la página anterior
+    this.route.queryParams.subscribe(params => {
+      this.id_solicitud = params['id_solicitud'];
+      this.nombreCompleto = params['nombre_completo'] || '';
+      this.correo = params['correo'] || '';
+      this.username = params['username'] || '';
+    });
+  }
 
   async registrarRepartidor() {
     if (!this.nombreCompleto || !this.correo || !this.username || !this.password) {

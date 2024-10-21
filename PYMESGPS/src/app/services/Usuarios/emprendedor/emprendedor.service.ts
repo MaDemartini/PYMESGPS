@@ -11,16 +11,20 @@ import { ActualizarEmprendedor } from 'src/app/models/Actualizar/Usuarios/actual
   providedIn: 'root'
 })
 export class EmprendedorService {
-  private path = 'emprendedor';
+  private path = 'emprendedor';  // Definición del path base para las consultas
 
   constructor(private apiService: ApiConfigService) {}
 
   // Obtener un emprendedor por ID usando HttpParams
   obtenerEmprendedorPorId(id: number): Observable<Emprendedor> {
     const params = new HttpParams().set('id_emprendedor', `eq.${id}`);
-    return this.apiService.get<Emprendedor>(this.path, { params });
+    return this.apiService.get<Emprendedor[]>(this.path, { params })
+      .pipe(
+        map((emprendedores: Emprendedor[]) => emprendedores[0])  // Acceder al primer elemento si es un array
+      );
   }
 
+  // Obtener un emprendedor por Username usando HttpParams
   obtenerEmprendedorPorUsername(username: string): Observable<any> {
     const params = new HttpParams().set('username', `eq.${username}`);
     return this.apiService.get<any>(`emprendedor`, { params });
@@ -42,7 +46,7 @@ export class EmprendedorService {
     return this.apiService.put(`${this.path}?id_emprendedor=eq.${id}`, emprendedor);  
   }
 
-  // Eliminar un emprendedor usando HttpParams (soft delete cambiando el estado)
+  // Eliminar un emprendedor (soft delete cambiando el estado a inactivo)
   eliminarEmprendedor(id: number): Observable<void> {
     const data = { estado: 'inactivo' };
     return this.apiService.put<void>(`${this.path}?id_emprendedor=eq.${id}`, data);  
