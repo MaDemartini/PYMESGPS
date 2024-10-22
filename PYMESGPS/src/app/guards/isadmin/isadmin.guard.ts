@@ -11,9 +11,9 @@ export const isadminGuard: CanActivateFn = async (route, state) => {
     // Obtener la información desencriptada del usuario
     const userInfo = await _authService.getDecryptedUserData();
 
-    // Verificar si el usuario tiene el rol de administrador (id_role = 4)
+    // Rol de administrador (id_role = 4)
     if (userInfo?.id_admin && userInfo?.id_role === 4) {
-      console.log("Acceso permitido: usuario es administrador");
+      //console.log("Acceso permitido: usuario es administrador");
       return true;
     } else {
       console.warn("Acceso denegado: el usuario no es administrador");

@@ -22,7 +22,6 @@ export class ActualizarProductosPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    // Inicializar el formulario con las validaciones necesarias
     this.productoForm = this.fb.group({
       nombre_producto: ['', [Validators.required]],
       descripcion_producto: [''],
@@ -33,7 +32,6 @@ export class ActualizarProductosPage implements OnInit {
   }
 
   async ngOnInit() {
-    // Obtener el ID del producto desde la URL
     const id_producto = this.route.snapshot.paramMap.get('id');
     if (id_producto) {
       this.id_producto = +id_producto;
@@ -44,7 +42,6 @@ export class ActualizarProductosPage implements OnInit {
     }
   }
 
-  // Cargar los datos del producto e inventario asociado
   async cargarDatosProducto() {
     if (this.id_producto) {
       try {
@@ -56,7 +53,7 @@ export class ActualizarProductosPage implements OnInit {
         });
 
         if (producto.id_inventario) {
-          this.id_inventario = producto.id_inventario;  // Asignamos el id_inventario
+          this.id_inventario = producto.id_inventario;
           const inventario = await firstValueFrom(this.inventarioService.obtenerInventarioPorId(this.id_inventario));
           this.productoForm.patchValue({
             cantidad_disponible: inventario.cantidad_disponible,
@@ -69,43 +66,36 @@ export class ActualizarProductosPage implements OnInit {
     }
   }
 
-  // Actualizar los datos del producto e inventario
   async actualizarProducto() {
     if (this.productoForm.invalid || !this.id_producto || !this.id_inventario) {
       console.error('Formulario inválido o información faltante');
       return;
     }
 
-    // Datos actualizados del producto
     const productoActualizado = {
       nombre_producto: this.productoForm.value.nombre_producto,
       descripcion_producto: this.productoForm.value.descripcion_producto,
       precio_prod: this.productoForm.value.precio_prod,
     };
 
-    // Datos actualizados del inventario
     const inventarioActualizado = {
       cantidad_disponible: this.productoForm.value.cantidad_disponible,
       umbral_reabastecimiento: this.productoForm.value.umbral_reabastecimiento,
     };
 
     try {
-      // Actualizar producto
       await firstValueFrom(this.productoService.actualizarProducto(this.id_producto, productoActualizado));
       console.log('Producto actualizado correctamente');
 
-      // Actualizar inventario
       await firstValueFrom(this.inventarioService.actualizarInventario(this.id_inventario, inventarioActualizado));
       console.log('Inventario actualizado correctamente');
 
-      // Redirigir a la lista de productos
       this.router.navigate(['/productos']);
     } catch (error) {
       console.error('Error al actualizar el producto o inventario:', error);
     }
   }
 
-  // Volver a la lista de productos sin actualizar
   volver() {
     this.router.navigate(['/productos']);
   }

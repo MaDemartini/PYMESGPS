@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SolicitudRepartidorService } from 'src/app/services/solicitud-repartidor/solicitud-repartidor.service';
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { CrearSolicitudRepartidor } from 'src/app/models/Usuarios/Solicitud/crearSolicitud-repartidor';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-solicitudes-repartidor',
@@ -18,7 +19,8 @@ export class SolicitudesRepartidorPage implements OnInit {
   constructor(
     private solicitudRepartidorService: SolicitudRepartidorService,
     private authService: AuthServiceService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController,
   ) { }
 
   async ngOnInit() {
@@ -43,6 +45,7 @@ export class SolicitudesRepartidorPage implements OnInit {
   // Crear una nueva solicitud de repartidor
   crearSolicitudRepartidor() {
     if (this.id_emprendedor && this.nombre_completo && this.correo && this.username) {
+      this.mostrarMensaje('Todos los campos son obligatorios.', 'danger');
       const nuevaSolicitud: CrearSolicitudRepartidor = {
         id_emprendedor: this.id_emprendedor,
         nombre_completo: this.nombre_completo,
@@ -54,11 +57,12 @@ export class SolicitudesRepartidorPage implements OnInit {
 
       this.solicitudRepartidorService.crearSolicitudRepartidor(nuevaSolicitud).subscribe({
         next: () => {
-          console.info('Solicitud de repartidor creada correctamente.');
+          this.mostrarMensaje('Solicitud enviada con éxito.', 'success');
           this.router.navigate(['/gestionar-repartidor']);
         },
         error: (error) => {
           console.error('Error al crear la solicitud de repartidor', error);
+          this.mostrarMensaje('Error al enviar la solicitud.', 'danger');
         }
       });
     } else {
@@ -66,9 +70,25 @@ export class SolicitudesRepartidorPage implements OnInit {
     }
   }
 
-
+  private async mostrarMensaje(mensaje: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      color: color,
+      position: 'top',
+      buttons: [
+        {
+          side: 'start',
+          icon: color === 'danger' ? 'warning' : 'checkmark-circle',
+        }
+      ]
+    });
+    toast.present();
+  }
 
   volver() {
     this.router.navigate(['/gestionar-repartidor']);
   }
 }
+
+

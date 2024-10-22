@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LotesPageRoutingModule } from './lotes-routing.module';
+import { EditarClientePageRoutingModule } from './editar-cliente-routing.module';
 
-import { LotesPage } from './lotes.page';
+import { EditarClientePage } from './editar-cliente.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LotesPageRoutingModule
+    EditarClientePageRoutingModule
   ],
-  declarations: [LotesPage]
+  declarations: [EditarClientePage]
 })
-export class LotesPageModule {}
+export class EditarClientePageModule {}

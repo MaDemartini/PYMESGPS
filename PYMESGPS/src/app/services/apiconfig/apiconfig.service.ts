@@ -29,11 +29,13 @@ export class ApiConfigService {
 
   public post<T>(path: string, data: any): Observable<T> {
     const url = `${this.baseUrl}/${path}`;
-    return this.http.post<T>(url, data, { headers: this.getHeaders() }).pipe(
+    const headers = this.getHeaders().set('Prefer', 'return=representation');
+  
+    return this.http.post<T>(url, data, { headers }).pipe(
       catchError(this.handleError)
     );
   }
-
+  
   public put<T>(path: string, data: any): Observable<T> {
     const url = `${this.baseUrl}/${path}`;
     return this.http.put<T>(url, data, { headers: this.getHeaders() }).pipe(

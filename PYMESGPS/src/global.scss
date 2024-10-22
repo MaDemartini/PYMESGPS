@@ -37,10 +37,10 @@ body, ion-content {
   --color: #000000;      /* Texto negro */
 }
 
-/* Estilo para el encabezado (ajuste de color del fondo y texto) */
+/* Estilo para el encabezado */
 ion-toolbar {
-  --background: linear-gradient(135deg, #6A85B6, #BAC8E0); /* Fondo gradiente */
-  --color: #ffffff;   /* Texto blanco */
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+  --color: #fff;
   --border-radius: 0; /* Sin bordes redondeados */
   --height: 60px;     /* Altura personalizada */
   display: flex;
@@ -53,60 +53,11 @@ ion-toolbar {
 
 /* Título del encabezado */
 ion-title {
-  font-size: 1.2rem; /* Ajustar tamaño del texto */
+  font-size: 1.3rem;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Manejar títulos largos */
-}
-
-/* Estilo para los botones de la app */
-ion-button {
-  --background: #0b4a8e; /* Azul oscuro */
-  --color: #ffffff;      /* Texto blanco */
-  --border-radius: 8px;  /* Botones redondeados */
-  --padding: 12px 24px;  /* Padding para botones */
-  margin: 10px 0;        /* Espaciado entre botones */
-  width: 100%;           /* Botones ocupan todo el ancho del contenedor */
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-/* Botones con transparencia (para botones secundarios) */
-ion-button.transparent {
-  --background: transparent;   /* Fondo transparente */
-  --border: 2px solid #007bff; /* Borde azul */
-  --color: #007bff;            /* Texto azul */
-  --border-radius: 8px;        /* Bordes redondeados */
-  --padding: 10px 20px;        /* Padding */
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-/* Estilo para los botones de íconos */
-ion-button ion-icon {
-  font-size: 20px; /* Tamaño ajustado para íconos */
-  margin-right: 8px; /* Separar el ícono del texto */
-}
-
-/* Estilo para los elementos del formulario */
-ion-item, ion-input {
-  --background: #f0f0f0; /* Fondo claro */
-  --border-radius: 5px;  /* Bordes redondeados */
-  --color: #000000;      /* Texto negro */
-  margin-bottom: 15px;   /* Espacio entre campos del formulario */
-}
-
-/* Estilo para la imagen del logotipo */
-ion-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100%;
-  text-align: center;
-  padding: 20px; /* Padding para evitar que el contenido se pegue a los bordes */
+  text-overflow: ellipsis;
 }
 
 ion-img {
@@ -118,98 +69,128 @@ ion-img {
   margin-right: auto;
 }
 
+/* Estilo para los botones */
+ion-button {
+  --color: #ffffff;      /* Texto blanco */
+  --border-radius: 10px; /* Botones redondeados */
+  --padding: 10px 20px;  /* Padding */
+  margin: 5px 0;         /* Espaciado entre botones */
+  width: auto;           /* Botones se ajustan al contenido */
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+ion-button:hover {
+  --background: #0056b3; /* Color más oscuro al pasar el ratón */
+}
+
+/* Botones transparentes */
+ion-button.transparent {
+  --background: transparent;
+  --border: 2px solid #007BFF;
+  --color: #007BFF;
+}
+
+/* Estilo para los íconos */
+ion-button ion-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+/* Estilo para los formularios */
+ion-item, ion-input {
+  --background: #f8f9fa; /* Fondo claro */
+  --border-radius: 8px;  /* Bordes redondeados */
+  --color: #212529;      /* Texto oscuro */
+  margin-bottom: 12px;   /* Espacio entre campos */
+}
+
 /* Estilo para los cards */
 ion-card {
-  --box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-  --background: #f9f9f9;
-  border-radius: 12px; /* Bordes redondeados */
-  margin-bottom: 15px; /* Espacio entre las tarjetas */
-  padding: 10px;       /* Espacio interno para mejor presentación */
+  --background: #fdfdfd; /* Fondo claro */
+  --box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-radius: 15px; /* Bordes redondeados */
+  margin: 12px; /* Espacio entre las tarjetas */
+  padding: 10px;
 }
 
 ion-card-title {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-weight: bold;
+  font-size: 1.4rem;
   color: #333;
-  margin-bottom: 5px;
 }
 
-ion-card p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Estilo para los ítems */
+/* Estilo para los items */
 ion-item {
   --background: white;
   --border-radius: 8px;
   margin-bottom: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   --padding-start: 12px;
 }
 
 ion-item h2 {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 ion-item p {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: #6c757d;
 }
 
-/* Ajuste del texto para mejorar legibilidad */
+/* Ajuste de texto */
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 10px;
+  color: #333;
 }
 
 p {
   font-size: 1rem;
   line-height: 1.5;
-  margin-bottom: 10px;
-  color: #333;
+  color: #555;
 }
 
-/* Estilo para el menú lateral */
+/* Estilo para el menú */
 ion-menu {
   --background: #ffffff;
-  --color: #333333;
-  --width: 260px; /* Ajustar el ancho del menú */
+  --color: #333;
+  --width: 260px;
 }
 
 ion-list ion-item {
-  --color: #333333;
-  --background: #f5f5f5;
+  --color: #333;
+  --background: #f1f1f1;
   margin-bottom: 10px;
   border-radius: 8px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 ion-list ion-label.menu-title {
   font-weight: bold;
-  font-size: 1.1rem;
-  color: #333;
+  font-size: 1.2rem;
 }
 
-/* Espaciado y organización de las tarjetas */
+/* Tarjetas de usuario */
+.user-card {
+  margin: 15px 10px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-item {
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes en tarjetas y contenido */
 ion-col {
   padding: 10px;
 }
 
-ion-card h3 {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-ion-card p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Modal pequeño */
+/* Modal */
 .small-modal {
   --width: 90%;
   --max-width: 400px;
@@ -220,14 +201,66 @@ ion-card p {
   --background: #ffffff;
 }
 
-/* Sombra y mejora para la barra de navegación */
+/* Mejora de la barra de navegación */
 ion-toolbar {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Ajustes de hover para botones */
-ion-button:hover {
-  --background: #0a3c73; /* Color más oscuro en hover */
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  ion-toolbar {
+    padding: 0 8px;
+  }
+
+  ion-button {
+    --padding: 8px 16px;
+  }
+
+  ion-card {
+    margin: 10px 5px;
+  }
+
+  ion-item h2 {
+    font-size: 1rem;
+  }
+
+  ion-item p {
+    font-size: 0.8rem;
+  }
 }
+
+
+.notificacion-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+}
+
+.notificacion-titulo {
+  font-weight: bold;
+  color: #333;
+}
+
+.notificacion-mensaje {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+.notificacion-fecha {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+:host {
+  --background: #ffffff; /* Fondo blanco */
+}
+
+.missing-field {
+  --highlight-color-focused: #f04141;
+  --highlight-color-invalid: #f04141;
+}
+
+
 
 /* --------- Fin de Global Styles --------- */

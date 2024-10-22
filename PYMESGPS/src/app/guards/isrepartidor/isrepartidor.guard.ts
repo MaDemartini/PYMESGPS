@@ -8,7 +8,7 @@ export const isRepartidorGuard: CanActivateFn = async (route, state) => {
 
   try {
     const userInfo = await authService.getDecryptedUserData();
-    if (userInfo?.id_repartidor) {
+    if (userInfo?.id_repartidor && userInfo?.id_role === 3) {
       return true;
     } else {
       router.navigate(['/login']);
@@ -18,4 +18,5 @@ export const isRepartidorGuard: CanActivateFn = async (route, state) => {
     router.navigate(['/login']);
     return false;
   }
+
 };

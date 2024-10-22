@@ -8,7 +8,7 @@ export const isClienteGuard: CanActivateFn = async (route, state) => {
 
   try {
     const userInfo = await authService.getDecryptedUserData();
-    if (userInfo?.id_cliente) {
+    if (userInfo?.id_cliente && userInfo?.id_role === 1)  {
       return true;
     } else {
       router.navigate(['/login']);

@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestionar Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Botones de agregar usuarios -->
+  <div style="display: flex; justify-content: space-evenly; padding: 10px;">
+    <ion-button expand="full" size="small" (click)="agregarUsuario('cliente')" color="secondary" style="margin: 0 5px;">
+      <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      Cliente
+    </ion-button>
+    <ion-button expand="full" size="small" (click)="agregarUsuario('emprendedor')" color="secondary" style="margin: 0 5px;">
+      <ion-icon slot="start" name="business-outline"></ion-icon>
+      Emprendedor
+    </ion-button>
+    <ion-button expand="full" size="small" (click)="agregarUsuario('repartidor')" color="secondary" style="margin: 0 5px;">
+      <ion-icon slot="start" name="bicycle-outline"></ion-icon>
+      Repartidor
+    </ion-button>
+  </div>
+
+  <!-- Sección de Clientes -->
+  <ion-card class="user-card">
+    <ion-card-header>
+      <ion-card-title>Clientes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let cliente of clientes" class="user-item">
+          <ion-label>
+            <h2>{{ cliente.nombre_completo }}</h2>
+            <p>{{ cliente.correo }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="editarUsuario(cliente.id_cliente, 'cliente')">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="danger" (click)="eliminarUsuario(cliente.id_cliente, 'cliente')">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Sección de Emprendedores -->
+  <ion-card class="user-card">
+    <ion-card-header>
+      <ion-card-title>Emprendedores</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let emprendedor of emprendedores" class="user-item">
+          <ion-label>
+            <h2>{{ emprendedor.nombre_completo }}</h2>
+            <p>{{ emprendedor.correo }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="editarUsuario(emprendedor.id_emprendedor, 'emprendedor')">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="danger" (click)="eliminarUsuario(emprendedor.id_emprendedor, 'emprendedor')">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Sección de Repartidores -->
+  <ion-card class="user-card">
+    <ion-card-header>
+      <ion-card-title>Repartidores</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let repartidor of repartidores" class="user-item">
+          <ion-label>
+            <h2>{{ repartidor.nombre_completo }}</h2>
+            <p>{{ repartidor.correo }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" color="primary" (click)="editarUsuario(repartidor.id_repartidor, 'repartidor')">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="danger" (click)="eliminarUsuario(repartidor.id_repartidor, 'repartidor')">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

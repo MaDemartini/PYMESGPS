@@ -7,7 +7,8 @@ import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartid
 import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
 import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
-import { firstValueFrom } from 'rxjs'; // Importamos firstValueFrom
+import { firstValueFrom } from 'rxjs';
+import { ToastController } from '@ionic/angular';  // Importa el ToastController
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginPage implements OnInit {
     private repartidorService: RepartidorService,
     private adminService: AdminService,
     private router: Router,
-    private authService: AuthServiceService 
+    private authService: AuthServiceService,
+    private toastController: ToastController  // Inyecta el ToastController
   ) {}
 
   ngOnInit() {}
@@ -39,7 +41,7 @@ export class LoginPage implements OnInit {
 
   async login() {
     if (!this.username || !this.password) {
-      console.error('Nombre de usuario y contraseña son obligatorios.');
+      this.mostrarMensaje('Nombre de usuario y contraseña son obligatorios.', 'danger');  // Muestra un mensaje de error
       return;
     }
 
@@ -62,14 +64,14 @@ export class LoginPage implements OnInit {
       } else if (admins?.length) {
         usuario = admins[0];
       } else {
-        console.error('Usuario no encontrado.');
+        this.mostrarMensaje('Usuario no encontrado.', 'danger');  // Muestra un mensaje de error
         return;
       }
 
       const isPasswordCorrect = await bcrypt.compare(this.password, usuario.contrasena);
 
       if (!isPasswordCorrect) {
-        console.error('Contraseña incorrecta.');
+        this.mostrarMensaje('Contraseña incorrecta.', 'danger');  // Muestra un mensaje de error
         return;
       }
 
@@ -90,9 +92,10 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/home']);
       }
 
-      console.info('Inicio de sesión exitoso.');
+      this.mostrarMensaje('Inicio de sesión exitoso.');  // Muestra un mensaje de éxito
     } catch (error) {
       console.error('Error durante el inicio de sesión:', error);
+      this.mostrarMensaje('Error durante el inicio de sesión. Inténtalo de nuevo.', 'danger');  // Muestra un mensaje de error
     }
   }
 
@@ -104,7 +107,24 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/registro-emprendedor']);
   }
 
-  irAContexto(){
+  irAContexto() {
     this.router.navigate(['/contexto']);
+  }
+
+  // Método para mostrar mensajes con Toast
+  private async mostrarMensaje(mensaje: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      color: color,
+      position: 'top',
+      buttons: [
+        {
+          side: 'start',
+          icon: color === 'danger' ? 'warning' : 'checkmark-circle',
+        }
+      ]
+    });
+    toast.present();
   }
 }

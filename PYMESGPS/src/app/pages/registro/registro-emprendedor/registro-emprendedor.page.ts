@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CrearEmprendedor } from 'src/app/models/Crear/Usuarios/crearEmprendedor';
 import * as bcrypt from 'bcryptjs';
 import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/emprendedor.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro-emprendedor',
@@ -17,7 +18,8 @@ export class RegistroEmprendedorPage implements OnInit {
 
   constructor(
     private emprendedorService: EmprendedorService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {}
@@ -46,6 +48,22 @@ export class RegistroEmprendedorPage implements OnInit {
     } catch (error) {
       console.error('Error durante el registro del emprendedor:', error);
     }
+  }
+
+  private async mostrarMensaje(mensaje: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      color: color,
+      position: 'top',
+      buttons: [
+        {
+          side: 'start',
+          icon: color === 'danger' ? 'warning' : 'checkmark-circle',
+        }
+      ]
+    });
+    toast.present();
   }
 
   volver() {

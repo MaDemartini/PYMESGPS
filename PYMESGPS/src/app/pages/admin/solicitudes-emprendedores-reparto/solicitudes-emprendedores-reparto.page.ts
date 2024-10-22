@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SolicitudEmprendedorRepartoService } from 'src/app/services/solicitud-emprendedor-reparto/solicitud-emprendedor-reparto.service';
 import { lastValueFrom } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-solicitudes-emprendedores-reparto',
@@ -11,7 +12,11 @@ import { lastValueFrom } from 'rxjs';
 export class SolicitudesEmprendedoresRepartoPage implements OnInit {
   solicitudesPendientes: any[] = [];
 
-  constructor(private solicitudEmprendedorRepartoService: SolicitudEmprendedorRepartoService, private router: Router) {}
+  constructor(
+    private solicitudEmprendedorRepartoService: SolicitudEmprendedorRepartoService, 
+    private router: Router,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {
     this.cargarSolicitudesPendientes();
@@ -21,15 +26,14 @@ export class SolicitudesEmprendedoresRepartoPage implements OnInit {
   cargarSolicitudesPendientes() {
     this.solicitudEmprendedorRepartoService.obtenerTodasSolicitudes().subscribe({
       next: (solicitudes) => {
-        //console.log('Solicitudes:', solicitudes);  
         this.solicitudesPendientes = solicitudes;
       },
       error: (error) => {
+        this.mostrarMensaje('Error al cargar las solicitudes', 'danger');
         console.error('Error al cargar las solicitudes', error);
       },
     });
   }
-
 
   async actualizarEstadoSolicitud(id_solicitud: number, nuevoEstado: string) {
     let estadoId: number;
@@ -49,16 +53,34 @@ export class SolicitudesEmprendedoresRepartoPage implements OnInit {
     if (id_solicitud) {
       try {
         await lastValueFrom(this.solicitudEmprendedorRepartoService.cambiarEstadoSolicitud(id_solicitud, estadoId));
-        console.info(`Estado de la solicitud con ID: ${id_solicitud} actualizado correctamente.`);
+        this.mostrarMensaje('Estado de solicitud actualizado correctamente.', 'success');
         this.cargarSolicitudesPendientes();  // Refrescar la lista de solicitudes
       } catch (error) {
+        this.mostrarMensaje('Error al actualizar el estado.', 'danger');
         console.error('Error al actualizar el estado', error);
       }
     } else {
+      this.mostrarMensaje('ID de solicitud no válido.', 'danger');
       console.error('ID de solicitud no válido:', id_solicitud);
     }
   }
- 
+
+  private async mostrarMensaje(mensaje: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      color: color,
+      position: 'top',
+      buttons: [
+        {
+          side: 'start',
+          icon: color === 'danger' ? 'warning' : 'checkmark-circle',
+        }
+      ]
+    });
+    toast.present();
+  }
+
   volver() {
     this.router.navigate(['/home-admin']); 
   }

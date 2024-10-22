@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { lastValueFrom } from 'rxjs';
-import { SolicitudRepartidor } from 'src/app/models/Usuarios/Solicitud/solicitud-repartidor'; // Cambié a SolicitudRepartidor
+import { SolicitudRepartidor } from 'src/app/models/Usuarios/Solicitud/solicitud-repartidor';
 import { SolicitudRepartidorService } from 'src/app/services/solicitud-repartidor/solicitud-repartidor.service';
 
 @Component({
@@ -99,5 +99,4 @@ export class GestionarRepartidorPage implements OnInit {
       console.error('Solicitud no encontrada');
     }
   }
-  
 }

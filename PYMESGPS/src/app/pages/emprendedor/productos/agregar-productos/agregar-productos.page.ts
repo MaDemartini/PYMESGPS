@@ -53,9 +53,8 @@ export class AgregarProductosPage implements OnInit {
       console.error('Formulario inválido o emprendedor no encontrado');
       return;
     }
-
+  
     try {
-      // Crear el producto primero (sin id_inventario aún)
       const nuevoProducto: CrearProducto = {
         nombre_producto: this.productoForm.value.nombre_producto,
         descripcion_producto: this.productoForm.value.descripcion_producto,
@@ -64,42 +63,35 @@ export class AgregarProductosPage implements OnInit {
         id_emprendedor: this.id_emprendedor,
       };
   
-      // Intentar crear el producto
       const productoCreado = await lastValueFrom(this.productoService.agregarProducto(nuevoProducto));
-
-      // Verificar que se generó el id_producto
+  
       if (!productoCreado || !productoCreado.id_producto) {
         throw new Error('Error al crear el producto.');
       }
-
+  
       console.log('Producto creado con ID:', productoCreado.id_producto);
-
-      // Ahora que el producto está creado, creamos el inventario
+  
       const nuevoInventario: CrearInventario = {
         cantidad_disponible: this.productoForm.value.cantidad_disponible,
         umbral_reabastecimiento: this.productoForm.value.umbral_reabastecimiento,
         fecha_actualizacion: new Date(),
       };
-
+  
       const inventarioCreado = await lastValueFrom(this.inventarioService.agregarInventario(nuevoInventario));
-
+  
       if (!inventarioCreado || !inventarioCreado.id_inventario) {
         throw new Error('Error al crear el inventario.');
       }
-
-      // Actualizar el producto con el id_inventario generado
-      const productoActualizado = {
-        id_inventario: inventarioCreado.id_inventario
-      };
-
-      await lastValueFrom(this.productoService.actualizarProducto(productoCreado.id_producto, productoActualizado));
-
+  
+      await lastValueFrom(this.productoService.actualizarProducto(productoCreado.id_producto, { id_inventario: inventarioCreado.id_inventario }));
+  
       console.info('Producto e inventario agregados correctamente');
       this.router.navigate(['/productos']);
     } catch (error) {
       console.error('Error al agregar producto e inventario:', error);
     }
-  }
+  }  
+  
 
   volver() {
     this.router.navigate(['/productos']);

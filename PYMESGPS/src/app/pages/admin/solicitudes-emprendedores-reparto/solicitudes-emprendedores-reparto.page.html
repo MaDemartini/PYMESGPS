@@ -17,7 +17,7 @@
       <ion-label>
         <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
         <p>Emprendedor: {{ solicitud.nombre_completo }}</p>
-        <p><strong>Estado:</strong> {{ solicitud.id_estado_solicitud }}</p> <!-- Aquí muestra el estado directamente -->
+        <p><strong>Estado:</strong> {{ solicitud.id_estado_solicitud }}</p>
       </ion-label>
       <ion-buttons slot="end">
         <ion-button color="success" (click)="actualizarEstadoSolicitud(solicitud.id_solicitud, 'aprobada')">

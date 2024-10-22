@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ToastController } from '@ionic/angular';
+import { NotificacionesService } from 'src/app/services/notificaciones/notificaciones.service';
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
-import { lastValueFrom } from 'rxjs';
+import { Notificacion } from 'src/app/models/notificacion';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { LoteService } from 'src/app/services/lote/lote.service';
 
 @Component({
   selector: 'app-home-cliente',
@@ -11,20 +14,26 @@ import { lastValueFrom } from 'rxjs';
   styleUrls: ['./home-cliente.page.scss'],
 })
 export class HomeClientePage implements OnInit {
-  cliente: boolean = false; // Para verificar si es cliente
-  clienteData: any;  // Para almacenar los datos del cliente
-  codigoSeguimiento: string = ''; // Para el código de seguimiento
+  cliente: boolean = false;
+  clienteData: any;
+  codigoSeguimiento: string = '';
+  notificaciones: Notificacion[] = [];
+  mostrarNotificacionesLista: boolean = false;
 
   constructor(
     private menuCtrl: MenuController,
     private clienteService: ClienteService,
-    private authService: AuthServiceService,  // Usamos AuthService para la autenticación
-    private router: Router
+    private authService: AuthServiceService,
+    private loteService: LoteService,
+    private notificacionesService: NotificacionesService,
+    private router: Router,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
-    this.cargarCliente();  // Cargar la información del cliente al iniciar la página
-    this.menuCtrl.enable(true);  // Asegúrate de habilitar el menú cuando la página se carga
+    this.cargarCliente();
+    this.cargarNotificaciones();
+    this.menuCtrl.enable(true);
   }
 
   openMenu() {
@@ -36,29 +45,77 @@ export class HomeClientePage implements OnInit {
   }
 
   async cargarCliente() {
-    const usuario = await this.authService.getDecryptedUserData();  // Obtener datos desencriptados del usuario
+    const usuario = await this.authService.getDecryptedUserData();
     if (usuario && usuario.id_cliente) {
-      this.cliente = true;  // Verificar si es cliente
+      this.cliente = true;
       const clienteInfo = await lastValueFrom(this.clienteService.obtenerClientePorId(usuario.id_cliente));
-      
-      // Asegurarse de que clienteInfo no sea un array
       this.clienteData = Array.isArray(clienteInfo) ? clienteInfo[0] : clienteInfo;
-      //console.log('Datos del cliente:', this.clienteData);
     } else {
-      this.cliente = false;  // No es cliente
-      this.clienteData = null; // Limpiar los datos del cliente
+      this.cliente = false;
+      this.clienteData = null;
     }
   }
 
-  rastrearPedido() {
+  async cargarNotificaciones() {
+    try {
+      const usuario = await this.authService.getDecryptedUserData();
+      if (usuario && usuario.id_cliente) {
+        this.notificaciones = await lastValueFrom(
+          this.notificacionesService.obtenerNotificaciones(usuario.id_cliente) 
+        );
+      } else {
+        console.warn('El usuario no es un cliente válido.');
+      }
+    } catch (error) {
+      console.error('Error al cargar las notificaciones:', error);
+    }
+  }
+
+  
+  async marcarNotificacionComoLeida(idNotificacion: number) {
+    try {
+      await lastValueFrom(this.notificacionesService.marcarComoLeida(idNotificacion));
+      this.notificaciones = this.notificaciones.filter(n => n.id_notificacion !== idNotificacion);
+    } catch (error) {
+      console.error('Error al marcar la notificación como leída:', error);
+    }
+  }
+
+  mostrarNotificaciones() {
+    this.mostrarNotificacionesLista = !this.mostrarNotificacionesLista;
+  }
+
+  private async mostrarMensaje(mensaje: string, color: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      color: color,
+      position: 'top',
+    });
+    toast.present();
+  }
+
+
+  async rastrearPedido() {
     if (this.codigoSeguimiento) {
-      console.log(`Rastreando pedido con código: ${this.codigoSeguimiento}`);
-      this.router.navigate(['/rastrear'], { state: { codigo: this.codigoSeguimiento } });
+      try {
+        const lote = await firstValueFrom( await this.loteService.obtenerSolicitudPorCodigoSeguimiento(this.codigoSeguimiento));
+  
+        if (lote) {
+          // Si se encuentra el lote, navega a la página de seguimiento
+          this.router.navigate(['/seguimiento'], { state: { codigo: this.codigoSeguimiento } });
+        } else {
+          console.error('No se encontró ningún lote con el código de seguimiento proporcionado.');
+          // Puedes mostrar un mensaje al usuario aquí
+        }
+      } catch (error) {
+        console.error('Error al buscar el lote:', error);
+      }
     } else {
       console.error('Por favor ingresa un código de seguimiento');
     }
   }
-
+  
   goToProfile() {
     this.router.navigate(['/perfil']);
   }
@@ -74,5 +131,4 @@ export class HomeClientePage implements OnInit {
   goToSupport() {
     this.router.navigate(['/soporte']);
   }
-  
 }

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Editar Emprendedor</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/gestionar-usuario"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="editarEmprendedor()">
+    <!-- Campos del emprendedor -->
+    <ion-item>
+      <ion-label position="floating">Nombre Completo</ion-label>
+      <ion-input [(ngModel)]="emprendedor.nombre_completo" name="nombre_completo" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input [(ngModel)]="emprendedor.correo" name="correo" type="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nombre de Usuario</ion-label>
+      <ion-input [(ngModel)]="emprendedor.username" name="username" required></ion-input>
+    </ion-item>
+
+    <!-- Botones -->
+    <ion-button expand="full" type="submit" color="primary">Guardar Cambios</ion-button>
+    <ion-button expand="full" color="medium" (click)="volver()">Cancelar</ion-button>
+  </form>
+</ion-content>

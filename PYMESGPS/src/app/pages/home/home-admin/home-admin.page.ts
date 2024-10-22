@@ -51,14 +51,6 @@ export class HomeAdminPage implements OnInit {
     }
   }
 
-  gestionarUsuarios() {
-    this.router.navigate(['/usuarios']);
-  }
-
-  verReportes() {
-    this.router.navigate(['/reportes']);
-  }
-
   goToProfile() {
     this.router.navigate(['/perfil']);
   }
@@ -78,5 +70,13 @@ export class HomeAdminPage implements OnInit {
   verSolicitudesEmprendedorReparto() {
     this.router.navigate(['/solicitudes-emprendedores-reparto']);
   }  
+
+  gestionarUsuarios() {
+    this.router.navigate(['/gestionar-usuario']);
+  }
+
+  verReportes() {
+    this.router.navigate(['/reportes']);
+  }
 
 }

@@ -82,11 +82,18 @@ export class HomePage implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // Escanear código QR (funcionalidad futura)
-  escanear() {
-    console.log('Escanear código QR...');
+  
+  goToConfig() {
+    this.router.navigate(['/configuracion']);
+  }
+  
+  goToSupport() {
+    this.router.navigate(['/soporte']);
   }
 
+
+  // Emprendedor 
+  
   // Navegar a la página de gestión de productos
   gestionarProductos() {
     this.router.navigate(['/productos']);
@@ -94,12 +101,28 @@ export class HomePage implements OnInit {
 
   // Navegar a la página de gestión de lotes
   gestionarLotes() {
-    this.router.navigate(['/lotes']);
+    this.router.navigate(['/gestionar-lote']);
   }
 
   // Navegar a la página de pedidos
   verPedidos() {
     this.router.navigate(['/pedidos']);
+  }
+
+  gestionarRepartidores() {
+    this.router.navigate(['/gestionar-repartidor']);
+  }
+
+  gestionarSolicitudServicio() {
+    this.router.navigate(['/solicitud-servicio']);
+  }
+  
+
+  // Repartidor
+
+  // Escanear código QR (funcionalidad futura)
+  escanear() {
+    console.log('Escanear código QR...');
   }
 
   verRutas() {
@@ -108,18 +131,6 @@ export class HomePage implements OnInit {
 
   verHistorialEntregas(){
     this.router.navigate(['/historial-entregas']);
-  }
-
-  gestionarRepartidores() {
-    this.router.navigate(['/gestionar-repartidor']);
-  }
-
-  goToConfig() {
-    this.router.navigate(['/configuracion']);
-  }
-  
-  goToSupport() {
-    this.router.navigate(['/soporte']);
   }
   
 }

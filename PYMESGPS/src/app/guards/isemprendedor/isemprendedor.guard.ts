@@ -8,7 +8,7 @@ export const isEmprendedorGuard: CanActivateFn = async (route, state) => {
 
   try {
     const userInfo = await authService.getDecryptedUserData();
-    if (userInfo?.id_emprendedor) {
+    if (userInfo?.id_emprendedor && userInfo?.id_role === 2) {
       return true;
     } else {
       router.navigate(['/login']);
@@ -18,4 +18,5 @@ export const isEmprendedorGuard: CanActivateFn = async (route, state) => {
     router.navigate(['/login']);
     return false;
   }
+
 };
