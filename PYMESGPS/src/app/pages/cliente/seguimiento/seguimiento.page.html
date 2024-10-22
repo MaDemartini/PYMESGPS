@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Seguimiento de Solicitud</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="solicitud; else noSolicitud">
+    <h2>Detalles de la Solicitud</h2>
+    <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+    <p><strong>Cliente:</strong> {{ solicitud.cliente?.nombre_cliente }}</p>
+    <p><strong>Estado:</strong> {{ solicitud.estado_solicitud?.nombre_estado }}</p>
+    <p><strong>Descripción:</strong> {{ solicitud.observacion }}</p>
+    <p><strong>Fecha de Solicitud:</strong> {{ solicitud.fecha_solicitud | date }}</p>
+  </div>
+  <ng-template #noSolicitud>
+    <p>{{ error }}</p>
+  </ng-template>
+</ion-content>

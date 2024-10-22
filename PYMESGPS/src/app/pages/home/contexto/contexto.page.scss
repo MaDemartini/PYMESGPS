@@ -1,0 +1,42 @@
+ion-header, ion-toolbar {
+    --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+    --color: #fff;
+  }
+  
+  ion-title {
+    font-size: 1.4rem;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .context-card {
+    --background: #fff;
+    --border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .context-card h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+  }
+  
+  .context-card p, ul {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  .context-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  

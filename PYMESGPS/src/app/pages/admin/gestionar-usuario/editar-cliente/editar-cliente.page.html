@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Editar Cliente</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/gestionar-usuario"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="editarCliente()">
+    <!-- Campos del cliente -->
+    <ion-item>
+      <ion-label position="floating">Nombre Completo</ion-label>
+      <ion-input [(ngModel)]="cliente.nombre_completo" name="nombre_completo" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input [(ngModel)]="cliente.correo" name="correo" type="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nombre de Usuario</ion-label>
+      <ion-input [(ngModel)]="cliente.username" name="username" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Dirección</ion-label>
+      <ion-input [(ngModel)]="cliente.direccion" name="direccion" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Región</ion-label>
+      <ion-input [(ngModel)]="cliente.region" name="region" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Comuna</ion-label>
+      <ion-input [(ngModel)]="cliente.comuna" name="comuna" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Teléfono</ion-label>
+      <ion-input [(ngModel)]="cliente.telefono" name="telefono" type="tel" required></ion-input>
+    </ion-item>
+
+    <!-- Botones -->
+    <ion-button expand="full" type="submit" color="primary">Guardar Cambios</ion-button>
+    <ion-button expand="full" color="medium" (click)="volver()">Cancelar</ion-button>
+  </form>
+</ion-content>

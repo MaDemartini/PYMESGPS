@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>Agregar Producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <form [formGroup]="productoForm" (ngSubmit)="agregarProducto()">
+    
+    <!-- Nombre del Producto -->
+    <ion-item>
+      <ion-label position="floating">Nombre del Producto</ion-label>
+      <ion-input formControlName="nombre_producto" required></ion-input>
+    </ion-item>
+
+    <!-- Descripción del Producto -->
+    <ion-item>
+      <ion-label position="floating">Descripción del Producto</ion-label>
+      <ion-textarea formControlName="descripcion_producto"></ion-textarea>
+    </ion-item>
+
+    <!-- Precio del Producto -->
+    <ion-item>
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input type="number" formControlName="precio_prod" required></ion-input>
+    </ion-item>
+
+    <!-- Inventario: Cantidad Disponible -->
+    <ion-item>
+      <ion-label position="floating">Cantidad Disponible</ion-label>
+      <ion-input type="number" formControlName="cantidad_disponible" required></ion-input>
+    </ion-item>
+
+    <!-- Inventario: Umbral de Reabastecimiento -->
+    <ion-item>
+      <ion-label position="floating">Umbral de Reabastecimiento</ion-label>
+      <ion-input type="number" formControlName="umbral_reabastecimiento" required></ion-input>
+    </ion-item>
+
+    <!-- Botones de Acción -->
+    <ion-button expand="block" type="submit" [disabled]="productoForm.invalid">Agregar Producto</ion-button>
+    <ion-button expand="block" color="medium" (click)="volver()">Cancelar</ion-button>
+
+  </form>
+
+</ion-content>

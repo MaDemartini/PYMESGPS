@@ -1,0 +1,76 @@
+#login-content {
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo-img {
+  max-width: 120px;
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-top: 10px;
+}
+
+.context-text {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.input-item {
+  width: 100%;
+  max-width: 400px;
+  --background: #fff;
+  --border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.password-item {
+  position: relative;
+}
+
+.eye-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+}
+
+.login-btn {
+  width: 100%;
+  max-width: 400px;
+  --border-radius: 20px;
+  --background: #007bff;
+  margin-top: 20px;
+}
+
+ion-button {
+  --border-radius: 20px;
+  margin-top: 10px;
+}
+
+ion-header {
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0); /* Cambiado el color de la barra superior */
+}
+
+ion-title {
+  color: rgb(0, 0, 0); /* Cambiar el color del título a blanco */
+}
+
+ion-content {
+  --background: #f5f8fa;
+}

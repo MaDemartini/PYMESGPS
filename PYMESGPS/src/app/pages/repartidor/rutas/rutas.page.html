@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Rutas del Repartidor</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>Solicitudes Pendientes</h2>
+  <ion-list>
+    <ion-item *ngFor="let solicitud of solicitudesPendientes">
+      <ion-label>
+        <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
+        <p>Cliente: {{ solicitud.nombre_cliente }}</p>
+        <p>Dirección: {{ solicitud.direccion_cliente }}</p>
+        <p>Estado: Pendiente</p>
+      </ion-label>
+      <ion-button color="success" (click)="aceptarSolicitud(solicitud.id_solicitud)">Aceptar</ion-button>
+      <ion-button color="danger" (click)="rechazarSolicitud(solicitud.id_solicitud)">Rechazar</ion-button>
+      <ion-button color="primary" (click)="escanearQR(solicitud.id_solicitud)">Escanear QR</ion-button>
+    </ion-item>    
+  </ion-list>
+
+  <h2>Solicitudes Aprobadas</h2>
+  <ion-list>
+    <ion-item *ngFor="let solicitud of solicitudesAprobadas">
+      <ion-label>
+        <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
+        <p>Cliente: {{ solicitud.nombre_cliente }}</p>
+        <p>Dirección: {{ solicitud.direccion_cliente }}</p>
+        <p>Estado: Aprobada</p>
+      </ion-label>
+      <ion-button color="primary" (click)="escanearQR(solicitud.id_solicitud)">Escanear QR</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

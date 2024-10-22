@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Solicitud de Servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Crear Nueva Solicitud</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Seleccione Lote</ion-label>
+        <ion-select [(ngModel)]="solicitud.id_lote">
+          <ion-select-option *ngFor="let lote of lotes" [value]="lote.id_lote">
+            {{ lote.nombre_lote }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Seleccione Cliente</ion-label>
+        <ion-select [(ngModel)]="solicitud.id_cliente">
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id_cliente">
+            {{ cliente.nombre_completo }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Seleccione Repartidor</ion-label>
+        <ion-select [(ngModel)]="solicitud.id_repartidor">
+          <ion-select-option *ngFor="let repartidor of repartidores" [value]="repartidor.id_repartidor">
+            {{ repartidor.nombre_completo }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Observaciones</ion-label>
+        <ion-textarea [(ngModel)]="solicitud.observacion"></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" (click)="crearSolicitud()">Crear Solicitud</ion-button>
+
+      <ion-toast
+        *ngIf="solicitudExistente"
+        message="Ya existe una solicitud para este lote y cliente."
+        duration="2000">
+      </ion-toast>
+    </ion-card-content>
+  </ion-card>
+
+  <h2>Solicitudes Existentes</h2>
+  <ion-list>
+    <ion-item *ngFor="let solicitud of solicitudes">
+      <ion-label>
+        <h2>{{ obtenerNombreLote(solicitud.id_lote) }}</h2>
+        <p>Cliente: {{ obtenerNombreCliente(solicitud.id_cliente) }}</p>
+        <p>Repartidor: {{ obtenerNombreRepartidor(solicitud.id_repartidor) }}</p>
+        <p>Estado: {{ obtenerNombreEstado(solicitud.id_estado_solicitud) }}</p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" 
+          (click)="eliminarSolicitud(solicitud.id_solicitud ?? 0)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button> 
+    </ion-item>
+  </ion-list>
+</ion-content>

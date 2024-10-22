@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Agregar Cliente</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/gestionar-usuario"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="agregarCliente()">
+    <ion-item [class.missing-field]="!nombreCompleto">
+      <ion-label position="floating">Nombre Completo</ion-label>
+      <ion-input [(ngModel)]="nombreCompleto" name="nombreCompleto" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!correo">
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input [(ngModel)]="correo" name="correo" type="email" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!username">
+      <ion-label position="floating">Username</ion-label>
+      <ion-input [(ngModel)]="username" name="username" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!password">
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!direccion">
+      <ion-label position="floating">Dirección</ion-label>
+      <ion-input [(ngModel)]="direccion" name="direccion" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!region">
+      <ion-label position="floating">Región</ion-label>
+      <ion-input [(ngModel)]="region" name="region" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!comuna">
+      <ion-label position="floating">Comuna</ion-label>
+      <ion-input [(ngModel)]="comuna" name="comuna" required></ion-input>
+    </ion-item>
+
+    <ion-item [class.missing-field]="!telefono">
+      <ion-label position="floating">Teléfono</ion-label>
+      <ion-input [(ngModel)]="telefono" name="telefono" type="tel" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" color="primary">Agregar Cliente</ion-button>
+    <ion-button expand="block" color="medium" (click)="volver()">Cancelar</ion-button>
+  </form>
+</ion-content>

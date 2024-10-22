@@ -1,0 +1,133 @@
+/* Estilos generales para la página home */
+ion-header, ion-toolbar {
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+  --color: #fff;
+}
+
+ion-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+ion-content {
+  --background: #f5f8fa;
+}
+
+ion-grid {
+  --ion-grid-padding: 10px;
+}
+
+ion-col {
+  text-align: center;
+}
+
+ion-img {
+  margin-top: 10px;
+  max-width: 120px;
+  height: auto;
+  border-radius: 12px;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 10px 0;
+  color: #333;
+}
+
+p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+ion-button {
+  --border-radius: 18px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  margin: 8px 0;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+ion-item {
+  --border-radius: 18px;
+  margin-bottom: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+ion-input {
+  --padding-start: 10px;
+}
+
+.menu-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.menu-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo-img {
+  margin-bottom: 15px;
+  max-width: 150px;
+}
+
+ion-list {
+  --background: transparent;
+}
+
+ion-item {
+  --background: #ffffff;
+  --border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 5px 0;
+}
+
+ion-item:hover {
+  --background: #f0f0f0;
+}
+
+/* Estilo de tarjetas para los botones */
+ion-card {
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  margin: 10px 0;
+  padding: 15px;
+  text-align: center;
+  background-color: #fff;
+}
+
+ion-card:hover {
+  transform: translateY(-2px); /* Efecto al pasar el mouse */
+  transition: 0.3s ease;
+}
+
+ion-card h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+ion-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+ion-icon {
+  font-size: 2.5rem;
+  color: #007bff; /* Color del icono */
+  margin-bottom: 10px;
+}
