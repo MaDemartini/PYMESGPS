@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CrearCliente } from 'src/app/models/Crear/Usuarios/crearCliente';
 import * as bcrypt from 'bcryptjs';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
 import { ApiConfigService } from 'src/app/services/apiconfig/apiconfig.service';
 

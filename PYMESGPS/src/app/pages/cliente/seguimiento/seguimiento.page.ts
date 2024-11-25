@@ -11,7 +11,11 @@ import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/so
   styleUrls: ['./seguimiento.page.scss'],
 })
 export class SeguimientoPage implements OnInit {
+<<<<<<< HEAD
   codigoSeguimiento: string = '';
+=======
+  codigoSeguimiento: string;
+>>>>>>> 5d054c5cb992c5e8a883b036822b6f5315102f44
   solicitud: SolicitudServicio | null = null;
   error: string | null = null;
 
@@ -21,8 +25,15 @@ export class SeguimientoPage implements OnInit {
     private toastController: ToastController
   ) {
     const navigation = this.router.getCurrentNavigation();
+<<<<<<< HEAD
     if (navigation?.extras.state) {
       this.codigoSeguimiento = navigation.extras.state['codigo'] || '';
+=======
+    if (navigation && navigation.extras.state) {
+      this.codigoSeguimiento = navigation.extras.state['codigo'];
+    } else {
+      this.codigoSeguimiento = '';
+>>>>>>> 5d054c5cb992c5e8a883b036822b6f5315102f44
     }
   }
 
@@ -37,6 +48,7 @@ export class SeguimientoPage implements OnInit {
 
   async buscarSolicitud() {
     try {
+<<<<<<< HEAD
       const solicitud = await firstValueFrom(
         this.solicitudServicioService.obtenerSolicitudPorCodigo(this.codigoSeguimiento)
       );
@@ -52,6 +64,7 @@ export class SeguimientoPage implements OnInit {
       console.error('Error al buscar la solicitud:', error);
       this.error = 'Error al buscar la solicitud. Inténtalo de nuevo más tarde.';
       this.mostrarMensaje(this.error, 'danger');
+      console.error('Error al buscar la solicitud:', error);
     }
   }
 
