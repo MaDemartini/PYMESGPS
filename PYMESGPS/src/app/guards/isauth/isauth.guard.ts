@@ -11,11 +11,11 @@ export const authGuard: CanActivateFn = async (route, state) => {
     if (userInfo) {
       return true;
     } else {
-      router.navigate(['/login']);
+      router.navigate(['/login'], { replaceUrl: true });
       return false;
     }
   } catch (error) {
-    router.navigate(['/login']);
+    router.navigate(['/login'],  { replaceUrl: true });
     return false;
   }
 };

@@ -1,11 +1,7 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Gestionar Repartidores</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="volver()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
+    <ion-back-button slot="start" defaultHref="/solicitud-servicio" (click)="volver()"> </ion-back-button>
     <ion-buttons slot="end">
       <ion-button (click)="solicitarRepartidor()" [disabled]="!tieneRepartidores()" fill="clear">
         <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
@@ -15,6 +11,19 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <!-- Refresher para recargar la lista de productos -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar" refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Mensaje de límite de repartidores -->
+  <ion-item *ngIf="!tieneRepartidores()" color="warning">
+    <ion-label class="ion-text-center">
+      Ha alcanzado el máximo de repartidores. Adquiera el Plan M para solicitar más repartidores.
+    </ion-label>
+  </ion-item>
+
   <!-- Sección Mis Repartidores -->
   <h2 class="section-title">Mis Repartidores</h2>
   <ion-grid *ngIf="repartidores.length > 0; else noRepartidores">
@@ -27,6 +36,9 @@
           <ion-card-content>
             <p><strong>Correo:</strong> {{ repartidor.correo }}</p>
             <p><strong>Username:</strong> {{ repartidor.username }}</p>
+            <ion-button color="danger" fill="clear" (click)="eliminarRepartidor(repartidor.id_solicitud)"> Eliminar Repartidor
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -50,8 +62,9 @@
         <p>{{ solicitud.correo }}</p>
         <p><strong>Estado:</strong> Aprobada</p>
       </ion-label>
-      <ion-button *ngIf="solicitud.id_solicitud" color="primary" fill="outline" (click)="registrarRepartidor(solicitud.id_solicitud)">
-        Registrar Repartidor
+      <ion-button 
+        *ngIf="solicitud.id_solicitud" color="primary" fill="clear" (click)="registrarRepartidor(solicitud.id_solicitud)" [disabled]="!puedeRegistrarRepartidor()">
+        <ion-icon slot="icon-only" name="person-add"></ion-icon>
       </ion-button>
     </ion-item>
   </ion-list>

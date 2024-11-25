@@ -1,10 +1,6 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-back-button (click)="volver()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
+  <ion-toolbar>
+      <ion-back-button slot="start" defaultHref="/productos" (click)="volver()"> </ion-back-button>
     <ion-title>Gestionar Productos</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="agregarProducto()">
@@ -15,6 +11,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <!-- Refresher para recargar la lista de productos -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar" refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
 
   <!-- Barra de búsqueda -->
   <ion-searchbar 
@@ -40,10 +41,14 @@
           <ion-card-content>
             <p><strong>Descripción:</strong> {{ producto.descripcion_producto }}</p>
             <p><strong>Precio:</strong> {{ producto.precio_prod | currency }}</p>
-            <p><strong>Inventario disponible:</strong> {{ producto.inventario?.cantidad_disponible || 0 }}</p>
+            <p><strong>Inventario disponible:</strong> {{ producto.inventario.cantidad_disponible || 0 }}</p>
             
-            <ion-button color="primary" fill="outline" (click)="editarProducto(producto.id_producto)">Editar</ion-button>
-            <ion-button color="danger" fill="outline" (click)="eliminarProducto(producto.id_producto)">Eliminar</ion-button>
+            <ion-button color="primary" fill="clear" (click)="editarProducto(producto.id_producto)">Editar
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button slot = "end" color="danger" fill="clear" (click)="eliminarProducto(producto.id_producto, producto.inventario.id_inventario)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

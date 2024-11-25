@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Historial de Entregas</ion-title>
+    <ion-back-button slot="start" defaultHref="/historial-entregas" (click)="volver()"></ion-back-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-list *ngIf="historialEntregas.length > 0; else noEntregas">
+          <ion-card *ngFor="let entrega of historialEntregas" class="entrega-card">
+            <ion-card-header>
+              <ion-card-title>ID Solicitud: {{ entrega.id_solicitud }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Lote:</strong> {{ entrega.solicitud.lote.nombre_lote }}</p>
+              <p><strong>Cliente:</strong> {{ entrega.solicitud.cliente.nombre_completo }}</p>
+              <p><strong>Emprendedor:</strong> {{ entrega.solicitud.emprendedor.nombre_completo }}</p>
+              <p><strong>Estado:</strong> {{ entrega.solicitud.estado_solicitud.nombre_estado }}</p>
+              <p><strong>Descripción:</strong> {{ entrega.descripcion }}</p>
+              <p>
+                <small>
+                  <strong>Fecha:</strong> {{ entrega.fecha_actualizacion | date: 'short' }}
+                </small>
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+
+        <!-- Plantilla si no hay entregas -->
+        <ng-template #noEntregas>
+          <div class="empty-state">
+            <ion-icon name="document-outline" class="empty-icon"></ion-icon>
+            <p>No hay entregas en el historial.</p>
+          </div>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

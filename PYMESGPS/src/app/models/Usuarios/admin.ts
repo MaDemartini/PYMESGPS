@@ -9,4 +9,5 @@ export interface Admin {
   fecha_creacion: Date;
   fecha_modificacion: Date;
   id_role: Role;
+  imagen_perfil?: string; // URL de la imagen de perfil
 }

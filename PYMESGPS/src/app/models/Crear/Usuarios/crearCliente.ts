@@ -8,4 +8,6 @@ export interface CrearCliente {
   comuna: string;
   telefono: string;
   id_role: number; 
-  } 
+  latitud?: number; // Coordenada opcional
+  longitud?: number; // Coordenada opcional
+}

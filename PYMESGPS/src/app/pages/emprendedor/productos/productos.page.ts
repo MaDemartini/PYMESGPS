@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ProductoService } from 'src/app/services/productos/productos.service';
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
+import { InventarioService } from 'src/app/services/inventario/inventario.service';
 
 @Component({
   selector: 'app-producto',
@@ -18,8 +19,9 @@ export class ProductosPage implements OnInit {
   constructor(
     private authService: AuthServiceService,
     private productoService: ProductoService,
+    private inventarioService: InventarioService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarProductos();
@@ -36,6 +38,12 @@ export class ProductosPage implements OnInit {
     } catch (error) {
       console.error('Error al cargar productos', error);
     }
+  }
+
+  // Refresco page
+  doRefresh(event: any) {
+    this.cargarProductos();
+    event.target.complete();
   }
 
   // Función para buscar productos
@@ -55,15 +63,22 @@ export class ProductosPage implements OnInit {
   // Navegar a la página para editar un producto
   editarProducto(idProducto: number) {
     this.router.navigate([`/productos/actualizar-productos/${idProducto}`]);
-  }
+  }  
 
-  // Eliminar un producto
-  async eliminarProducto(idProducto: number) {
+  // Eliminar un producto y su inventario asociado
+  async eliminarProducto(idProducto: number, Inventario: number) {
     try {
+      // Paso 1: Eliminar el inventario asociado
+      await lastValueFrom(this.inventarioService.eliminarInventario(Inventario));
+
+      // Paso 2: Eliminar el producto
       await lastValueFrom(this.productoService.eliminarProducto(idProducto));
-      this.cargarProductos();  // Recargar la lista después de eliminar
+
+      // Recargar la lista después de eliminar
+      this.cargarProductos();
+      // console.log('Producto e inventario eliminados correctamente');
     } catch (error) {
-      console.error('Error al eliminar producto', error);
+      console.error('Error al eliminar producto e inventario', error);
     }
   }
 

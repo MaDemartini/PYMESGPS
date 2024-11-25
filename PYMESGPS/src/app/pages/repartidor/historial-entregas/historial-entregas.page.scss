@@ -1,0 +1,48 @@
+ion-content {
+  --background: #f9f9f9;
+}
+
+.entrega-card {
+  border-radius: 10px;
+  margin: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+ion-card-header {
+  background-color: #f1f5f9;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+ion-card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+ion-card-content {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+ion-card-content p {
+  margin: 5px 0;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 10px;
+}

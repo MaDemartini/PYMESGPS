@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reportes',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportesPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router ) { }
 
   ngOnInit() {
   }
 
+  volver() {
+    this.router.navigate(['/home-admin']);
+  }
 }

@@ -1,51 +1,84 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Bienvenido a PYMEsGPS</ion-title>
+    <ion-title>PYMEsGPS</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openMenu()">
-        <ion-icon name="menu-outline"></ion-icon>
+        <button class="boton-menu" name="menu-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/12194/12194428.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
-      <!-- Botón de notificación a la izquierda -->
-      <ion-button (click)="mostrarNotificaciones()">
-        <ion-icon name="notifications-outline"></ion-icon>
-        <ion-badge *ngIf="notificaciones.length > 0" color="danger">{{ notificaciones.length }}</ion-badge>
-      </ion-button>
+      <button class="boton-notificacion" (click)="abrirModalNotificaciones()">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/1859/1859479.png"
+          class="icon-notificacion"
+        />
+        <ion-badge
+          *ngIf="notificacionesNoLeidas.length > 0"
+          color="danger"
+          class="badge-notificacion"
+        >
+          {{ notificacionesNoLeidas.length }}
+        </ion-badge>
+      </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<!-- Panel lateral -->
 <ion-menu side="end" contentId="main-content">
   <ion-header>
     <ion-toolbar>
       <ion-title>Menú</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="closeMenu()">
-          <ion-icon name="close-outline"></ion-icon>
-        </ion-button>
+        <button class="boton-menu" (click)="closeMenu()">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-
   <ion-content>
     <ion-list>
-      <!-- Opciones de Menú -->
       <ion-item button (click)="goToProfile()">
-        <ion-icon name="person-circle-outline"></ion-icon>
+          <button slot="start" class="boton-menu" name="person-circle-outline">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/31/31625.png"
+              class="icon-menu"
+            />
+          </button>
         <ion-label>Perfil</ion-label>
       </ion-item>
       <ion-item button (click)="goToConfig()">
-        <ion-icon name="settings-outline"></ion-icon>
+        <button slot="start" class="boton-menu" name="settings-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/14945/14945874.png"
+            class="icon-menu"
+          />
+        </button>
         <ion-label>Configuración</ion-label>
       </ion-item>
       <ion-item button (click)="goToSupport()">
-        <ion-icon name="help-circle-outline"></ion-icon>
+        <button slot="start" class="boton-menu" name="help-circle-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1067/1067566.png"
+            class="icon-menu"
+          />
+        </button>
         <ion-label>Soporte</ion-label>
       </ion-item>
       <ion-item button (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
+        <button slot="start" class="boton-menu" name="log-out-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1828/1828427.png"
+            class="icon-menu"
+          />
+        </button>
         <ion-label>Cerrar sesión</ion-label>
       </ion-item>
     </ion-list>
@@ -53,44 +86,118 @@
 </ion-menu>
 
 <ion-content id="main-content" class="ion-padding">
+  <!-- Modal de notificaciones -->
+  <div class="notificaciones-modal" *ngIf="mostrarModalNotificaciones">
+    <div class="notificaciones-header">
+      <span>Notificaciones</span>
+      <ion-button
+        fill="clear"
+        class="boton-xnotificacion"
+        (click)="cerrarModalNotificaciones()"
+      >
+        <img
+          src="https://cdn-icons-gif.flaticon.com/8362/8362307.gif"
+          class="icon-notificacion"
+        />
+      </ion-button>
+    </div>
+    <ion-segment (ionChange)="cambiarSegmento($event)" value="noLeidas">
+      <ion-segment-button value="noLeidas">
+        <ion-label>No Leídas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="leidas">
+        <ion-label>Leídas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Notificaciones no leídas -->
+    <ion-list *ngIf="segmentoActual === 'noLeidas'">
+      <ion-item-sliding *ngFor="let notificacion of notificacionesNoLeidas">
+        <ion-item>
+          <ion-label>
+            <h2>{{ notificacion.titulo }}</h2>
+            <p>{{ notificacion.mensaje }}</p>
+            <p><small>{{ notificacion.fecha | date: 'short' }}</small></p>
+          </ion-label>
+          <ion-button
+            slot="end"
+            color="success"
+            size="small"
+            (click)="marcarNotificacionComoLeida(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option
+            color="danger"
+            (click)="eliminarNotificacion(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- Notificaciones leídas -->
+    <ion-list *ngIf="segmentoActual === 'leidas'">
+      <ion-item-sliding *ngFor="let notificacion of notificacionesLeidas">
+        <ion-item>
+          <ion-label>
+            <h2>{{ notificacion.titulo }}</h2>
+            <p>{{ notificacion.mensaje }}</p>
+            <p><small>{{ notificacion.fecha | date: 'short' }}</small></p>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option
+            color="danger"
+            (click)="eliminarNotificacion(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
   <ion-grid>
     <ion-row class="ion-justify-content-center ion-align-items-center">
       <ion-col size="12" class="ion-text-center">
-        <ion-img src="assets/img/track-order.png" alt="Track Order" class="logo-img"></ion-img>
+        <ion-img
+          src="https://cdn-icons-png.flaticon.com/128/12532/12532265.png"
+          alt="Welcome"
+          class="logo-img"
+        ></ion-img>
         <h2>¡Hola, {{ clienteData?.nombre_completo }}!</h2>
         <p>Introduce el código de seguimiento para rastrear tu entrega.</p>
       </ion-col>
     </ion-row>
 
-    <!-- Campo de código de seguimiento -->
     <ion-row>
       <ion-col size="12">
         <ion-item>
           <ion-label position="floating">Código de Seguimiento</ion-label>
           <ion-input type="text" [(ngModel)]="codigoSeguimiento"></ion-input>
         </ion-item>
-        <ion-button expand="full" color="primary" (click)="rastrearPedido()">Rastrear</ion-button>
-      </ion-col>
-    </ion-row>
-
-    <!-- Lista de notificaciones -->
-    <ion-row *ngIf="mostrarNotificacionesLista" class="notificaciones-overlay">
-      <ion-col size="12">
-        <div class="notificaciones-container">
-          <ion-list>
-            <ion-item *ngFor="let notificacion of notificaciones" lines="none">
-              <ion-label>
-                <h3>{{ notificacion.titulo }}</h3>
-                <p>{{ notificacion.mensaje }}</p>
-                <small>{{ notificacion.fecha | date: 'short' }}</small>
-              </ion-label>
-              <ion-button fill="clear" color="medium" (click)="marcarNotificacionComoLeida(notificacion.id_notificacion!)">
-                <ion-icon name="checkmark-circle-outline"></ion-icon>
-              </ion-button>
-            </ion-item>
-          </ion-list>
-        </div>
+        <ion-button expand="full" color="primary" (click)="rastrearPedido()"
+          >Confirmar</ion-button
+        >
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Imágenes Laterales -->
+  <div class="side-icons">
+    <img
+      src="https://cdn-icons-png.flaticon.com/128/2445/2445144.png"
+      alt="Icono Lateral Izquierdo"
+      class="side-icon left-icon"
+    />
+    <img
+      src="https://cdn-icons-png.flaticon.com/128/2445/2445144.png"
+      alt="Icono Lateral Derecho"
+      class="side-icon right-icon"
+    />
+  </div>
 </ion-content>

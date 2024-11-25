@@ -1,4 +1,5 @@
 export interface ActualizarSolicitudServicio {
-  estado_solicitud?: string;
+  id_solicitud?: number; 
+  id_estado_solicitud?: number; 
   observacion?: string;
 }

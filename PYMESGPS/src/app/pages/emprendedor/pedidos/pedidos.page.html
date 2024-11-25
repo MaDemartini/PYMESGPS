@@ -1,13 +1,69 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>pedidos</ion-title>
+    <ion-title>Pedidos</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pedidos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- Mostrar indicador de carga -->
+  <div *ngIf="cargando" class="cargando-container">
+    <ion-spinner name="dots"></ion-spinner>
+    <p class="cargando-text">Cargando pedidos...</p>
+  </div>
+
+  <!-- Mostrar mensaje cuando no hay pedidos -->
+  <div *ngIf="!cargando && pedidos && pedidos.length === 0" class="no-orders-container">
+    <ion-icon name="document-text-outline" class="no-orders-icon"></ion-icon>
+    <p class="no-orders-text">No tienes historial de pedidos.</p>
+  </div>
+
+  <!-- Mostrar la lista de pedidos -->
+  <ion-list *ngIf="!cargando && pedidos && pedidos.length > 0">
+    <ion-card *ngFor="let pedido of pedidos">
+      <ion-card-header>
+        <ion-card-title>
+          Lote: {{ pedido.lote?.nombre_lote ? pedido.lote?.nombre_lote : 'Desconocido' }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          Código Seguimiento: {{ pedido.lote?.codigo_seguimiento ? pedido.lote?.codigo_seguimiento : 'N/A' }}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <strong>Cliente:</strong> {{ pedido.cliente?.nombre_completo ? pedido.cliente?.nombre_completo : 'Desconocido' }}
+        </p>
+        <p>
+          <strong>Repartidor:</strong> {{ pedido.repartidor?.nombre_completo ? pedido.repartidor?.nombre_completo : 'Desconocido' }}
+        </p>
+        <p>
+          <strong>Fecha:</strong> {{ pedido.fecha_solicitud | date: 'short' }}
+        </p>
+        <p>
+          <strong>Estado:</strong> {{ pedido.estado_solicitud?.nombre_estado ? pedido.estado_solicitud?.nombre_estado : 'Desconocido' }}
+        </p>
+        <p>
+          <strong>Precio Total del Lote:</strong> ${{ obtenerPrecioLote(pedido) }}
+        </p>
+        <p><strong>Productos:</strong></p>
+
+        <ion-list *ngIf="pedido.lote && pedido.lote.productos && pedido.lote.productos.length > 0">
+          <ion-item *ngFor="let producto of pedido.lote.productos">
+            <ion-label>
+              {{ producto.producto.nombre_producto ? producto.producto.nombre_producto : 'Producto desconocido' }} - 
+              Cantidad: {{ producto.cantidad || 0 }} - 
+              Precio Unitario: ${{ producto.producto.precio_prod || 0 }} - 
+              Total: ${{ (producto.producto.precio_prod || 0) * (producto.cantidad || 0) }}
+            </ion-label>
+          </ion-item>
+        </ion-list>        
+
+        <ng-container *ngIf="pedido.lote && (!pedido.lote.productos || pedido.lote.productos.length === 0)">
+          <p>No hay productos disponibles.</p>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 </ion-content>
