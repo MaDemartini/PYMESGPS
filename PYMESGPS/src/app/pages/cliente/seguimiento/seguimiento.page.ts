@@ -12,8 +12,8 @@ import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/so
 })
 export class SeguimientoPage implements OnInit {
   codigoSeguimiento: string;
-  solicitud: SolicitudServicio | null = null; 
-  error: string | null = null; 
+  solicitud: SolicitudServicio | null = null;
+  error: string | null = null;
 
   constructor(
     private router: Router,
@@ -23,7 +23,7 @@ export class SeguimientoPage implements OnInit {
     // Obtiene el código del estado de la navegación
     const navigation = this.router.getCurrentNavigation();
     if (navigation && navigation.extras.state) {
-      this.codigoSeguimiento = navigation.extras.state['codigo']; 
+      this.codigoSeguimiento = navigation.extras.state['codigo'];
     } else {
       this.codigoSeguimiento = '';
     }
@@ -40,20 +40,39 @@ export class SeguimientoPage implements OnInit {
 
   async buscarSolicitud() {
     try {
-      this.solicitud = await firstValueFrom(this.solicitudServicioService.obtenerSolicitudPorCodigo(this.codigoSeguimiento));
-      if (!this.solicitud) {
-        this.error = 'No se encontró la solicitud con este código.';
+      // Paso 1: Buscar la solicitud básica
+      const solicitudBasica = await firstValueFrom(
+        this.solicitudServicioService.obtenerSolicitudPorCodigo(this.codigoSeguimiento)
+      );
+  
+      if (!solicitudBasica) {
+        this.error = 'No se encontró ninguna solicitud con este código.';
         this.mostrarMensaje(this.error, 'danger');
-      } else {
-        this.mostrarMensaje('Solicitud encontrada con éxito.', 'success');
+        return;
       }
-    } catch (error) {
-      this.error = 'Error al buscar la solicitud. Inténtalo de nuevo más tarde.';
-      this.mostrarMensaje(this.error, 'danger');
-      console.error('Error al buscar la solicitud:', error);
+  
+      console.log('Solicitud básica encontrada:', solicitudBasica);
+  
+      // Paso 2: Buscar los detalles completos de la solicitud
+      const solicitudDetalles = await firstValueFrom(
+        this.solicitudServicioService.obtenerSolicitudConDetalles(this.codigoSeguimiento)
+      );
+  
+      if (solicitudDetalles) {
+        this.solicitud = solicitudDetalles;
+        this.mostrarMensaje('Solicitud encontrada con éxito.', 'success');
+        console.log('Detalles de la solicitud:', solicitudDetalles);
+      } else {
+        this.error = 'No se encontraron detalles de la solicitud.';
+        this.mostrarMensaje(this.error, 'danger');
+      }
+    } catch (error: any) {
+      console.error('Error en buscarSolicitud:', error);
+      this.error = error.message || 'Error al buscar la solicitud. Inténtalo de nuevo más tarde.';
+      this.mostrarMensaje(this.error || 'Ocurrió un error desconocido.', 'danger');
     }
-  }
-
+  } 
+  
   private async mostrarMensaje(mensaje: string, color: string) {
     const toast = await this.toastController.create({
       message: mensaje,

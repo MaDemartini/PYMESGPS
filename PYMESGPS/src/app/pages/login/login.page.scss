@@ -7,6 +7,11 @@
   height: 100vh;
 }
 
+ion-header, ion-toolbar {
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+  --color: #fff;
+  }
+  
 .logo-container {
   text-align: center;
   margin-bottom: 20px;

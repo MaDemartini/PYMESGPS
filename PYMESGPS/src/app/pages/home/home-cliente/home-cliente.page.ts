@@ -18,7 +18,11 @@ export class HomeClientePage implements OnInit {
   clienteData: any;
   codigoSeguimiento: string = '';
   notificaciones: Notificacion[] = [];
+  notificacionesNoLeidas: Notificacion[] = [];
+  notificacionesLeidas: Notificacion[] = [];
   mostrarNotificacionesLista: boolean = false;
+  mostrarModalNotificaciones = false;
+  segmentoActual: string = 'noLeidas'; 
 
   constructor(
     private menuCtrl: MenuController,
@@ -28,7 +32,7 @@ export class HomeClientePage implements OnInit {
     private notificacionesService: NotificacionesService,
     private router: Router,
     private toastController: ToastController
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarCliente();
@@ -60,29 +64,77 @@ export class HomeClientePage implements OnInit {
     try {
       const usuario = await this.authService.getDecryptedUserData();
       if (usuario && usuario.id_cliente) {
-        this.notificaciones = await lastValueFrom(
-          this.notificacionesService.obtenerNotificaciones(usuario.id_cliente) 
+        const idRoleCliente = 1; // Ajusta este valor según el ID numérico del rol 'cliente'
+        const notificaciones = await firstValueFrom(
+          this.notificacionesService.obtenerNotificacionesPorRolYUsuario(
+              idRoleCliente, 
+              usuario.id_cliente
+            )
         );
+
+         // Separar notificaciones en leídas y no leídas
+         this.notificacionesNoLeidas = notificaciones.filter((n) => !n.leido);
+         this.notificacionesLeidas = notificaciones.filter((n) => n.leido);
       } else {
-        console.warn('El usuario no es un cliente válido.');
+        console.warn('No hay notificaciones disponibles para el usuario.');
       }
     } catch (error) {
       console.error('Error al cargar las notificaciones:', error);
     }
   }
-
   
+  mostrarNotificaciones() {
+    this.mostrarNotificacionesLista = !this.mostrarNotificacionesLista;
+  }
+ 
+  abrirModalNotificaciones() {
+    this.mostrarModalNotificaciones = true;
+  }
+
+  cerrarModalNotificaciones() {
+    this.mostrarModalNotificaciones = false;
+  }
+
+  cambiarSegmento(event: any) {
+    this.segmentoActual = event.detail.value;
+  }
+
   async marcarNotificacionComoLeida(idNotificacion: number) {
     try {
-      await lastValueFrom(this.notificacionesService.marcarComoLeida(idNotificacion));
-      this.notificaciones = this.notificaciones.filter(n => n.id_notificacion !== idNotificacion);
+      await lastValueFrom(
+        this.notificacionesService.marcarComoLeida(idNotificacion)
+      );
+      // Mover notificación de no leídas a leídas
+      const notificacionMarcada = this.notificacionesNoLeidas.find(
+        (n) => n.id_notificacion === idNotificacion
+      );
+      if (notificacionMarcada) {
+        notificacionMarcada.leido = true;
+        this.notificacionesLeidas.push(notificacionMarcada);
+        this.notificacionesNoLeidas = this.notificacionesNoLeidas.filter(
+          (n) => n.id_notificacion !== idNotificacion
+        );
+      }
     } catch (error) {
       console.error('Error al marcar la notificación como leída:', error);
     }
-  }
+  }  
 
-  mostrarNotificaciones() {
-    this.mostrarNotificacionesLista = !this.mostrarNotificacionesLista;
+  async eliminarNotificacion(idNotificacion: number) {
+    try {
+      await firstValueFrom(
+        this.notificacionesService.eliminarNotificacion(idNotificacion)
+      );
+      // Eliminar de ambas listas
+      this.notificacionesNoLeidas = this.notificacionesNoLeidas.filter(
+        (n) => n.id_notificacion !== idNotificacion
+      );
+      this.notificacionesLeidas = this.notificacionesLeidas.filter(
+        (n) => n.id_notificacion !== idNotificacion
+      );
+    } catch (error) {
+      console.error('Error al eliminar la notificación:', error);
+    }
   }
 
   private async mostrarMensaje(mensaje: string, color: string) {
@@ -95,34 +147,36 @@ export class HomeClientePage implements OnInit {
     toast.present();
   }
 
-
   async rastrearPedido() {
     if (this.codigoSeguimiento) {
       try {
-        const lote = await firstValueFrom( await this.loteService.obtenerSolicitudPorCodigoSeguimiento(this.codigoSeguimiento));
+        const solicitud = await firstValueFrom(
+          this.loteService.obtenerSolicitudPorCodigoSeguimiento(this.codigoSeguimiento)
+        );
   
-        if (lote) {
-          // Si se encuentra el lote, navega a la página de seguimiento
+        if (solicitud) {
           this.router.navigate(['/seguimiento'], { state: { codigo: this.codigoSeguimiento } });
         } else {
-          console.error('No se encontró ningún lote con el código de seguimiento proporcionado.');
-          // Puedes mostrar un mensaje al usuario aquí
+          console.error('No se encontró ninguna solicitud con el código de seguimiento proporcionado.');
         }
       } catch (error) {
-        console.error('Error al buscar el lote:', error);
+        console.error('Error al buscar la solicitud:', error);
       }
     } else {
       console.error('Por favor ingresa un código de seguimiento');
     }
-  }
-  
+  }  
+
   goToProfile() {
     this.router.navigate(['/perfil']);
   }
 
-  logout() {
-    this.router.navigate(['/login']);
+  // Cerrar sesión
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login'], { replaceUrl: true }); // Redirigir y bloquear acceso a páginas previas
   }
+
 
   goToConfig() {
     this.router.navigate(['/configuracion']);

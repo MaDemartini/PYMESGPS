@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: GestionarLotePage
+  },  {
+    path: 'lotes-creados',
+    loadChildren: () => import('./lotes-creados/lotes-creados.module').then( m => m.LotesCreadosPageModule)
   }
+
 ];
 
 @NgModule({

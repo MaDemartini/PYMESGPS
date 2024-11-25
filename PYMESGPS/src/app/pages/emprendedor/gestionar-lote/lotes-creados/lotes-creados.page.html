@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mis Lotes Creados</ion-title>
+    <ion-back-button defaultHref="/gestionar-lote" slot="start"></ion-back-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="cargarLotes()">
+    <ion-refresher-content pullingText="Desliza para actualizar" refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Mensaje en caso de no haber lotes -->
+  <ion-item *ngIf="lotes.length === 0">
+    <ion-label class="ion-text-center">
+      No tienes lotes creados aún.
+    </ion-label>
+  </ion-item>
+
+  <!-- Lista de lotes -->
+  <ion-list *ngIf="lotes.length > 0">
+    <ion-item *ngFor="let lote of lotes" lines="full">
+      <ion-label>
+        <h2>{{ lote.nombre_lote }}</h2>
+        <p>Código de Seguimiento: {{ lote.codigo_seguimiento }}</p>
+        <p>Precio Total: {{ lote.precio_lote | currency }}</p>
+        <p>Fecha de Creación: {{ lote.fecha_creacion | date:'short' }}</p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="eliminarLote(lote.id_lote)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

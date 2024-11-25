@@ -22,7 +22,7 @@ export class HomeAdminPage implements OnInit {
     private adminService: AdminService,
     private authService: AuthServiceService,  // Usamos AuthService para la autenticación
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarAdmin();
@@ -55,8 +55,10 @@ export class HomeAdminPage implements OnInit {
     this.router.navigate(['/perfil']);
   }
 
-  logout() {
-    this.router.navigate(['/login']);
+  // Cerrar sesión
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login'], { replaceUrl: true }); // Redirigir y bloquear acceso a páginas previas
   }
 
   goToConfig() {
@@ -66,10 +68,10 @@ export class HomeAdminPage implements OnInit {
   goToSupport() {
     this.router.navigate(['/soporte']);
   }
-  
+
   verSolicitudesEmprendedorReparto() {
     this.router.navigate(['/solicitudes-emprendedores-reparto']);
-  }  
+  }
 
   gestionarUsuarios() {
     this.router.navigate(['/gestionar-usuario']);

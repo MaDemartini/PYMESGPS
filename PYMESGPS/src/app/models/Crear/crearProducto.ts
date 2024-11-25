@@ -4,5 +4,6 @@ export interface CrearProducto {
   descripcion_producto?: string;
   id_emprendedor: number;
   precio_prod: number;
-  estado_prod: string;
+  estado_prod: boolean;
+  id_inventario: number;
 }

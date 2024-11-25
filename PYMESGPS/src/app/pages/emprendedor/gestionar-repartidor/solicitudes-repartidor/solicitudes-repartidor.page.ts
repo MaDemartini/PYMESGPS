@@ -62,7 +62,6 @@ export class SolicitudesRepartidorPage implements OnInit {
         },
         error: (error) => {
           console.error('Error al crear la solicitud de repartidor', error);
-          this.mostrarMensaje('Error al enviar la solicitud.', 'danger');
         }
       });
     } else {

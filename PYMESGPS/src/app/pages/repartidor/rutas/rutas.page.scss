@@ -1,0 +1,41 @@
+ion-header, ion-toolbar {
+    --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+    --color: #fff;
+}
+
+.solicitud-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+      
+.solicitud-info {
+    flex: 1; /* Ocupa todo el espacio disponible antes del botón */
+}
+      
+.boton-derecha {
+    width: 60px; /* Ajusta el tamaño según lo que desees */
+    height: 60px; /* Ajusta el tamaño según lo que desees */
+    padding: 0; /* Elimina cualquier relleno interno */
+    border: none; /* Sin bordes */
+    background-color: transparent; /* Sin fondo adicional */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Hace que sea clickeable */
+    overflow: hidden; /* Asegura que la imagen no sobresalga */
+
+}
+      
+.icon-rutas {
+    width: 100%; /* Ocupar todo el ancho del contenedor */
+    height: 100%; /* Ocupar todo el alto del contenedor */
+    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    cursor: pointer; /* Hace que sea clickeable */
+  }
+
+  .icon-cancelar {
+    width: 24px;
+    height: 24px;
+    filter: invert(45%) sepia(75%) saturate(500%) hue-rotate(0deg);
+  }

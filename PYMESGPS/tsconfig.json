@@ -4,6 +4,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["google.maps"],
+    "typeRoots": ["node_modules/@types"],
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
