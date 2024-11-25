@@ -4,6 +4,7 @@ import { CrearCliente } from 'src/app/models/Crear/Usuarios/crearCliente';
 import * as bcrypt from 'bcryptjs';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
+import { ApiConfigService } from 'src/app/services/apiconfig/apiconfig.service';
 
 @Component({
   selector: 'app-registro-cliente',
@@ -22,6 +23,7 @@ export class RegistroClientePage implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
+    private apiConfigService: ApiConfigService,
     private router: Router
   ) {}
 
@@ -64,9 +66,11 @@ export class RegistroClientePage implements OnInit {
   
   private async obtenerCoordenadas(direccion: string): Promise<{ lat: number; lng: number }> {
     try {
+      const mapsApiKey = this.apiConfigService.getMapsApiKey(); 
+
       const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         direccion
-      )}&key=AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug`;
+      )}&key=${mapsApiKey}`;
   
       const response = await fetch(geocodingUrl);
       if (!response.ok) {

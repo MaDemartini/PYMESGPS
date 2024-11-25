@@ -1,26 +1,45 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Seguimiento de Solicitud</ion-title>
-    <ion-back-button slot="start" defaultHref="/seguimiento" (click)="volver()"> </ion-back-button>
+    <ion-title>Seguimiento de Pedido</ion-title>
+    <ion-back-button slot="start" defaultHref="/seguimiento" (click)="volver()"></ion-back-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div *ngIf="solicitud; else noSolicitud">
-    <h2>Detalles de la Solicitud</h2>
-    <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
-    <p><strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo ? solicitud.cliente?.nombre_completo : 'No disponible' }}</p>
-    <p><strong>Repartidor:</strong> {{ solicitud.repartidor?.nombre_completo ? solicitud.repartidor?.nombre_completo : 'No asignado' }}</p>
-    <p><strong>Estado:</strong> {{ solicitud.estado_solicitud?.nombre_estado ? solicitud.estado_solicitud?.nombre_estado : 'No disponible' }}</p>
-    <p><strong>Descripción:</strong> {{ solicitud.observacion ? solicitud.observacion : 'No disponible' }}</p>
-    <p><strong>Fecha de Solicitud:</strong> {{ solicitud.fecha_solicitud ? (solicitud.fecha_solicitud | date) : 'No disponible' }}</p>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles de la Solicitud</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+        <p><strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo || 'No disponible' }}</p>
+        <p><strong>Repartidor:</strong> {{ solicitud.repartidor?.nombre_completo || 'No asignado' }}</p>
+        <p><strong>Estado:</strong> {{ solicitud.estado_solicitud?.nombre_estado || 'No disponible' }}</p>
+        <p><strong>Descripción:</strong> {{ solicitud.observacion || 'No disponible' }}</p>
+        <p>
+          <strong>Fecha de Solicitud:</strong>
+          {{ solicitud.fecha_solicitud ? (solicitud.fecha_solicitud | date: 'short') : 'No disponible' }}
+        </p>
 
-    <h3>Detalles del Lote</h3>
-    <p><strong>Nombre Lote:</strong> {{ solicitud.lote?.nombre_lote ? solicitud.lote?.nombre_lote : 'No disponible' }}</p>
-    <p><strong>Código Seguimiento:</strong> {{ solicitud.lote?.codigo_seguimiento ? solicitud.lote?.codigo_seguimiento : 'No disponible' }}</p>
-    <p><strong>Descripción Lote:</strong> {{ solicitud.lote?.descripcion_lote ? solicitud.lote?.descripcion_lote : 'No disponible' }}</p>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Detalles del Lote</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Nombre Lote:</strong> {{ solicitud.lote?.nombre_lote || 'No disponible' }}</p>
+            <p><strong>Código Seguimiento:</strong> {{ solicitud.lote?.codigo_seguimiento || 'No disponible' }}</p>
+            <p><strong>Descripción:</strong> {{ solicitud.lote?.descripcion_lote || 'No disponible' }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-card-content>
+    </ion-card>
   </div>
+
   <ng-template #noSolicitud>
-    <p>{{ error }}</p>
+    <div class="empty-state">
+      <ion-icon name="alert-circle-outline" class="empty-icon"></ion-icon>
+      <p>{{ error }}</p>
+    </div>
   </ng-template>
 </ion-content>
