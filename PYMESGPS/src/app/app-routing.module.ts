@@ -115,22 +115,18 @@ const routes: Routes = [
     loadChildren: () => import('./pages/emprendedor/productos/productos.module').then( m => m.ProductosPageModule),
     canActivate: [authGuard, isEmprendedorGuard]  // Protege la gestión de productos para emprendedores
   },
-  {
-    path: 'actualizar-productos',
-    loadChildren: () => import('./pages/emprendedor/productos/actualizar-productos/actualizar-productos.module').then( m => m.ActualizarProductosPageModule),
-    canActivate: [authGuard, isEmprendedorGuard]  // Protege la gestión de productos para emprendedores
-  },
-  {
-    path: 'agregar-productos',
-    loadChildren: () => import('./pages/emprendedor/productos/agregar-productos/agregar-productos.module').then( m => m.AgregarProductosPageModule),
-    canActivate: [authGuard, isEmprendedorGuard]  // Protege la gestión de productos para emprendedores
-  },
+
 
 
   {
     path: 'gestionar-lote',
     loadChildren: () => import('./pages/emprendedor/gestionar-lote/gestionar-lote.module').then( m => m.GestionarLotePageModule),
     canActivate: [authGuard, isEmprendedorGuard]  // Protege la gestión de lotes para emprendedores
+  },
+  {
+    path: 'lotes-creados',
+    loadChildren: () => import('./pages/emprendedor/gestionar-lote/lotes-creados/lotes-creados.module').then( m => m.LotesCreadosPageModule),
+    canActivate: [authGuard, isEmprendedorGuard]  // Protege la visualización de lotes creados para emprendedores
   },
   {
     path: 'gestionar-repartidor',
@@ -152,9 +148,18 @@ const routes: Routes = [
   {
     path: 'rutas',
     loadChildren: () => import('./pages/repartidor/rutas/rutas.module').then( m => m.RutasPageModule),
-    canActivate: [authGuard, isRepartidorGuard]  // Protege la vista de pedidos para emprendedores
+    canActivate: [authGuard, isRepartidorGuard]  // Protege la vista de pedidos para repartidores
   },
-
+  {
+    path: 'mapa',
+    loadChildren: () => import('./pages/repartidor/mapa/mapa.module').then( m => m.MapaPageModule),
+    canActivate: [authGuard, isRepartidorGuard]  // Protege la vista de pedidos para repartidores
+  },
+  {
+    path: 'historial-entregas',
+    loadChildren: () => import('./pages/repartidor/historial-entregas/historial-entregas.module').then( m => m.HistorialEntregasPageModule),
+    canActivate: [authGuard, isRepartidorGuard]  // Protege la vista de pedidos para repartidores
+  },
 
 
   {

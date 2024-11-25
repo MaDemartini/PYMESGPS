@@ -13,14 +13,9 @@ const routes: Routes = [
     loadChildren: () => import('./agregar-productos/agregar-productos.module').then( m => m.AgregarProductosPageModule)
   },
   {
-    path: 'actualizar-productos',
+    path: 'actualizar-productos/:id',
     loadChildren: () => import('./actualizar-productos/actualizar-productos.module').then( m => m.ActualizarProductosPageModule)
   },
-  {
-    path: 'eliminar-productos',
-    loadChildren: () => import('./eliminar-productos/eliminar-productos.module').then( m => m.EliminarProductosPageModule)
-  }
-
 ];
 
 @NgModule({

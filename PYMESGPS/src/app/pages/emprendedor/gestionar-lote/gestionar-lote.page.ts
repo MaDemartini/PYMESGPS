@@ -14,6 +14,7 @@ import { LoteProducto } from 'src/app/models/lote_producto';
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { LoteProductoSimplificado } from 'src/app/models/loteproductosimplificado';
 import { ToastController } from '@ionic/angular';
+import { InventarioService } from 'src/app/services/inventario/inventario.service';
 
 @Component({
   selector: 'app-gestionar-lote',
@@ -39,28 +40,30 @@ export class GestionarLotePage implements OnInit {
 
   loteProductos: LoteProducto[] = [];
   productoSeleccionado: Producto | null = null;
+  clienteSeleccionado: Cliente | null = null;
   cantidadSeleccionada: number = 0;
+  cantidadDisponible: number = 0;
 
   constructor(
     private clienteService: ClienteService,
     private productoService: ProductoService,
+    private inventarioService: InventarioService,
     private loteService: LoteService,
     private loteProductoService: LoteProductoService,
     private authService: AuthServiceService,
     private emprendedorService: EmprendedorService,
     private router: Router,
     private toastController: ToastController
-  ) {}
+  ) { }
 
   async ngOnInit() {
     try {
       this.clientes = await firstValueFrom(this.clienteService.obtenerClientes());
-      this.productos = await firstValueFrom(this.productoService.obtenerTodosLosProductos());
-
-      const usuarioLogueado = await this.authService.getDecryptedUserData();  
+      const usuarioLogueado = await this.authService.getDecryptedUserData();
       if (usuarioLogueado && usuarioLogueado.id_emprendedor) {
         this.emprendedor = await firstValueFrom(this.emprendedorService.obtenerEmprendedorPorId(usuarioLogueado.id_emprendedor));
         this.lote.id_emprendedor = this.emprendedor.id_emprendedor;
+        this.productos = await firstValueFrom(this.productoService.obtenerProductosPorEmprendedor(this.emprendedor.id_emprendedor));
       }
     } catch (error) {
       this.mostrarMensaje('Error al cargar los datos iniciales.', 'danger');
@@ -68,38 +71,47 @@ export class GestionarLotePage implements OnInit {
     }
   }
 
-  agregarProducto(producto: Producto | null, cantidad: number) {
-    if (!producto || !producto.inventario) {
-      this.mostrarMensaje('Producto o inventario no disponible.', 'danger');
+  seleccionarProducto(producto: Producto | null) {
+    this.productoSeleccionado = producto;
+    this.cantidadDisponible = producto ? producto.inventario.cantidad_disponible : 0;
+  }
+
+  seleccionarCliente(cliente: Cliente) {
+    this.clienteSeleccionado = cliente;
+    this.lote.id_cliente = cliente.id_cliente; 
+  }
+
+  agregarProducto() {
+    if (!this.productoSeleccionado) {
+      this.mostrarMensaje('Producto no disponible.', 'danger');
       return;
     }
-  
-    const cantidadDisponible = producto.inventario.cantidad_disponible || 0;
-  
-    if (cantidad <= 0 || cantidad > cantidadDisponible) {
+
+    if (this.cantidadSeleccionada <= 0 || this.cantidadSeleccionada > this.cantidadDisponible) {
       this.mostrarMensaje('Cantidad inválida o excede el inventario disponible.', 'danger');
       return;
     }
-  
+
     const nuevoLoteProducto: LoteProducto = {
       id_lote_producto: 0,
       id_lote: this.lote,
-      id_producto: producto,
-      cantidad
+      id_producto: this.productoSeleccionado,
+      cantidad: this.cantidadSeleccionada,
     };
-  
+
     this.loteProductos.push(nuevoLoteProducto);
+    this.cantidadDisponible -= this.cantidadSeleccionada; // Disminuir la cantidad disponible en la UI
+    this.productoSeleccionado!.inventario.cantidad_disponible = this.cantidadDisponible; // Actualizar la cantidad en el objeto de producto
+
     this.calcularPrecioLote();
     this.mostrarMensaje('Producto agregado al lote.', 'success');
-  }  
+    this.cantidadSeleccionada = 0;
+  }
 
   calcularPrecioLote() {
     this.lote.precio_lote = this.loteProductos.reduce((total, loteProducto) => {
       const producto = this.productos.find(p => p.id_producto === loteProducto.id_producto.id_producto);
-      if (producto && producto.inventario) {
-        return total + (producto.precio_prod * loteProducto.cantidad);
-      }
-      return total;
+      return producto ? total + (producto.precio_prod * loteProducto.cantidad) : total;
     }, 0);
   }
 
@@ -109,7 +121,7 @@ export class GestionarLotePage implements OnInit {
         this.lote.codigo_seguimiento = Math.random().toString(36).substring(2, 10).toUpperCase();
         this.lote.fecha_creacion = new Date();
         this.lote.fecha_modificacion = new Date();
-  
+
         const loteCreado = await firstValueFrom(this.loteService.crearLote({
           nombre_lote: this.lote.nombre_lote,
           descripcion_lote: this.lote.descripcion_lote,
@@ -120,35 +132,32 @@ export class GestionarLotePage implements OnInit {
           fecha_creacion: this.lote.fecha_creacion,
           fecha_modificacion: this.lote.fecha_modificacion,
         }));
-  
+
         if (loteCreado && loteCreado.id_lote) {
           for (const loteProducto of this.loteProductos) {
-            const loteProductoSimplificado: LoteProductoSimplificado = {
-              id_lote_producto: 0,
+            const nuevoLoteProducto: LoteProductoSimplificado = {
               id_lote: loteCreado.id_lote,
               id_producto: loteProducto.id_producto.id_producto,
               cantidad: loteProducto.cantidad,
             };
-  
-            await firstValueFrom(this.loteProductoService.agregarProductoAlLote(loteProductoSimplificado));
-  
-            if (loteProducto.id_producto.inventario) {
-              const cantidadRestante = loteProducto.id_producto.inventario.cantidad_disponible - loteProducto.cantidad;
-  
-              if (cantidadRestante < 0) {
-                throw new Error(`No hay suficiente inventario para el producto: ${loteProducto.id_producto.nombre_producto}`);
-              }
-  
-              await this.productoService.actualizarInventario(loteProducto.id_producto.id_producto, {
-                cantidad_disponible: cantidadRestante
-              });
+
+            await firstValueFrom(this.loteProductoService.agregarProductoAlLote(nuevoLoteProducto));
+
+            const cantidadRestante = loteProducto.id_producto.inventario.cantidad_disponible - loteProducto.cantidad;
+
+            if (cantidadRestante < 0) {
+              throw new Error(`No hay suficiente inventario para el producto: ${loteProducto.id_producto.nombre_producto}`);
             }
+
+            await firstValueFrom(this.inventarioService.actualizarInventario(loteProducto.id_producto.id_producto, {
+              cantidad_disponible: cantidadRestante,
+            }));
           }
-  
-          this.router.navigate(['/solicitud-servicio']);
-          this.mostrarMensaje('Lote guardado correctamente.', 'success');
+
+          this.router.navigate(['/gestionar-lote']);
+          //this.mostrarMensaje('Lote guardado correctamente.', 'success');
         } else {
-          throw new Error('El lote no se creó correctamente.');
+          throw new Error('El lote no se creó correctamente en la base de datos.');
         }
       }
     } catch (error) {
@@ -159,6 +168,10 @@ export class GestionarLotePage implements OnInit {
 
   eliminarProducto(loteProducto: LoteProducto) {
     this.loteProductos = this.loteProductos.filter(lp => lp !== loteProducto);
+    const producto = this.productos.find(p => p.id_producto === loteProducto.id_producto.id_producto);
+    if (producto) {
+      producto.inventario.cantidad_disponible += loteProducto.cantidad;
+    }
     this.calcularPrecioLote();
     this.mostrarMensaje('Producto eliminado del lote.', 'success');
   }
@@ -180,6 +193,10 @@ export class GestionarLotePage implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/home']);
+  }
+
+  verLotes() {
+    this.router.navigate(['/lotes-creados']);
   }
 }

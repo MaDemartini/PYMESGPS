@@ -41,20 +41,20 @@ export class LoginPage implements OnInit {
 
   async login() {
     if (!this.username || !this.password) {
-      this.mostrarMensaje('Nombre de usuario y contraseña son obligatorios.', 'danger');  // Muestra un mensaje de error
+      this.mostrarMensaje('Nombre de usuario y contraseña son obligatorios.', 'danger');
       return;
     }
-
+  
     try {
       let usuario: any;
-
+  
       const [clientes, emprendedores, repartidores, admins] = await Promise.all([
         firstValueFrom(this.clienteService.obtenerClientePorUsername(this.username)),
         firstValueFrom(this.emprendedorService.obtenerEmprendedorPorUsername(this.username)),
         firstValueFrom(this.repartidorService.obtenerRepartidorPorUsername(this.username)),
         firstValueFrom(this.adminService.obtenerAdminPorUsername(this.username)),
       ]);
-
+  
       if (clientes?.length) {
         usuario = clientes[0];
       } else if (emprendedores?.length) {
@@ -64,26 +64,32 @@ export class LoginPage implements OnInit {
       } else if (admins?.length) {
         usuario = admins[0];
       } else {
-        this.mostrarMensaje('Usuario no encontrado.', 'danger');  // Muestra un mensaje de error
+        this.mostrarMensaje('Usuario no encontrado.', 'danger');
         return;
       }
-
+  
       const isPasswordCorrect = await bcrypt.compare(this.password, usuario.contrasena);
-
+  
       if (!isPasswordCorrect) {
-        this.mostrarMensaje('Contraseña incorrecta.', 'danger');  // Muestra un mensaje de error
+        this.mostrarMensaje('Contraseña incorrecta.', 'danger');
         return;
       }
-
-      // Guardar la información del usuario en Preferences usando el authService
+  
+      // Guardar la información del usuario
       await this.authService.setEncryptedUserData(usuario);
-
+  
+      // Guardar token de sesión
+      const sessionToken = {
+        access_token: 'simulated-token', // Reemplázalo con un token válido si lo generas
+      };
+      await this.authService.setSessionToken(sessionToken);
+  
       // Verificar y redirigir según el tipo de usuario
       const esAdmin = usuario.id_admin ? await firstValueFrom(this.adminService.esAdmin(usuario.id_admin)) : false;
       const esCliente = usuario.id_cliente ? await firstValueFrom(this.clienteService.esCliente(usuario.id_cliente)) : false;
       const esEmprendedor = usuario.id_emprendedor ? await firstValueFrom(this.emprendedorService.esEmprendedor(usuario.id_emprendedor)) : false;
       const esRepartidor = usuario.id_repartidor ? await firstValueFrom(this.repartidorService.esRepartidor(usuario.id_repartidor)) : false;
-
+  
       if (esAdmin) {
         this.router.navigate(['/home-admin']);
       } else if (esCliente) {
@@ -91,13 +97,14 @@ export class LoginPage implements OnInit {
       } else if (esEmprendedor || esRepartidor) {
         this.router.navigate(['/home']);
       }
-
-      this.mostrarMensaje('Inicio de sesión exitoso.');  // Muestra un mensaje de éxito
+  
+      this.mostrarMensaje('Inicio de sesión exitoso.');
     } catch (error) {
       console.error('Error durante el inicio de sesión:', error);
-      this.mostrarMensaje('Error durante el inicio de sesión. Inténtalo de nuevo.', 'danger');  // Muestra un mensaje de error
+      this.mostrarMensaje('Error durante el inicio de sesión. Inténtalo de nuevo.', 'danger');
     }
   }
+  
 
   irARegistroCliente() {
     this.router.navigate(['/registro-cliente']);

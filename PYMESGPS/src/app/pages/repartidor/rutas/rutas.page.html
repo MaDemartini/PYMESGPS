@@ -1,40 +1,127 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Rutas del Repartidor</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="volver()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
+  <ion-toolbar>
+    <ion-title>Mis Rutas</ion-title>
+    <ion-back-button slot="start" defaultHref="/rutas" (click)="volver()"></ion-back-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Solicitudes Pendientes</h2>
-  <ion-list>
-    <ion-item *ngFor="let solicitud of solicitudesPendientes">
-      <ion-label>
-        <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
-        <p>Cliente: {{ solicitud.nombre_cliente }}</p>
-        <p>Dirección: {{ solicitud.direccion_cliente }}</p>
-        <p>Estado: Pendiente</p>
-      </ion-label>
-      <ion-button color="success" (click)="aceptarSolicitud(solicitud.id_solicitud)">Aceptar</ion-button>
-      <ion-button color="danger" (click)="rechazarSolicitud(solicitud.id_solicitud)">Rechazar</ion-button>
-      <ion-button color="primary" (click)="escanearQR(solicitud.id_solicitud)">Escanear QR</ion-button>
-    </ion-item>    
-  </ion-list>
+<ion-content>
+  <!-- Refresher para deslizar hacia abajo -->
+  <ion-refresher slot="fixed" (ionRefresh)="cargarDatosIniciales($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      refreshingSpinner="bubbles"
+      pullingText="Desliza para actualizar"
+      refreshingText="Actualizando..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <!-- Pendientes -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Solicitudes Pendientes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content *ngFor="let solicitud of solicitudesPendientes">
+      <div class="solicitud-container">
+        <div class="solicitud-info">
+          <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p>
+            <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
+          </p>
+          <p><strong>Dirección:</strong> {{ solicitud.cliente?.direccion }}</p>
+        </div>
+        <button class="boton-derecha" (click)="empezarRuta(solicitud)">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/3069/3069242.png"
+            class="icon-rutas"
+          />
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
-  <h2>Solicitudes Aprobadas</h2>
-  <ion-list>
-    <ion-item *ngFor="let solicitud of solicitudesAprobadas">
-      <ion-label>
-        <h2>ID Solicitud: {{ solicitud.id_solicitud }}</h2>
-        <p>Cliente: {{ solicitud.nombre_cliente }}</p>
-        <p>Dirección: {{ solicitud.direccion_cliente }}</p>
-        <p>Estado: Aprobada</p>
-      </ion-label>
-      <ion-button color="primary" (click)="escanearQR(solicitud.id_solicitud)">Escanear QR</ion-button>
-    </ion-item>
-  </ion-list>
+  <!-- En Proceso -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Solicitudes en Proceso</ion-card-title>
+    </ion-card-header>
+    <ion-card-content *ngFor="let solicitud of solicitudesAprobadas">
+      <div class="solicitud-container">
+        <div class="solicitud-info">
+          <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p>
+            <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
+          </p>
+          <p><strong>Dirección:</strong> {{ solicitud.cliente?.direccion }}</p>
+        </div>
+        <!-- Botón para continuar la ruta -->
+        <button class="boton-derecha" (click)="empezarRuta(solicitud)">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/11137/11137806.png"
+            class="icon-rutas"
+          /></button
+        >
+        <!-- Botón para cancelar la entrega -->
+        <button class="boton-derecha" (click)="cancelarPedido(solicitud)">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/5974/5974771.png"
+            class="icon-cancelar"
+          />
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Completadas -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Solicitudes Completadas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content *ngFor="let solicitud of solicitudesCompletadas">
+      <div class="solicitud-container">
+        <div class="solicitud-info">
+          <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p>
+            <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
+          </p>
+          <p><strong>Dirección:</strong> {{ solicitud.cliente?.direccion }}</p>
+        </div>
+        <button class="boton-derecha">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/9431/9431243.png"
+            class="icon-rutas"
+          />
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Canceladas -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Solicitudes Canceladas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content
+      *ngFor="let solicitud of solicitudesCanceladas"
+      class="solicitud-card"
+    >
+      <div class="solicitud-container">
+        <div class="solicitud-info">
+          <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p>
+            <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
+          </p>
+          <p><strong>Dirección:</strong> {{ solicitud.cliente?.direccion }}</p>
+        </div>
+        <div class="solicitud-actions">
+          <button class="boton-derecha" (click)="devolverPedido(solicitud)">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/15254/15254115.png"
+              class="icon-rutas"
+            />
+          </button>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

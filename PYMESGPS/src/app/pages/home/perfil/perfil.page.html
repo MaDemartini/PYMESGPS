@@ -1,32 +1,82 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Perfil</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="volver()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
+    <ion-back-button
+      slot="start"
+      defaultHref="/perfil"
+      (click)="volver()"
+    ></ion-back-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Contenedor de perfil -->
+  <div class="profile-container">
+    <div class="profile-picture-container">
+      <!-- Imagen temporal o guardada -->
+      <img
+        *ngIf="imagenTemporal; else imagenGuardada"
+        [src]="imagenTemporal"
+        alt="Imagen temporal"
+        class="profile-picture"
+      />
+      <ng-template #imagenGuardada>
+        <img
+          *ngIf="imagenPerfil; else defaultImage"
+          [src]="imagenPerfil"
+          alt="Imagen de perfil"
+          class="profile-picture"
+        />
+        <ng-template #defaultImage>
+          <ion-icon
+            name="person-circle-outline"
+            class="default-profile-icon"
+          ></ion-icon>
+        </ng-template>
+      </ng-template>
+    </div>
+    <ion-button expand="block" color="primary" (click)="cambiarImagenPerfil()"
+      >Cambiar Imagen</ion-button
+    >
+    <ion-button expand="block" color="primary" (click)="guardarImagenPerfil()"
+      >Guardar Imagen</ion-button
+    >
+  </div>
+
+  <!-- Datos del usuario -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>Mi Perfil</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p *ngIf="emprendedor"><strong>Nombre:</strong> {{ emprendedor?.nombre_completo }}</p>
-      <p *ngIf="cliente"><strong>Nombre:</strong> {{ cliente?.nombre_completo }}</p>
-      <p *ngIf="repartidor"><strong>Nombre:</strong> {{ repartidor?.nombre_completo }}</p>
+      <p *ngIf="emprendedor">
+        <strong>Nombre:</strong> {{ emprendedor?.nombre_completo }}
+      </p>
+      <p *ngIf="cliente">
+        <strong>Nombre:</strong> {{ cliente?.nombre_completo }}
+      </p>
+      <p *ngIf="repartidor">
+        <strong>Nombre:</strong> {{ repartidor?.nombre_completo }}
+      </p>
       <p *ngIf="admin"><strong>Nombre:</strong> {{ admin?.nombre_completo }}</p>
-      
-      <p><strong>Rol:</strong> 
+      <p>
+        <strong>Rol:</strong>
         <span *ngIf="emprendedor"> Emprendedor</span>
         <span *ngIf="cliente"> Cliente</span>
         <span *ngIf="repartidor"> Repartidor</span>
         <span *ngIf="admin"> Administrador</span>
       </p>
-      <ion-button expand="full" (click)="logout()">Cerrar sesión</ion-button>
     </ion-card-content>
   </ion-card>
+
+  <ion-button
+    class="logout-button"
+    expand="full"
+    color="danger"
+    shape="round"
+    fill="solid"
+    (click)="logout()"
+  >
+    Cerrar sesión
+  </ion-button>
 </ion-content>

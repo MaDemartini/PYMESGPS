@@ -1,5 +1,5 @@
 export interface Lote {
-  id_lote?: number;
+  id_lote: number;
   nombre_lote: string;
   descripcion_lote: string;
   id_cliente: number;

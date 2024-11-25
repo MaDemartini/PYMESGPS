@@ -1,10 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Bienvenido a PYMEsGPS</ion-title>
+    <ion-title>PYMEsGPS</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openMenu()">
-        <ion-icon name="menu-outline"></ion-icon>
+        <button class="boton-menu" name="menu-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/12194/12194428.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="repartidor">
+      <button class="boton-notificacion" (click)="abrirModalNotificaciones()">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/1859/1859479.png"
+          class="icon-notificacion"
+        />
+        <ion-badge
+          *ngIf="notificacionesNoLeidas.length > 0"
+          color="danger"
+          class="badge-notificacion"
+        >
+          {{ notificacionesNoLeidas.length }}
+        </ion-badge>
+      </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,124 +34,237 @@
     <ion-toolbar>
       <ion-title>Menú</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="closeMenu()">
-          <ion-icon name="close-outline"></ion-icon>
-        </ion-button>
+        <button class="boton-menu" (click)="closeMenu()">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  
   <ion-content>
     <ion-list>
-      <!-- Perfil -->
       <ion-item button (click)="goToProfile()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="person-circle-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Perfil</ion-label>
+          <button slot="start" class="boton-menu" name="person-circle-outline">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/31/31625.png"
+              class="icon-menu"
+            />
+          </button>
+        <ion-label>Perfil</ion-label>
       </ion-item>
-      
-      <!-- Configuración -->
       <ion-item button (click)="goToConfig()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="settings-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Configuración</ion-label>
+        <button slot="start" class="boton-menu" name="settings-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/14945/14945874.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Configuración</ion-label>
       </ion-item>
-
-      <!-- Soporte -->
       <ion-item button (click)="goToSupport()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="help-circle-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Soporte</ion-label>
+        <button slot="start" class="boton-menu" name="help-circle-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1067/1067566.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Soporte</ion-label>
       </ion-item>
-
-      <!-- Cerrar sesión -->
       <ion-item button (click)="logout()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="log-out-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Cerrar sesión</ion-label>
+        <button slot="start" class="boton-menu" name="log-out-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1828/1828427.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Cerrar sesión</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
 
 <ion-content id="main-content" class="ion-padding">
-  <ion-grid>
-    <!-- Emprendedor -->
-    <ion-row *ngIf="emprendedor">
-      <ion-col size="12" class="ion-text-center">
-        <ion-img src="assets/img/Welcome.png" alt="Welcome" class="logo-img"></ion-img>
-        <h2>¡Bienvenido, {{ emprendedorData?.nombre_completo }}!</h2>
-        <p>Gestiona tus productos, lotes y pedidos.</p>
-      </ion-col>
-      
-      <ion-col size="12">
-        <ion-card button (click)="gestionarSolicitudServicio()">
-          <ion-icon name="document-text-outline"></ion-icon>
-          <h3>Solicitud de Servicio</h3>
-          <p>Solicita servicios adicionales</p>
-        </ion-card>
-      </ion-col>
+  <!-- Modal de notificaciones -->
+  <div
+    class="notificaciones-modal"
+    *ngIf="mostrarModalNotificaciones"
+  >
+    <div class="notificaciones-header">
+      <span>Notificaciones</span>
+      <ion-button fill="clear" class="boton-notificacion" (click)="cerrarModalNotificaciones()">
+        <img
+          src="https://cdn-icons-gif.flaticon.com/8362/8362307.gif"
+          class="icon-notificacion"
+        />
+      </ion-button>
+    </div>
+    <ion-segment (ionChange)="cambiarSegmento($event)" value="noLeidas">
+      <ion-segment-button value="noLeidas">
+        <ion-label>No Leídas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="leidas">
+        <ion-label>Leídas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-      <!-- Opciones para Emprendedor -->
-      <ion-col size="6">
-        <ion-card button (click)="gestionarProductos()">
-          <ion-icon name="cube-outline"></ion-icon>
-          <h3>Gestionar Productos</h3>
-          <p>Administra tus productos</p>
-        </ion-card>
-      </ion-col>
+    <!-- Notificaciones no leídas -->
+    <ion-list *ngIf="segmentoActual === 'noLeidas'">
+      <ion-item-sliding *ngFor="let notificacion of notificacionesNoLeidas">
+        <ion-item>
+          <ion-label>
+            <h2>{{ notificacion.titulo }}</h2>
+            <p>{{ notificacion.mensaje }}</p>
+            <p><small>{{ notificacion.fecha | date: 'short' }}</small></p>
+          </ion-label>
+          <ion-button
+            slot="end"
+            color="success"
+            size="small"
+            (click)="marcarNotificacionComoLeida(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option
+            color="danger"
+            (click)="eliminarNotificacion(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
 
-      <ion-col size="6">
-        <ion-card button (click)="gestionarLotes()">
-          <ion-icon name="layers-outline"></ion-icon>
-          <h3>Gestionar Lotes</h3>
-          <p>Administra tus lotes</p>
-        </ion-card>
-      </ion-col>
+    <!-- Notificaciones leídas -->
+    <ion-list *ngIf="segmentoActual === 'leidas'">
+      <ion-item-sliding *ngFor="let notificacion of notificacionesLeidas">
+        <ion-item>
+          <ion-label>
+            <h2>{{ notificacion.titulo }}</h2>
+            <p>{{ notificacion.mensaje }}</p>
+            <p><small>{{ notificacion.fecha | date: 'short' }}</small></p>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option
+            color="danger"
+            (click)="eliminarNotificacion(notificacion.id_notificacion!)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
 
-      <ion-col size="6">
-        <ion-card button (click)="verPedidos()">
-          <ion-icon name="list-outline"></ion-icon>
-          <h3>Ver Pedidos</h3>
-          <p>Revisa tus pedidos</p>
-        </ion-card>
-      </ion-col>
+    <ion-grid>
+      <!-- Emprendedor -->
+      <ion-row *ngIf="emprendedor">
+        <ion-col size="12" class="ion-text-center">
+          <ion-img
+            src="https://cdn-icons-png.flaticon.com/128/5578/5578902.png"
+            alt="Welcome"
+            class="logo-img"
+          ></ion-img>
+          <h2>¡Bienvenido, {{ emprendedorData?.nombre_completo }}!</h2>
+          <p>Gestiona tus productos, lotes y pedidos.</p>
+        </ion-col>
 
-      <ion-col size="6">
-        <ion-card button (click)="gestionarRepartidores()">
-          <ion-icon name="people-outline"></ion-icon>
-          <h3>Gestionar Repartidores</h3>
-          <p>Administra los repartidores</p>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+        <!-- Opciones para Emprendedor -->
+        <ion-col size="12">
+          <ion-card button (click)="gestionarSolicitudServicio()">
+            <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-gif.flaticon.com/6416/6416398.gif"
+            alt="document-outline"
+          ></ion-img>
+            <h3>Solicitud de Servicio</h3>
+            <p>Solicita servicios adicionales</p>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="6">
+          <ion-card button (click)="gestionarProductos()">
+            <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-png.flaticon.com/128/2250/2250803.png"
+            alt="document-outline"
+          ></ion-img>
+            <h3>Gestionar Productos</h3>
+            <p>Administra productos</p>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="6">
+          <ion-card button (click)="gestionarLotes()">
+            <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-png.flaticon.com/128/7132/7132915.png"
+            alt="document-outline"
+          ></ion-img>
+            <h3>Gestionar Lotes</h3>
+            <p>Administra lotes</p>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="6">
+          <ion-card button (click)="verPedidos()">
+            <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-png.flaticon.com/128/2728/2728577.png"
+            alt="document-outline"
+          ></ion-img>
+            <h3>Ver Pedidos</h3>
+            <p>Revisa pedidos</p>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="6">
+          <ion-card button (click)="gestionarRepartidores()">
+            <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-png.flaticon.com/128/3063/3063637.png"
+            alt="document-outline"
+          ></ion-img>
+            <h3>Gestionar Repartidor</h3>
+            <p>Administra repartidores</p>
+          </ion-card>
+        </ion-col>
+      </ion-row>
 
-    <!-- Repartidor -->
     <ion-row *ngIf="repartidor">
       <ion-col size="12" class="ion-text-center">
-        <ion-img src="assets/img/Welcome.png" alt="Welcome" class="logo-img"></ion-img>
+        <ion-img
+          src="https://cdn-icons-png.flaticon.com/128/5578/5578902.png"
+          alt="Welcome"
+          class="logo-img"
+        ></ion-img>
         <h2>¡Bienvenido, {{ repartidorData?.nombre_completo }}!</h2>
         <p>Aquí puedes gestionar tus entregas y ver tu historial de pedidos.</p>
       </ion-col>
-      
-      <!-- Opciones para Repartidor -->
       <ion-col size="6">
         <ion-card button (click)="verRutas()">
-          <ion-icon name="navigate-outline"></ion-icon>
+          <ion-img
+            class="iconRepartidores"
+            src="https://cdn-icons-gif.flaticon.com/6844/6844493.gif"
+            alt="navigate-outline"
+          ></ion-img>
           <h3>Ver Rutas</h3>
           <p>Revisa las rutas asignadas</p>
         </ion-card>
       </ion-col>
-
       <ion-col size="6">
         <ion-card button (click)="verHistorialEntregas()">
-          <ion-icon name="document-outline"></ion-icon>
-          <h3>Historial de Entregas</h3>
-          <p>Consulta tus entregas anteriores</p>
+          <ion-img
+            class="iconRepartidores"
+            src="https://cdn-icons-gif.flaticon.com/6416/6416398.gif"
+            alt="document-outline"
+          ></ion-img>
+          <h3>Historial Entregas</h3>
+          <p>Entregas anteriores</p>
         </ion-card>
       </ion-col>
     </ion-row>

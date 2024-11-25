@@ -1,14 +1,23 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Gestionar Lote</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="volver()">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
+    <ion-back-button
+      slot="start"
+      defaultHref="/gestionar-lote"
+      (click)="volver()"
+    >
+    </ion-back-button>
     <ion-buttons slot="end">
-      <ion-button (click)="guardarLote()" [disabled]="!lote.nombre_lote || !lote.id_cliente || loteProductos.length === 0">
+      <!-- Botón para guardar el lote -->
+      <ion-button
+        (click)="guardarLote()"
+        [disabled]="!lote.nombre_lote || !lote.id_cliente || loteProductos.length === 0"
+      >
         <ion-icon slot="icon-only" name="save-outline"></ion-icon>
+      </ion-button>
+      <!-- Botón para ver los lotes creados -->
+      <ion-button (click)="verLotes()">
+        <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,31 +38,54 @@
   <!-- Selección del cliente -->
   <ion-item>
     <ion-label>Cliente</ion-label>
-    <ion-select [(ngModel)]="lote.id_cliente" interface="popover">
-      <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id_cliente">{{ cliente.nombre_completo }}</ion-select-option>
+    <ion-select
+      [(ngModel)]="clienteSeleccionado"
+      (ionChange)="seleccionarCliente($event.detail.value)"
+
+      >
+      <ion-select-option *ngFor="let cliente of clientes" [value]="cliente">
+        {{ cliente.nombre_completo }}
+      </ion-select-option>
     </ion-select>
   </ion-item>
 
-  <!-- Agregar productos al lote -->
+  <!-- Selección del producto -->
   <ion-item>
     <ion-label>Producto</ion-label>
-    <ion-select [(ngModel)]="productoSeleccionado" interface="popover">
+    <ion-select
+      [(ngModel)]="productoSeleccionado"
+      (ionChange)="seleccionarProducto($event.detail.value)"
+    >
       <ion-select-option *ngFor="let producto of productos" [value]="producto">
-        {{ producto.nombre_producto }} - Cantidad disponible: {{ producto.inventario?.cantidad_disponible || 0 }}
+        {{ producto.nombre_producto }}
       </ion-select-option>
     </ion-select>
+  </ion-item>
+
+  <!-- Mostrar cantidad disponible -->
+  <ion-item *ngIf="productoSeleccionado">
+    <ion-label color="medium"
+      >Cantidad disponible: {{ cantidadDisponible }}</ion-label
+    >
   </ion-item>
 
   <!-- Cantidad del producto -->
   <ion-item>
     <ion-label position="floating">Cantidad</ion-label>
-    <ion-input type="number" [(ngModel)]="cantidadSeleccionada" [max]="productoSeleccionado?.inventario?.cantidad_disponible || 0" min="1"></ion-input>
+    <ion-input
+      type="number"
+      [(ngModel)]="cantidadSeleccionada"
+      [max]="productoSeleccionado?.inventario?.cantidad_disponible || 0"
+      min="1"
+    ></ion-input>
   </ion-item>
 
   <!-- Botón para agregar producto al lote -->
-  <ion-button expand="block" 
-              [disabled]="!productoSeleccionado || cantidadSeleccionada <= 0 || (productoSeleccionado.inventario && cantidadSeleccionada > productoSeleccionado.inventario.cantidad_disponible) || 0"
-              (click)="agregarProducto(productoSeleccionado, cantidadSeleccionada)">
+  <ion-button
+    expand="block"
+    [disabled]="!productoSeleccionado || cantidadSeleccionada <= 0 || (productoSeleccionado.inventario.cantidad_disponible && cantidadSeleccionada > productoSeleccionado.inventario.cantidad_disponible)"
+    (click)="agregarProducto()"
+  >
     Agregar Producto
   </ion-button>
 
@@ -63,9 +95,16 @@
       <ion-label>
         <h2>{{ loteProducto.id_producto.nombre_producto }}</h2>
         <p>Cantidad: {{ loteProducto.cantidad }}</p>
-        <p>Precio Total: {{ loteProducto.id_producto.precio_prod * loteProducto.cantidad | currency }}</p>
+        <p>
+          Precio Total: {{ loteProducto.id_producto.precio_prod *
+          loteProducto.cantidad | currency }}
+        </p>
       </ion-label>
-      <ion-button fill="clear" color="danger" (click)="eliminarProducto(loteProducto)">
+      <ion-button
+        fill="clear"
+        color="danger"
+        (click)="eliminarProducto(loteProducto)"
+      >
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-item>

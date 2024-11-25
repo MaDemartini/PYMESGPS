@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CrearRepartidor } from 'src/app/models/Crear/Usuarios/crearRepartidor';
 import * as bcrypt from 'bcryptjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { RepartidorService } from 'src/app/services/Usuarios/repartidor/repartidor.service';
+import { SolicitudRepartidorService } from 'src/app/services/solicitud-repartidor/solicitud-repartidor.service';
 
 @Component({
   selector: 'app-registro-repartidor',
@@ -18,9 +20,10 @@ export class RegistroRepartidorPage implements OnInit {
 
   constructor(
     private repartidorService: RepartidorService,
+    private solicitudRepartidorService: SolicitudRepartidorService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Recibir los parámetros desde la página anterior
@@ -50,15 +53,24 @@ export class RegistroRepartidorPage implements OnInit {
         id_role: 3  // El rol de repartidor es '3'
       };
 
-      await this.repartidorService.registrarRepartidor(nuevoRepartidor).toPromise();
+      // Register the new delivery person (using lastValueFrom for completion signal)
+      await lastValueFrom(this.repartidorService.registrarRepartidor(nuevoRepartidor));
       console.info("Repartidor registrado con éxito.");
-      this.router.navigate(['/login']);
+
+      // Mark the request as registered in the database
+      if (this.id_solicitud) {
+        await firstValueFrom(this.solicitudRepartidorService.marcarComoRegistrado(this.id_solicitud));
+        console.info("Solicitud marcada como registrada.");
+      }
+
+      // Navegar a la página de gestión de repartidores
+      this.router.navigate(['/gestionar-repartidor']);
     } catch (error) {
       console.error('Error durante el registro del repartidor:', error);
     }
   }
 
   volver() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/gestionar-repartidor']);
   }
 }

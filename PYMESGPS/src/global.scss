@@ -1,11 +1,11 @@
 /*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- */
+* App Global CSS
+* ----------------------------------------------------------------------------
+* Put style rules here that you want to apply globally. These styles are for
+* the entire app and not just one component. Additionally, this file can be
+* used as an entry point to import other CSS/Sass files to be included in the
+* output CSS.
+*/
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
@@ -24,243 +24,337 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 /* Dark Mode Palettes (optional) */
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
-
 
 /* --------- Global Styles --------- */
 
 /* Fondo blanco y texto negro por defecto */
 body, ion-content {
-  --background: #ffffff; /* Fondo blanco */
-  --color: #000000;      /* Texto negro */
+ --background: #ffffff;
 }
 
 /* Estilo para el encabezado */
 ion-toolbar {
-  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
-  --color: #fff;
-  --border-radius: 0; /* Sin bordes redondeados */
-  --height: 60px;     /* Altura personalizada */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-  text-align: center;
+ --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+ --color: #ffffff;
+ --height: 60px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ padding: 0 15px;
+ box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+ text-align: center;
 }
 
-/* Título del encabezado */
 ion-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+ font-size: 1.4rem;
+ font-weight: bold;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
 }
 
+ion-grid {
+  --ion-grid-padding: 10px;
+}
+
+/* Imagen de usuario */
 ion-img {
-  max-width: 150px;    /* Ajusta el tamaño de la imagen según tus necesidades */
-  height: auto;
-  margin-bottom: 20px; /* Espacio debajo de la imagen */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+ max-width: 150px;
+ height: auto;
+ margin-bottom: 20px;
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
 }
 
 /* Estilo para los botones */
 ion-button {
-  --color: #ffffff;      /* Texto blanco */
-  --border-radius: 10px; /* Botones redondeados */
-  --padding: 10px 20px;  /* Padding */
-  margin: 5px 0;         /* Espaciado entre botones */
-  width: auto;           /* Botones se ajustan al contenido */
-  font-weight: bold;
-  transition: background 0.3s;
+  --color: #ffffff; /* Color del texto */
+  --border-radius: 25px; /* Botones más redondeados */
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --font-size: 0.9rem; /* Tamaño de fuente más pequeño */
+  --font-weight: bold;
+  transition: transform 0.2s ease-in-out; /* Efecto al hacer hover */
 }
 
 ion-button:hover {
-  --background: #0056b3; /* Color más oscuro al pasar el ratón */
+ --background: #ffffff;
+ transform: scale(1.05);
 }
 
 /* Botones transparentes */
 ion-button.transparent {
-  --background: transparent;
-  --border: 2px solid #007BFF;
-  --color: #007BFF;
+ --background: transparent;
+ --border: 2px solid #007BFF;
+ --color: #007BFF;
 }
 
-/* Estilo para los íconos */
+/* Botón de regreso */
+ion-back-button {
+ font-size: 20px;
+ margin-right: 8px;
+ --color: #f8f9fa;
+}
+
+/* Iconos en los botones */
 ion-button ion-icon {
-  font-size: 20px;
-  margin-right: 8px;
+ font-size: 20px;
+ margin-right: 8px;
 }
 
-/* Estilo para los formularios */
+/* Estilo de campos de formulario */
 ion-item, ion-input {
-  --background: #f8f9fa; /* Fondo claro */
-  --border-radius: 8px;  /* Bordes redondeados */
-  --color: #212529;      /* Texto oscuro */
-  margin-bottom: 12px;   /* Espacio entre campos */
+ --background: #f8f9fa;
+ --border-radius: 8px;
+ --color: #212529;
+ margin-bottom: 12px;
+ box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Estilo para los cards */
+/* Estilo de cards */
 ion-card {
-  --background: #fdfdfd; /* Fondo claro */
-  --box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  border-radius: 15px; /* Bordes redondeados */
-  margin: 12px; /* Espacio entre las tarjetas */
-  padding: 10px;
+ --background: #fdfdfd;
+ --box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+ border-radius: 15px;
+ margin: 12px;
+ padding: 10px;
 }
 
 ion-card-title {
-  font-weight: bold;
-  font-size: 1.4rem;
-  color: #333;
+ font-weight: bold;
+ font-size: 1.4rem;
+ color: #333;
 }
 
-/* Estilo para los items */
+/* Estilo de items */
 ion-item {
-  --background: white;
-  --border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  --padding-start: 12px;
+ --background: #fff;
+ --border-radius: 10px;
+ top: 5px;
+ margin-bottom: 10px;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ --padding-start: 12px;
+}
+
+ion-input {
+  --padding-start: 10px;
 }
 
 ion-item h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
+ font-size: 1.2rem;
+ font-weight: 600;
 }
 
 ion-item p {
-  font-size: 0.9rem;
-  color: #6c757d;
+ font-size: 0.9rem;
+ color: #6c757d;
 }
 
-/* Ajuste de texto */
+/* Ajuste de texto general */
 h2 {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #333;
+ font-weight: bold;
+ font-size: 1.5rem;
+ color: #333;
+ margin-bottom: 10px;
 }
 
 p {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #555;
+ line-height: 1.5;
+ font-size: 1.2rem;
+ color: #666;
 }
 
-/* Estilo para el menú */
+/* Estilo de menú */
 ion-menu {
-  --background: #ffffff;
-  --color: #333;
-  --width: 260px;
+ --background: #ffffff;
+ --width: 260px;
 }
 
 ion-list ion-item {
-  --color: #333;
-  --background: #f1f1f1;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+ --background: #f1f1f1;
+ margin-bottom: 10px;
+ border-radius: 8px;
+ box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 ion-list ion-label.menu-title {
-  font-weight: bold;
-  font-size: 1.2rem;
+ font-weight: bold;
+ font-size: 1.2rem;
 }
 
 /* Tarjetas de usuario */
 .user-card {
-  margin: 15px 10px;
-  border-radius: 15px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+ margin: 15px 10px;
+ border-radius: 15px;
+ box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .user-item {
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+ border-radius: 12px;
+ padding: 10px;
+ box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Ajustes en tarjetas y contenido */
 ion-col {
-  padding: 10px;
+ padding: 10px;
 }
 
-/* Modal */
+/* Modal pequeño */
 .small-modal {
-  --width: 90%;
-  --max-width: 400px;
-  --height: auto;
-  --max-height: 80%;
-  --border-radius: 10px;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --background: #ffffff;
-}
-
-/* Mejora de la barra de navegación */
-ion-toolbar {
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+ --width: 90%;
+ --max-width: 400px;
+ --height: auto;
+ --max-height: 80%;
+ --border-radius: 10px;
+ --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+ --background: #ffffff;
 }
 
 /* Ajustes responsivos */
 @media (max-width: 768px) {
-  ion-toolbar {
-    padding: 0 8px;
-  }
+ ion-toolbar {
+   padding: 0 10px;
+ }
 
-  ion-button {
-    --padding: 8px 16px;
-  }
+ ion-card {
+   margin: 10px 5px;
+ }
 
-  ion-card {
-    margin: 10px 5px;
-  }
+ ion-item h2 {
+   font-size: 1rem;
+ }
 
-  ion-item h2 {
-    font-size: 1rem;
-  }
+ ion-item p {
+   font-size: 0.8rem;
+ }
 
-  ion-item p {
-    font-size: 0.8rem;
-  }
+ .section-title {
+   font-size: 1.2rem;
+ }
 }
 
-
+/* Notificación */
 .notificacion-item {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0;
+ border-bottom: 1px solid #e0e0e0;
+ padding: 10px 0;
 }
 
 .notificacion-titulo {
-  font-weight: bold;
-  color: #333;
+ font-weight: bold;
+ color: #333;
 }
 
 .notificacion-mensaje {
-  font-size: 14px;
-  color: #555;
-  margin-top: 5px;
+ font-size: 14px;
+ color: #555;
+ margin-top: 5px;
 }
 
 .notificacion-fecha {
-  font-size: 12px;
-  color: #999;
-  margin-top: 5px;
-}
-
-:host {
-  --background: #ffffff; /* Fondo blanco */
+ font-size: 12px;
+ color: #999;
+ margin-top: 5px;
 }
 
 .missing-field {
-  --highlight-color-focused: #f04141;
-  --highlight-color-invalid: #f04141;
+ --highlight-color-focused: #f04141;
+ --highlight-color-invalid: #f04141;
+}
+
+:host {
+ --background: #ffffff;
+}
+
+.notificaciones-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 5px;
+  z-index: 10;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notificaciones-container {
+  padding: 3px;
+  margin: -5px;
 }
 
 
+.boton-notificacion {
+  height: 35px; /* Ajusta el tamaño según lo que desees */
+  padding: 0; /* Elimina cualquier relleno interno */
+  border: none; /* Sin bordes */
+  background-color: transparent; /* Sin fondo adicional */
+  display: flex;
+  justify-content: center;
+  cursor: pointer; /* Hace que sea clickeable */
+  overflow: hidden; /* Asegura que la imagen no sobresalga */
+}
 
+.boton-xnotificacion {
+  height: 45px; /* Ajusta el tamaño según lo que desees */
+  padding: 0; /* Elimina cualquier relleno interno */
+  border: none; /* Sin bordes */
+  background-color: transparent; /* Sin fondo adicional */
+  display: flex;
+  justify-content: center;
+  cursor: pointer; /* Hace que sea clickeable */
+  overflow: hidden; /* Asegura que la imagen no sobresalga */
+}
+
+
+.boton-menu {
+  height: 25px; /* Ajusta el tamaño según lo que desees */
+  padding: 0; /* Elimina cualquier relleno interno */
+  border: none; /* Sin bordes */
+  background-color: transparent; /* Sin fondo adicional */
+  display: flex;
+  justify-content: center;
+  cursor: pointer; /* Hace que sea clickeable */
+  overflow: hidden; /* Asegura que la imagen no sobresalga */
+}
+    
+.icon-notificacion {
+  width: 100%; /* Ocupar todo el ancho del contenedor */
+  height: 100%; /* Ocupar todo el alto del contenedor */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  cursor: pointer; /* Hace que sea clickeable */
+}
+
+.icon-menu {
+  width: 100%; /* Ocupar todo el ancho del contenedor */
+  height: 100%; /* Ocupar todo el alto del contenedor */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  cursor: pointer; /* Hace que sea clickeable */
+}
+
+.iconRepartidores{
+  height: 45px; /* Ajusta el tamaño según lo que desees */
+  padding: 0; /* Elimina cualquier relleno interno */
+  border: none; /* Sin bordes */
+  background-color: transparent; /* Sin fondo adicional */
+  display: flex;
+  justify-content: center;
+  cursor: pointer; /* Hace que sea clickeable */
+  overflow: hidden; /* Asegura que la imagen no sobresalga */
+}
+
+.iconEmprendedores{
+  height: 45px; /* Ajusta el tamaño según lo que desees */
+  padding: 0; /* Elimina cualquier relleno interno */
+  border: none; /* Sin bordes */
+  background-color: transparent; /* Sin fondo adicional */
+  display: flex;
+  justify-content: center;
+  cursor: pointer; /* Hace que sea clickeable */
+  overflow: hidden; /* Asegura que la imagen no sobresalga */
+}
 /* --------- Fin de Global Styles --------- */

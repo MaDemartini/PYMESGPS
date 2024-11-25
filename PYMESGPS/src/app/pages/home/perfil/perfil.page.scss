@@ -1,41 +1,75 @@
 ion-content {
-    --background: #f4f5f7;
-  }
-  
-  .profile-card {
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    padding: 20px;
-    text-align: center;
-  }
-    
-  .profile-card ion-card-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .profile-card p {
-    font-size: 1.1em;
-    color: #666;
-    margin: 10px 0;
-  }
-  
-  .logout-button {
-    margin-top: 20px;
-    border-radius: 25px;
-    --background: #f53d3d;
-    --color: #fff;
-    --background-hover: #e63946;
-  }
-  
-  ion-button {
-    --color: #333;
-  }
-  
-  ion-card-content {
-    padding: 20px;
-  }
-  
+  --background: #f4f5f7;
+}
+
+ion-header,
+ion-toolbar {
+  --background: linear-gradient(135deg, #6A85B6, #BAC8E0);
+  --color: #fff;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-picture-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 15px;
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #ccc;
+}
+
+.default-profile-icon {
+  font-size: 120px;
+  color: #bdbdbd;
+}
+
+ion-card {
+  margin: 20px auto;
+  padding: 20px;
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+ion-card-content p {
+  margin: 5px 0;
+}
+
+.logout-button {
+  margin-top: 20px;
+  border-radius: 5px;
+  --background: #dc3545;
+  --color: #fff;
+  --background-hover: #c82333;
+  --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+ion-button {
+  --background: #007bff;
+  --background-hover: #0056b3;
+  --color: white;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+  margin-bottom: 10px;
+}  
+
+ion-card-content {
+  padding: 20px;
+}

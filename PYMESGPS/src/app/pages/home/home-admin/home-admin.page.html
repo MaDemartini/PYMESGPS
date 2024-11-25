@@ -3,7 +3,12 @@
     <ion-title>Administrador</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openMenu()">
-        <ion-icon name="menu-outline"></ion-icon>
+        <button class="boton-menu" name="menu-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/12194/12194428.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,45 +19,53 @@
     <ion-toolbar>
       <ion-title>Menú</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="closeMenu()">
-          <ion-icon name="close-outline"></ion-icon>
-        </ion-button>
+        <button class="boton-menu" (click)="closeMenu()">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png"
+            class="icon-menu"
+          />
+        </button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
-      <!-- Perfil -->
       <ion-item button (click)="goToProfile()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="person-circle-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Perfil</ion-label>
+          <button slot="start" class="boton-menu" name="person-circle-outline">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/31/31625.png"
+              class="icon-menu"
+            />
+          </button>
+        <ion-label>Perfil</ion-label>
       </ion-item>
-
-      <!-- Configuración -->
       <ion-item button (click)="goToConfig()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="settings-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Configuración</ion-label>
+        <button slot="start" class="boton-menu" name="settings-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/14945/14945874.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Configuración</ion-label>
       </ion-item>
-
-      <!-- Soporte -->
       <ion-item button (click)="goToSupport()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="help-circle-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Soporte</ion-label>
+        <button slot="start" class="boton-menu" name="help-circle-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1067/1067566.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Soporte</ion-label>
       </ion-item>
-
-      <!-- Cerrar sesión -->
       <ion-item button (click)="logout()">
-        <ion-avatar slot="start">
-          <ion-icon class="menu-icon" name="log-out-outline"></ion-icon>
-        </ion-avatar>
-        <ion-label class="menu-title">Cerrar sesión</ion-label>
+        <button slot="start" class="boton-menu" name="log-out-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1828/1828427.png"
+            class="icon-menu"
+          />
+        </button>
+        <ion-label>Cerrar sesión</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>
@@ -62,7 +75,11 @@
   <ion-grid>
     <ion-row class="ion-justify-content-center ion-align-items-center">
       <ion-col size="12" class="ion-text-center">
-        <ion-img src="assets/img/admin.png" alt="Admin" class="logo-img"></ion-img>
+        <ion-img 
+          src="https://cdn-icons-png.flaticon.com/128/1754/1754626.png" 
+          alt="Admin" 
+          class="logo-img"
+        ></ion-img>
         <h2>¡Hola, {{ adminData?.nombre_completo }}!</h2>
         <p>Gestiona la aplicación y los usuarios.</p>
       </ion-col>
@@ -72,27 +89,36 @@
     <ion-row>
       <ion-col size="6">
         <ion-card button (click)="gestionarUsuarios()">
-          <ion-icon name="people-outline"></ion-icon>
-          <h3>Gestionar Usuarios</h3>
-          <p>Administra a los usuarios</p>
+          <ion-img
+          class="iconEmprendedores"
+          src="https://cdn-icons-png.flaticon.com/128/1283/1283342.png"
+          alt="document-outline"
+        ></ion-img>          <h3>Gestionar Usuarios</h3>
+          <p>Administra usuarios</p>
         </ion-card>
       </ion-col>
 
       <ion-col size="6">
         <ion-card button (click)="verSolicitudesEmprendedorReparto()">
-          <ion-icon name="file-tray-full-outline"></ion-icon>
-          <h3>Solicitudes de Repartidores</h3>
-          <p>Revisa las solicitudes pendientes</p>
+          <ion-img
+            class="iconEmprendedores"
+            src="https://cdn-icons-png.flaticon.com/128/12824/12824819.png"
+            alt="document-outline"
+          ></ion-img>
+          <h3>Solicitudes Repartidor</h3>
+          <p>Revisa solicitudes pendientes</p>
         </ion-card>
-      </ion-col>      
+      </ion-col>  
 
+      <!--  
       <ion-col size="6">
         <ion-card button (click)="verReportes()">
           <ion-icon name="stats-chart-outline"></ion-icon>
           <h3>Ver Reportes</h3>
           <p>Revisa los reportes del sistema</p>
         </ion-card>
-      </ion-col>
+      </ion-col>-->
+
     </ion-row>
   </ion-grid>
 </ion-content>

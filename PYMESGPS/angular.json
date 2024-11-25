@@ -16,6 +16,7 @@
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "allowedCommonJsDependencies": ["bcryptjs", "crypto-js"],
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -35,10 +36,7 @@
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": [],
-            "allowedCommonJsDependencies": [
-              "bcryptjs"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

@@ -49,19 +49,24 @@ export class GestionarRepartidorPage implements OnInit {
           this.solicitudRepartidorService.obtenerSolicitudesEmprendedor(this.id_emprendedor)
         );
   
-        // Filtrar las solicitudes por estado
+        // Filtrar las solicitudes por estado y registrar
         this.solicitudesPendientes = solicitudes.filter(sol => sol.id_estado_solicitud === 1);
-        this.solicitudesAprobadas = solicitudes.filter(sol => sol.id_estado_solicitud === 2 && !sol.registrado);
+        this.solicitudesAprobadas = solicitudes.filter(sol => sol.id_estado_solicitud === 2 && !sol.registrado); // Aprobadas y no registradas
         this.solicitudesRechazadas = solicitudes.filter(sol => sol.id_estado_solicitud === 3);
-        this.repartidores = solicitudes.filter(sol => sol.registrado); // Aquí cargamos los repartidores activos
+        this.repartidores = solicitudes.filter(sol => sol.id_estado_solicitud === 2 && sol.registrado); // Registrados activos
   
-        //console.log('Solicitudes cargadas:', solicitudes); 
       } catch (error) {
         console.error('Error al cargar solicitudes', error);
       }
     }
   }
   
+  // Refresco page
+  doRefresh(event: any) {
+    this.cargarSolicitudes();
+    event.target.complete();
+  }
+
   // Método para enviar una solicitud
   solicitarRepartidor() {
     this.router.navigate(['/solicitudes-repartidor']);
@@ -72,12 +77,22 @@ export class GestionarRepartidorPage implements OnInit {
     return this.repartidores.length < 2;
   }
 
+  // Verificar si se pueden registrar más repartidores (para deshabilitar el botón de registro)
+  puedeRegistrarRepartidor(): boolean {
+    return this.repartidores.length < 2;
+  }
+
   volver() {
     this.router.navigate(['/home']); 
   }
 
   // Método para registrar repartidor aprobado y pasar los datos
   registrarRepartidor(id_solicitud: number) {
+    if (!this.puedeRegistrarRepartidor()) {
+      console.warn('Límite de repartidores alcanzado. No se puede registrar más repartidores.');
+      return;
+    }
+    
     const solicitud = this.solicitudesAprobadas.find(sol => sol.id_solicitud === id_solicitud);
     
     if (solicitud) {
@@ -90,13 +105,19 @@ export class GestionarRepartidorPage implements OnInit {
           username: solicitud.username
         }
       });
-  
-      // Marca la solicitud como registrada
-      this.solicitudRepartidorService.marcarComoRegistrado(id_solicitud).subscribe(() => {
-        //console.log('Solicitud marcada como registrada');
-      });
     } else {
       console.error('Solicitud no encontrada');
+    }
+  }
+
+  // Método para eliminar un repartidor
+  async eliminarRepartidor(id_solicitud: number) {
+    try {
+      await lastValueFrom(this.solicitudRepartidorService.eliminarRepartidor(id_solicitud));
+      console.log('Repartidor eliminado correctamente');
+      this.cargarSolicitudes(); // Recargar las solicitudes para reflejar los cambios
+    } catch (error) {
+      console.error('Error al eliminar el repartidor:', error);
     }
   }
 }
