@@ -25,7 +25,7 @@ export class GestionarUsuarioPage implements OnInit {
     private repartidorService: RepartidorService,
     private router: Router,
     private toastController: ToastController
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.cargarUsuarios();
@@ -43,6 +43,27 @@ export class GestionarUsuarioPage implements OnInit {
     }
   }
 
+  // Método para confirmar y eliminar un usuario
+  async confirmarEliminarUsuario(id_usuario: number, tipo: 'cliente' | 'emprendedor' | 'repartidor') {
+    const alert = await this.toastController.create({
+      header: 'Confirmar eliminación',
+      message: `¿Estás seguro de que deseas eliminar este ${tipo}? Esta acción no se puede deshacer.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => console.log('Eliminación cancelada'),
+        },
+        {
+          text: 'Eliminar',
+          handler: () => this.eliminarUsuario(id_usuario, tipo),
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
   // Método para eliminar un usuario por tipo
   async eliminarUsuario(id_usuario: number, tipo: 'cliente' | 'emprendedor' | 'repartidor') {
     try {
@@ -53,11 +74,12 @@ export class GestionarUsuarioPage implements OnInit {
       } else if (tipo === 'repartidor') {
         await firstValueFrom(this.repartidorService.eliminarRepartidor(id_usuario));
       }
-      await this.cargarUsuarios();
-      this.mostrarMensaje('Usuario eliminado con éxito.', 'success');
+
+      await this.cargarUsuarios(); // Recargar los usuarios activos
+      this.mostrarMensaje('Usuario deshabilitado con éxito.', 'success');
     } catch (error) {
-      this.mostrarMensaje('Error al eliminar el usuario.', 'danger');
-      console.error('Error al eliminar el usuario:', error);
+      this.mostrarMensaje('Error al deshabilitar el usuario.', 'danger');
+      console.error('Error al deshabilitar el usuario:', error);
     }
   }
 
@@ -87,6 +109,6 @@ export class GestionarUsuarioPage implements OnInit {
   }
 
   volver() {
-    this.router.navigate(['/home-admin']); 
+    this.router.navigate(['/home-admin']);
   }
 }

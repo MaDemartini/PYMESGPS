@@ -16,7 +16,13 @@
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "allowedCommonJsDependencies": ["bcryptjs", "crypto-js"],
+            "allowedCommonJsDependencies": [
+              "bcryptjs",
+              "crypto-js",
+              "fast-xml-parser",
+              "bowser",
+              "fast-deep-equal"
+            ],
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

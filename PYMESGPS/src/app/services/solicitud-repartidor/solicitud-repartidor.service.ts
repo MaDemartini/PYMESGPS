@@ -62,29 +62,6 @@ export class SolicitudRepartidorService {
     );
   }
 
-  // Obtener solicitudes aprobadas de un emprendedor
-  obtenerSolicitudesAprobadas(id_repartidor: number): Observable<SolicitudServicio[]> {
-    const params = new HttpParams()
-      .set('id_repartidor', `eq.${id_repartidor}`)
-      .set('id_estado_solicitud', 'eq.2'); // En proceso
-
-    return this.apiService
-      .get<SolicitudServicio[]>(
-        `solicitud_servicio?select=id_solicitud,cliente(id_cliente,nombre_completo,direccion),id_repartidor,id_estado_solicitud,estado_solicitud_servicio!fk_estado_solicitud_servicio(nombre_estado),lote(nombre_lote,codigo_seguimiento)`,
-        { params }
-      )
-      .pipe(
-        map((response: HttpResponse<SolicitudServicio[]>) => {
-          const solicitudes = response.body;
-          if (!solicitudes || solicitudes.length === 0) {
-            throw new Error(`No se encontraron solicitudes aprobadas para el repartidor con ID ${id_repartidor}.`);
-          }
-          return solicitudes;
-        }),
-        catchError(this.handleError)
-      );
-  }
-
   // Obtener solicitudes pendientes desde 'solicitud_servicio'
   obtenerSolicitudesPorEstado(id_repartidor: number, estado: number): Observable<SolicitudServicio[]> {
     const params = new HttpParams()

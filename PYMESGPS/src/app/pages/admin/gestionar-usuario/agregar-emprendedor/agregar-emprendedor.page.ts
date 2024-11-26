@@ -16,6 +16,7 @@ export class AgregarEmprendedorPage implements OnInit {
   correo: string = '';
   username: string = '';
   password: string = '';
+  estado: boolean = true; 
 
   constructor(
     private emprendedorService: EmprendedorService,
@@ -40,7 +41,8 @@ export class AgregarEmprendedorPage implements OnInit {
         correo: this.correo,
         username: this.username,
         contrasena: hashedPassword,
-        id_role: 2  // Rol de emprendedor
+        id_role: 2, // Rol de emprendedor
+        estado: true,
       };
 
       await firstValueFrom(this.emprendedorService.registrarEmprendedor(nuevoEmprendedor));

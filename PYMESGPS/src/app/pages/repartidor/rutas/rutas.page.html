@@ -1,7 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Mis Rutas</ion-title>
-    <ion-back-button slot="start" defaultHref="/rutas" (click)="volver()"></ion-back-button>
+    <ion-back-button
+      slot="start"
+      defaultHref="/rutas"
+      (click)="volver()"
+    ></ion-back-button>
   </ion-toolbar>
 </ion-header>
 
@@ -25,6 +29,7 @@
       <div class="solicitud-container">
         <div class="solicitud-info">
           <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p><strong>Lote:</strong> {{ solicitud.lote?.nombre_lote }}</p>
           <p>
             <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
           </p>
@@ -49,18 +54,29 @@
       <div class="solicitud-container">
         <div class="solicitud-info">
           <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p><strong>Lote:</strong> {{ solicitud.lote?.nombre_lote }}</p>
           <p>
             <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
           </p>
           <p><strong>Dirección:</strong> {{ solicitud.cliente?.direccion }}</p>
         </div>
         <!-- Botón para continuar la ruta -->
-        <button class="boton-derecha" (click)="empezarRuta(solicitud)">
+        <button class="boton-derecha" (click)="seguirRuta(solicitud)">
           <img
             src="https://cdn-icons-png.flaticon.com/128/11137/11137806.png"
             class="icon-rutas"
-          /></button
+          />
+        </button>
+        <button
+          class="boton-derecha"
+          (click)="abrirEnGoogleMaps(clienteSeleccionado?.cliente.direccion)"
         >
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/1527/1527779.png"
+            class="icon-cancelar"
+            alt="Google Maps"
+          />
+        </button>
         <!-- Botón para cancelar la entrega -->
         <button class="boton-derecha" (click)="cancelarPedido(solicitud)">
           <img
@@ -81,6 +97,7 @@
       <div class="solicitud-container">
         <div class="solicitud-info">
           <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p><strong>Lote:</strong> {{ solicitud.lote?.nombre_lote }}</p>
           <p>
             <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
           </p>
@@ -108,6 +125,7 @@
       <div class="solicitud-container">
         <div class="solicitud-info">
           <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
+          <p><strong>Lote:</strong> {{ solicitud.lote?.nombre_lote }}</p>
           <p>
             <strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo }}
           </p>

@@ -10,4 +10,5 @@ export interface Repartidor {
   fecha_modificacion: Date;
   id_role: Role;
   imagen_perfil?: string; // URL de la imagen de perfil
+  estado: boolean;
 }

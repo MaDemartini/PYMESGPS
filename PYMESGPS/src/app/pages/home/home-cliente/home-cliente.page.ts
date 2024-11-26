@@ -22,7 +22,7 @@ export class HomeClientePage implements OnInit {
   notificacionesLeidas: Notificacion[] = [];
   mostrarNotificacionesLista: boolean = false;
   mostrarModalNotificaciones = false;
-  segmentoActual: string = 'noLeidas'; 
+  segmentoActual: string = 'noLeidas';
 
   constructor(
     private menuCtrl: MenuController,
@@ -67,14 +67,14 @@ export class HomeClientePage implements OnInit {
         const idRoleCliente = 1; // Ajusta este valor según el ID numérico del rol 'cliente'
         const notificaciones = await firstValueFrom(
           this.notificacionesService.obtenerNotificacionesPorRolYUsuario(
-              idRoleCliente, 
-              usuario.id_cliente
-            )
+            idRoleCliente,
+            usuario.id_cliente
+          )
         );
 
-         // Separar notificaciones en leídas y no leídas
-         this.notificacionesNoLeidas = notificaciones.filter((n) => !n.leido);
-         this.notificacionesLeidas = notificaciones.filter((n) => n.leido);
+        // Separar notificaciones en leídas y no leídas
+        this.notificacionesNoLeidas = notificaciones.filter((n) => !n.leido);
+        this.notificacionesLeidas = notificaciones.filter((n) => n.leido);
       } else {
         console.warn('No hay notificaciones disponibles para el usuario.');
       }
@@ -82,11 +82,11 @@ export class HomeClientePage implements OnInit {
       console.error('Error al cargar las notificaciones:', error);
     }
   }
-  
+
   mostrarNotificaciones() {
     this.mostrarNotificacionesLista = !this.mostrarNotificacionesLista;
   }
- 
+
   abrirModalNotificaciones() {
     this.mostrarModalNotificaciones = true;
   }
@@ -118,7 +118,7 @@ export class HomeClientePage implements OnInit {
     } catch (error) {
       console.error('Error al marcar la notificación como leída:', error);
     }
-  }  
+  }
 
   async eliminarNotificacion(idNotificacion: number) {
     try {
@@ -148,24 +148,25 @@ export class HomeClientePage implements OnInit {
   }
 
   async rastrearPedido() {
-    if (this.codigoSeguimiento) {
+    if (this.codigoSeguimiento.trim()) {
       try {
-        const solicitud = await firstValueFrom(
+        const lote = await firstValueFrom(
           this.loteService.obtenerSolicitudPorCodigoSeguimiento(this.codigoSeguimiento)
         );
   
-        if (solicitud) {
-          this.router.navigate(['/seguimiento'], { state: { codigo: this.codigoSeguimiento } });
+        if (lote) {
+          //console.log('Lote encontrado:', lote);
+          this.router.navigate(['/seguimiento'], { state: { lote } });
         } else {
-          console.error('No se encontró ninguna solicitud con el código de seguimiento proporcionado.');
+          console.error('No se encontró ningún lote con el código de seguimiento proporcionado.');
         }
       } catch (error) {
-        console.error('Error al buscar la solicitud:', error);
+        console.error('Error al buscar el lote:', error);
       }
     } else {
-      console.error('Por favor ingresa un código de seguimiento');
+      console.error('Por favor ingresa un código de seguimiento válido.');
     }
-  }  
+  }
 
   goToProfile() {
     this.router.navigate(['/perfil']);

@@ -13,6 +13,8 @@ import { NotificacionesService } from 'src/app/services/notificaciones/notificac
 import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/solicitudservicio.service';
 import { Notificacion } from 'src/app/models/notificacion';
+import { HistorialEntrega } from 'src/app/models/historial_entrega';
+import { HistorialEntregaService } from 'src/app/services/historial-entrega/historial-entrega.service';
 
 @Component({
   selector: 'app-solicitud-servicio',
@@ -30,6 +32,7 @@ export class SolicitudServicioPage implements OnInit {
 
   constructor(
     private solicitudServicioService: SolicitudServicioService,
+    private historialEntregaService: HistorialEntregaService,
     private notificacionesService: NotificacionesService,
     private authService: AuthServiceService,
     private clienteService: ClienteService,
@@ -102,6 +105,15 @@ export class SolicitudServicioPage implements OnInit {
       if (Array.isArray(solicitudCreadaArray) && solicitudCreadaArray.length > 0) {
         const solicitudCreada = solicitudCreadaArray[0];
         // console.log('Solicitud creada con éxito:', solicitudCreada);
+
+        // Registrar en historial_entrega con estado "En Preparación (1)"
+        const historialEntrega: HistorialEntrega = {
+          id_lote: this.solicitud.id_lote,
+          id_tipo_estado: 1, // Estado "En Preparación"
+          descripcion: 'Pedido en Preparación',
+          fecha_actualizacion: new Date(),
+        };
+        await firstValueFrom(this.historialEntregaService.agregarHistorial(historialEntrega));
 
         await this.crearNotificaciones(solicitudCreada);
 

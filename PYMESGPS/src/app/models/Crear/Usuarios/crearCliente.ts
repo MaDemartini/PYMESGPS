@@ -10,4 +10,5 @@ export interface CrearCliente {
   id_role: number; 
   latitud?: number; // Coordenada opcional
   longitud?: number; // Coordenada opcional
+  estado: boolean;
 }

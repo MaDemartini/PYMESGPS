@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { SolicitudServicio } from 'src/app/models/solicitud_servicio';
-import { firstValueFrom } from 'rxjs';
-import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/solicitudservicio.service';
 
 @Component({
   selector: 'app-seguimiento',
@@ -11,64 +8,54 @@ import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/so
   styleUrls: ['./seguimiento.page.scss'],
 })
 export class SeguimientoPage implements OnInit {
-<<<<<<< HEAD
   codigoSeguimiento: string = '';
-=======
-  codigoSeguimiento: string;
->>>>>>> 5d054c5cb992c5e8a883b036822b6f5315102f44
-  solicitud: SolicitudServicio | null = null;
+  lote: any | null = null;
   error: string | null = null;
 
   constructor(
     private router: Router,
-    private solicitudServicioService: SolicitudServicioService,
     private toastController: ToastController
   ) {
     const navigation = this.router.getCurrentNavigation();
-<<<<<<< HEAD
     if (navigation?.extras.state) {
-      this.codigoSeguimiento = navigation.extras.state['codigo'] || '';
-=======
-    if (navigation && navigation.extras.state) {
-      this.codigoSeguimiento = navigation.extras.state['codigo'];
-    } else {
-      this.codigoSeguimiento = '';
->>>>>>> 5d054c5cb992c5e8a883b036822b6f5315102f44
+      this.codigoSeguimiento = navigation.extras.state['lote']?.codigo_seguimiento || '';
+      this.lote = navigation.extras.state['lote'] || null;
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.codigoSeguimiento) {
-      this.buscarSolicitud();
+      await this.buscarLote();
     } else {
       this.error = 'No se proporcionó un código de seguimiento.';
       this.mostrarMensaje(this.error, 'danger');
     }
   }
 
-  async buscarSolicitud() {
+  /**
+   * Busca los detalles del lote con el código de seguimiento.
+   */
+  async buscarLote(event?: any) {
     try {
-<<<<<<< HEAD
-      const solicitud = await firstValueFrom(
-        this.solicitudServicioService.obtenerSolicitudPorCodigo(this.codigoSeguimiento)
-      );
-
-      if (solicitud) {
-        this.solicitud = solicitud;
-        this.mostrarMensaje('Solicitud encontrada con éxito.', 'success');
+      if (!this.lote) {
+        this.error = 'No se encontraron detalles del lote.';
       } else {
-        this.error = 'No se encontró ninguna solicitud con este código.';
-        this.mostrarMensaje(this.error, 'danger');
+        this.error = null;
       }
+
+      if (event) {
+        event.target.complete(); 
+      }
+
     } catch (error) {
-      console.error('Error al buscar la solicitud:', error);
-      this.error = 'Error al buscar la solicitud. Inténtalo de nuevo más tarde.';
-      this.mostrarMensaje(this.error, 'danger');
-      console.error('Error al buscar la solicitud:', error);
+      console.error('Error al buscar los detalles del lote:', error);
     }
   }
 
-  
+
+  /**
+   * Muestra un mensaje Toast en la pantalla.
+   */
   private async mostrarMensaje(mensaje: string, color: string) {
     const toast = await this.toastController.create({
       message: mensaje,
@@ -79,6 +66,9 @@ export class SeguimientoPage implements OnInit {
     toast.present();
   }
 
+  /**
+   * Redirige a la página anterior (Home Cliente).
+   */
   volver() {
     this.router.navigate(['/home-cliente']);
   }

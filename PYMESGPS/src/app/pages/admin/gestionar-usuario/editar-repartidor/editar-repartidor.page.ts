@@ -37,7 +37,7 @@ export class EditarRepartidorPage implements OnInit {
 
   async editarRepartidor() {
     try {
-      const repartidorActualizado: Partial<ActualizarRepartidor> = {
+      const repartidorActualizado: ActualizarRepartidor = {
         ...this.repartidor,
         id_role: this.repartidor.id_role.id_role  // Convertir a número
       };

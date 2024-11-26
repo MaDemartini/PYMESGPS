@@ -16,6 +16,7 @@ export class AgregarRepartidorPage implements OnInit {
   correo: string = '';
   username: string = '';
   password: string = '';
+  estado: boolean = true; 
 
   constructor(
     private repartidorService: RepartidorService,
@@ -40,7 +41,8 @@ export class AgregarRepartidorPage implements OnInit {
         correo: this.correo,
         username: this.username,
         contrasena: hashedPassword,
-        id_role: 3  // El rol de repartidor es '3'
+        id_role: 3,  // El rol de repartidor es '3'
+        estado: true,
       };
 
       await firstValueFrom(this.repartidorService.registrarRepartidor(nuevoRepartidor));

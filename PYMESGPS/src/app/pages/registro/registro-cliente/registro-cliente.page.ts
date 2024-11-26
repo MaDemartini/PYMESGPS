@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CrearCliente } from 'src/app/models/Crear/Usuarios/crearCliente';
 import * as bcrypt from 'bcryptjs';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { ClienteService } from 'src/app/services/Usuarios/cliente/cliente.service';
 import { ApiConfigService } from 'src/app/services/apiconfig/apiconfig.service';
 
@@ -55,6 +54,7 @@ export class RegistroClientePage implements OnInit {
         latitud: coordenadas.lat,
         longitud: coordenadas.lng,
         id_role: 1,
+        estado: true,
       };
   
       await lastValueFrom(this.clienteService.registrarCliente(nuevoCliente));
@@ -67,11 +67,11 @@ export class RegistroClientePage implements OnInit {
   
   private async obtenerCoordenadas(direccion: string): Promise<{ lat: number; lng: number }> {
     try {
-      const mapsApiKey = this.apiConfigService.getMapsApiKey(); 
+      const HttpApiKey = this.apiConfigService.getHttpApiKey();
 
       const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         direccion
-      )}&key=${mapsApiKey}`;
+      )}&key=${HttpApiKey}`;
   
       const response = await fetch(geocodingUrl);
       if (!response.ok) {

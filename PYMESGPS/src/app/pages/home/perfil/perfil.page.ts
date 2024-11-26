@@ -7,7 +7,7 @@ import { EmprendedorService } from 'src/app/services/Usuarios/emprendedor/empren
 import { AdminService } from 'src/app/services/Usuarios/admin/admin.service';
 import { lastValueFrom } from 'rxjs';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ToastController, Platform } from '@ionic/angular';
+import { ToastController, Platform, ActionSheetController } from '@ionic/angular';
 import { ImagenPerfilService } from 'src/app/services/imagen-perfil/imagen-perfil.service';
 
 @Component({
@@ -33,6 +33,7 @@ export class PerfilPage implements OnInit {
     private router: Router,
     private platform: Platform,
     private toastController: ToastController,
+    private actionSheetCtrl: ActionSheetController, 
     private imagenPerfilService: ImagenPerfilService
   ) { }
 
@@ -86,6 +87,30 @@ export class PerfilPage implements OnInit {
     //console.log('Datos del usuario según rol:', { cliente: this.cliente, emprendedor: this.emprendedor, repartidor: this.repartidor, admin: this.admin });
   }
 
+   /**
+   * Muestra un menú para seleccionar o capturar una imagen.
+   */
+   async mostrarOpcionesImagen() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Selecciona una opción',
+      buttons: [
+        {
+          text: 'Abrir Galería',
+          handler: () => this.cambiarImagenPerfil(CameraSource.Photos),
+        },
+        {
+          text: 'Tomar Foto',
+          handler: () => this.cambiarImagenPerfil(CameraSource.Camera),
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+      ],
+    });
+    await actionSheet.present();
+  }
+
   /**
  * Carga la URL de la imagen de perfil del usuario.
  */
@@ -108,7 +133,7 @@ export class PerfilPage implements OnInit {
   /**
    * Permite al usuario seleccionar o capturar una nueva imagen de perfil.
    */
-  async cambiarImagenPerfil() {
+  async cambiarImagenPerfil(source: CameraSource) {
     try {
       if (this.isBrowser) {
         const input = document.createElement('input');
@@ -130,7 +155,7 @@ export class PerfilPage implements OnInit {
           quality: 90,
           allowEditing: true,
           resultType: CameraResultType.DataUrl,
-          source: CameraSource.Prompt,
+          source: source,
         });
         this.imagenTemporal = image.dataUrl || null; // Muestra imagen temporal
       }

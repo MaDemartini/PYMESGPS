@@ -1,42 +1,87 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Seguimiento de Pedido</ion-title>
-    <ion-back-button slot="start" defaultHref="/seguimiento" (click)="volver()"></ion-back-button>
+    <ion-title>Seguimiento</ion-title>
+    <ion-back-button slot="start" defaultHref="/seguimiento" (click)="volver()"> </ion-back-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="solicitud; else noSolicitud">
+  <ion-refresher slot="fixed" (ionRefresh)="buscarLote($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-outline"
+      refreshingSpinner="circles"
+      pullingText="Desliza para actualizar"
+      refreshingText="Cargando..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="lote; else noLote">
+    <!-- Detalles del Lote -->
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Detalles de la Solicitud</ion-card-title>
+        <ion-card-title>Detalles del Lote</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p><strong>ID Solicitud:</strong> {{ solicitud.id_solicitud }}</p>
-        <p><strong>Cliente:</strong> {{ solicitud.cliente?.nombre_completo || 'No disponible' }}</p>
-        <p><strong>Repartidor:</strong> {{ solicitud.repartidor?.nombre_completo || 'No asignado' }}</p>
-        <p><strong>Estado:</strong> {{ solicitud.estado_solicitud?.nombre_estado || 'No disponible' }}</p>
-        <p><strong>Descripción:</strong> {{ solicitud.observacion || 'No disponible' }}</p>
+        <p><strong>Nombre Lote:</strong> {{ lote.nombre_lote ? lote.nombre_lote : 'No disponible' }}</p>
+        <p><strong>Código Seguimiento:</strong> {{ lote.codigo_seguimiento ? lote.codigo_seguimiento : 'No disponible' }}</p>
+        <p><strong>Descripción:</strong> {{ lote.descripcion_lote ? lote.descripcion_lote : 'No disponible' }}</p>
         <p>
-          <strong>Fecha de Solicitud:</strong>
-          {{ solicitud.fecha_solicitud ? (solicitud.fecha_solicitud | date: 'short') : 'No disponible' }}
+          <strong>Última Actualización:</strong>
+          {{ lote.historial_entrega?.[0]?.fecha_actualizacion ? (lote.historial_entrega[0].fecha_actualizacion | date: 'short') : 'No disponible' }}
         </p>
-
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Detalles del Lote</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p><strong>Nombre Lote:</strong> {{ solicitud.lote?.nombre_lote || 'No disponible' }}</p>
-            <p><strong>Código Seguimiento:</strong> {{ solicitud.lote?.codigo_seguimiento || 'No disponible' }}</p>
-            <p><strong>Descripción:</strong> {{ solicitud.lote?.descripcion_lote || 'No disponible' }}</p>
-          </ion-card-content>
-        </ion-card>
+        <p><strong>Estado:</strong> {{ lote.historial_entrega?.[0]?.tipo_estado_entrega?.nombre_estado ? lote.historial_entrega[0].tipo_estado_entrega.nombre_estado : 'No disponible' }}</p>
       </ion-card-content>
     </ion-card>
+
+    <!-- Detalles del Cliente -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles del Cliente</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Nombre del Cliente:</strong> {{ lote.solicitud_servicio?.[0]?.cliente?.nombre_completo ? lote.solicitud_servicio[0].cliente.nombre_completo : 'No disponible' }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Detalles del Repartidor -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles del Repartidor</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Nombre del Repartidor:</strong> {{ lote.solicitud_servicio?.[0]?.repartidor?.nombre_completo ? lote.solicitud_servicio[0].repartidor.nombre_completo : 'No asignado' }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Productos del Lote -->
+    <div *ngIf="lote.lote_producto?.length > 0; else noProductos">
+      <ion-card *ngFor="let producto of lote.lote_producto">
+        <ion-card-header>
+          <ion-card-title>Detalles del Producto</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p><strong>Producto:</strong> {{ producto.producto?.nombre_producto ? producto.producto.nombre_producto : 'Producto no disponible' }}</p>
+          <p><strong>Descripción:</strong> {{ producto.producto?.descripcion_producto ? producto.producto.descripcion_producto : 'No disponible' }}</p>
+          <p><strong>Precio:</strong> {{ producto.producto?.precio_prod ? (producto.producto.precio_prod | currency) : 'No disponible' }}</p>
+          <p><strong>Cantidad:</strong> {{ producto.cantidad ? producto.cantidad : 0 }}</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ng-template #noProductos>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Productos del Lote</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>No hay productos asociados a este lote.</p>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
   </div>
 
-  <ng-template #noSolicitud>
+  <!-- Mensaje en caso de no encontrar el lote -->
+  <ng-template #noLote>
     <div class="empty-state">
       <ion-icon name="alert-circle-outline" class="empty-icon"></ion-icon>
       <p>{{ error }}</p>

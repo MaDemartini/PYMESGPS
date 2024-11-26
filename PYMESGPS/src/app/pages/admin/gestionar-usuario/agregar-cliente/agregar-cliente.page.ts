@@ -20,6 +20,7 @@ export class AgregarClientePage implements OnInit {
   region: string = '';
   comuna: string = '';
   telefono: string = '';
+  estado: boolean = true; 
 
   constructor(
     private clienteService: ClienteService,
@@ -48,7 +49,8 @@ export class AgregarClientePage implements OnInit {
         region: this.region,
         comuna: this.comuna,
         telefono: this.telefono,
-        id_role: 1
+        id_role: 1,
+        estado: true,
       };
 
       await firstValueFrom(this.clienteService.registrarCliente(nuevoCliente));
