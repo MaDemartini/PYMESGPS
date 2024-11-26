@@ -4,14 +4,15 @@ const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
   appName: 'PYMESGPS',
   webDir: 'www',
-  bundledWebRuntime: false,
   plugins: {
     Camera: {
-      language: 'es', // Configura el idioma de la cámara
+      language: 'es',
+      presentationStyle: 'popover',
+      saveToGallery: true,
     },
-    GoogleMaps: {
-      apiKey: 'AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug'
-    }
+    CapacitorGoogleMaps: {
+      androidApiKey: 'AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug', 
+    },
   },
 };
 

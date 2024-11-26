@@ -9,7 +9,10 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiConfigService {
   private baseUrl = environment.api_url;
-  private mapsApiKey= environment.googleMapsApiKey
+  private androidMapApiKey = environment.androidApiKey; 
+  private httpApiKey = environment.httpApiKey; 
+  private mapaKey = environment.apikey3;
+
 
   constructor(private http: HttpClient) {}
 
@@ -21,8 +24,16 @@ export class ApiConfigService {
     });
   }
 
-  public getMapsApiKey(): string {
-    return this.mapsApiKey;
+  public getMapaApiKey(): string {
+    return this.mapaKey;
+  }
+
+  public getMapaAndroidApiKey(): string {
+    return this.androidMapApiKey;
+  }
+
+  public getHttpApiKey(): string{
+    return this.httpApiKey;
   }
 
   // Método GET genérico que devuelve la respuesta completa usando HttpResponse

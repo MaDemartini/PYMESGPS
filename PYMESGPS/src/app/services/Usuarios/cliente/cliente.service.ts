@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
 export class ClienteService {
   private path = 'cliente';
 
-  constructor(private apiService: ApiConfigService) {}
+  constructor(private apiService: ApiConfigService) { }
 
   obtenerClientePorId(id: number): Observable<Cliente> {
     const params = new HttpParams().set('id_cliente', `eq.${id}`);
@@ -38,12 +38,15 @@ export class ClienteService {
   }
 
   obtenerClientes(): Observable<Cliente[]> {
-    const params = new HttpParams().set('select', '*');
+    const params = new HttpParams()
+      .set('select', '*')
+      .set('estado', 'eq.true'); // Filtrar por estado activo
     return this.apiService.get<Cliente[]>(this.path, { params }).pipe(
       map((response) => response.body || []),
       catchError(this.handleError)
     );
   }
+
 
   registrarCliente(cliente: CrearCliente): Observable<Cliente> {
     return this.apiService.post<Cliente>(this.path, cliente).pipe(
@@ -60,17 +63,25 @@ export class ClienteService {
   }
 
   eliminarCliente(id: number): Observable<void> {
-    const data = { estado: 'inactivo' };
+    const data = { estado: false }; // Cambiar a inactivo
+    return this.apiService.patch<void>(`${this.path}?id_cliente=eq.${id}`, data).pipe(
+      map(() => undefined),
+      catchError(this.handleError)
+    );
+  }
+  
+  activarCliente(id: number): Observable<void> {
+    const data = { estado: true }; // Cambiar a activo
     return this.apiService.put<void>(`${this.path}?id_cliente=eq.${id}`, data).pipe(
       map(() => undefined),
       catchError(this.handleError)
     );
   }
-
+  
   actualizarImagen(idCliente: number, imagenUrl: string): Observable<any> {
     const path = `cliente?id_cliente=eq.${idCliente}`;
     return this.apiService.patch(path, { imagen_perfil: imagenUrl });
-  }  
+  }
 
   esCliente(id_cliente: number): Observable<boolean> {
     const params = new HttpParams().set('id_cliente', `eq.${id_cliente}`);
@@ -90,21 +101,21 @@ export class ClienteService {
       catchError(this.handleError)
     );
   }
-  
+
 
   obtenerSolicitudesConClientesYLotes(): Observable<any[]> {
     const params = new HttpParams().set(
       'select',
       `id_solicitud,cliente(id_cliente,nombre_completo,direccion,comuna,region,telefono,latitud,longitud),lote(id_lote,nombre_lote,descripcion_lote)`
     );
-  
+
     return this.apiService.get<any[]>('solicitud_servicio', { params }).pipe(
       map((response) => response.body || []),
       catchError(this.handleError)
     );
   }
-  
-  
+
+
   private handleError(error: any): Observable<never> {
     console.error('Ocurrió un error:', error);
     return throwError(() => new Error('Error en la operación del servicio de clientes'));

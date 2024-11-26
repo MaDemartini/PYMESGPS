@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
 export class EmprendedorService {
   private path = 'emprendedor';
 
-  constructor(private apiService: ApiConfigService) {}
+  constructor(private apiService: ApiConfigService) { }
 
   obtenerEmprendedorPorId(id: number): Observable<Emprendedor> {
     const params = new HttpParams().set('id_emprendedor', `eq.${id}`);
@@ -38,13 +38,15 @@ export class EmprendedorService {
   }
 
   obtenerEmprendedores(): Observable<Emprendedor[]> {
-    const params = new HttpParams().set('select', '*');
+    const params = new HttpParams()
+      .set('select', '*')
+      .set('estado', 'eq.true'); // Filtrar por estado activo
     return this.apiService.get<Emprendedor[]>(this.path, { params }).pipe(
       map((response) => response.body || []),
       catchError(this.handleError)
     );
   }
-
+  
   registrarEmprendedor(emprendedor: CrearEmprendedor): Observable<Emprendedor> {
     return this.apiService.post<Emprendedor>(this.path, emprendedor).pipe(
       map((response) => response.body as Emprendedor),
@@ -60,17 +62,25 @@ export class EmprendedorService {
   }
 
   eliminarEmprendedor(id: number): Observable<void> {
-    const data = { estado: 'inactivo' };
+    const data = { estado: false }; // Cambiar a inactivo
+    return this.apiService.patch<void>(`${this.path}?id_emprendedor=eq.${id}`, data).pipe(
+      map(() => undefined),
+      catchError(this.handleError)
+    );
+  }
+  
+  activarEmprendedor(id: number): Observable<void> {
+    const data = { estado: true }; // Cambiar a activo
     return this.apiService.put<void>(`${this.path}?id_emprendedor=eq.${id}`, data).pipe(
       map(() => undefined),
       catchError(this.handleError)
     );
   }
-
+  
   actualizarImagen(idEmprendedor: number, imagenUrl: string): Observable<any> {
     const path = `emprendedor?id_emprendedor=eq.${idEmprendedor}`;
     return this.apiService.patch(path, { imagen_perfil: imagenUrl });
-  }  
+  }
 
   esEmprendedor(id_emprendedor: number): Observable<boolean> {
     const params = new HttpParams().set('id_emprendedor', `eq.${id_emprendedor}`);

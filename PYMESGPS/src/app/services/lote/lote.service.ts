@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ApiConfigService } from '../apiconfig/apiconfig.service';
 import { HttpParams, HttpResponse } from '@angular/common/http';
 import { CrearLote } from 'src/app/models/Crear/crearLote';
+import { SolicitudServicio } from 'src/app/models/solicitud_servicio';
 
 @Injectable({
   providedIn: 'root'
@@ -108,27 +109,59 @@ export class LoteService {
     );
   }
 
+    // Obtener datos básicos del lote con relaciones directas
+  obtenerLoteConRelaciones(codigoSeguimiento: string): Observable<any> {
+    const params = new HttpParams().set('codigo_seguimiento', `eq.${codigoSeguimiento}`);
+
+    return this.apiService
+      .get<any>(`${this.path}?select=id_lote,codigo_seguimiento,nombre_lote,descripcion_lote,precio_lote,historial_entrega(descripcion,fecha_actualizacion,tipo_estado_entrega(nombre_estado)),solicitud_servicio(id_solicitud,id_emprendedor,id_repartidor,id_cliente,cliente(nombre_completo),repartidor(nombre_completo))`, { params })
+      .pipe(
+        map((response: HttpResponse<any>) => {
+          const lotes = response.body;
+
+          if (!lotes || lotes.length === 0) {
+            throw new Error(`No se encontró ningún lote con el código de seguimiento ${codigoSeguimiento}.`);
+          }
+
+          // Retornamos el primer lote encontrado
+          return lotes[0];
+        }),
+        catchError((error) => {
+          console.error('Error al buscar el lote por código de seguimiento:', error);
+          return throwError(() => new Error('No se pudo obtener el lote con el código de seguimiento.'));
+        })
+      );
+  }
+  
   // Obtener solicitud por código de seguimiento
   obtenerSolicitudPorCodigoSeguimiento(codigoSeguimiento: string): Observable<any> {
-    const params = new HttpParams()
-      .set(
-        'select',
-        'id_lote, lote(codigo_seguimiento)' // Relación para traer el código de seguimiento desde la tabla lote
-      )
-      .set('lote.codigo_seguimiento', `eq.${codigoSeguimiento}`); // Filtro por el código de seguimiento en la tabla lote
+    const params = new HttpParams().set('codigo_seguimiento', `eq.${codigoSeguimiento}`);
 
-    return this.apiService.get<any>('solicitud_servicio', { params }).pipe(
-      map((response: HttpResponse<any>) => {
-        const solicitud = response.body;
-        if (!solicitud || solicitud.length === 0) {
-          throw new Error(
-            `No se encontró ninguna solicitud con el código de seguimiento ${codigoSeguimiento}.`
-          );
-        }
-        return solicitud[0]; // Devolver el primer resultado si existe
-      }),
-      catchError(this.handleError)
-    );
+    return this.apiService
+      .get<any>(`${this.path}?select=id_lote,codigo_seguimiento,nombre_lote,descripcion_lote,precio_lote
+        ,historial_entrega(descripcion,fecha_actualizacion
+        ,tipo_estado_entrega(nombre_estado))
+        ,solicitud_servicio(id_solicitud,id_emprendedor,id_repartidor,id_cliente
+        ,cliente(nombre_completo)
+        ,repartidor(nombre_completo))
+        ,lote_producto(cantidad,id_producto
+        ,producto(nombre_producto,descripcion_producto,precio_prod))`, { params })
+      .pipe(
+        map((response: HttpResponse<any>) => {
+          const lotes = response.body;
+
+          if (!lotes || lotes.length === 0) {
+            throw new Error(`No se encontró ningún lote con el código de seguimiento ${codigoSeguimiento}.`);
+          }
+
+          // Retornamos el primer lote encontrado
+          return lotes[0];
+        }),
+        catchError((error) => {
+          console.error('Error al buscar el lote por código de seguimiento:', error);
+          return throwError(() => new Error('No se pudo obtener el lote con el código de seguimiento.'));
+        })
+      );
   }
 
   // Manejo de errores

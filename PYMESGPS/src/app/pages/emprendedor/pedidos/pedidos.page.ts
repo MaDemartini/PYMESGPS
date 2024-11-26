@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SolicitudServicioService } from 'src/app/services/solicitud-servicio/solicitudservicio.service';
 import { SolicitudServicio } from 'src/app/models/solicitud_servicio';
 import { firstValueFrom } from 'rxjs';
+import { AuthServiceService } from 'src/app/services/autentificacion/autentificacion.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -10,13 +11,14 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['./pedidos.page.scss'],
 })
 export class PedidosPage implements OnInit {
-  pedidos: SolicitudServicio[] = []; // Lista de solicitudes de servicio cargadas
+  pedidos: SolicitudServicio[] = []; // Lista de pedidos del emprendedor
   cargando: boolean = false; // Indicador de carga
 
   constructor(
     private solicitudServicioService: SolicitudServicioService,
+    private authService: AuthServiceService,
     private router: Router
-  ) { }
+  ) {}
 
   async ngOnInit() {
     await this.cargarPedidos();
@@ -25,7 +27,19 @@ export class PedidosPage implements OnInit {
   async cargarPedidos() {
     this.cargando = true;
     try {
-      const solicitudesBasicas = await firstValueFrom(this.solicitudServicioService.obtenerSolicitudesBasicas());
+      // Obtener usuario autenticado
+      const usuario = await this.authService.getDecryptedUserData();
+      if (!usuario || usuario.id_role !== 2 || !usuario.id_emprendedor) {
+        console.error('Usuario no autorizado o no es emprendedor');
+        return;
+      }
+
+      const idEmprendedor = usuario.id_emprendedor;
+
+      // Obtener solicitudes realizadas por el emprendedor
+      const solicitudesBasicas = await firstValueFrom(
+        this.solicitudServicioService.obtenerSolicitudesPorEmprendedor(idEmprendedor)
+      );
       console.log('Solicitudes básicas cargadas:', solicitudesBasicas);
 
       const solicitudesConDetalles = await Promise.all(
@@ -68,8 +82,7 @@ export class PedidosPage implements OnInit {
     }
   }
 
-  // Métodos para mapear datos del modelo
-
+  // Métodos auxiliares para mapear datos del modelo
   obtenerNombreCliente(pedido: SolicitudServicio): string {
     return pedido.cliente?.nombre_completo || 'Desconocido';
   }
@@ -95,15 +108,6 @@ export class PedidosPage implements OnInit {
     }
     return 0;
   }
-  
-  obtenerProductos(pedido: SolicitudServicio): any[] {
-    return pedido.lote?.productos?.map((item) => ({
-      nombre: item.producto?.nombre_producto || 'Desconocido',
-      cantidad: item.cantidad || 0,
-      precio: item.producto?.precio_prod || 0,
-      total: (item.producto?.precio_prod || 0) * (item.cantidad || 0),
-    })) || [];
-  }  
 
   volver() {
     this.router.navigate(['/home']);

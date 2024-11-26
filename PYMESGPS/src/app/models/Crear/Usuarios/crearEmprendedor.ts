@@ -4,4 +4,5 @@ export interface CrearEmprendedor {
   username: string;
   contrasena: string;
   id_role: number; 
+  estado: boolean;
 }

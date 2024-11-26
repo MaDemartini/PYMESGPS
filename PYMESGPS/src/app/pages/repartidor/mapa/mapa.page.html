@@ -6,12 +6,26 @@
 </ion-header>
 
 <ion-content>
-  <div #map id="map"></div>
+  <div #map id="map" style="width: 100%; height: 100%"></div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="centrarMapaEnRepartidor()">
-      <ion-icon name="locate-outline"></ion-icon>
-    </ion-fab-button>
+    <p>
+      <ion-fab-button
+        class="google-maps-button"
+        (click)="abrirEnGoogleMaps(clienteSeleccionado?.cliente.direccion)"
+      >
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/1527/1527779.png"
+          class="google-maps-icon"
+          alt="Google Maps"
+        />
+      </ion-fab-button>
+    </p>
+    <p>
+      <ion-fab-button (click)="centrarMapaEnRepartidor()">
+        <ion-icon name="locate-outline"></ion-icon>
+      </ion-fab-button>
+    </p>
   </ion-fab>
 
   <!-- Card que se muestra al hacer clic en un marcador -->

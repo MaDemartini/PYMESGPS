@@ -27,6 +27,11 @@
       <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
     </ion-item>
 
+    <ion-item>
+      <ion-label position="floating">Estado</ion-label>
+      <ion-toggle [(ngModel)]="estado" name="estado" required></ion-toggle>
+    </ion-item>
+
     <ion-button expand="block" type="submit" color="primary">Agregar Emprendedor</ion-button>
     <ion-button expand="block" color="medium" (click)="volver()">Cancelar</ion-button>
   </form>

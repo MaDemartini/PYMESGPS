@@ -36,6 +36,11 @@
       <ion-label position="floating">Teléfono</ion-label>
       <ion-input [(ngModel)]="cliente.telefono" name="telefono" type="tel" required></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-toggle [(ngModel)]="cliente.estado" name="estado"></ion-toggle>
+    </ion-item>
+    
 
     <!-- Botones -->
     <ion-button expand="full" type="submit" color="primary">Guardar Cambios</ion-button>

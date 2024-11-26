@@ -50,7 +50,8 @@ export class RegistroRepartidorPage implements OnInit {
         correo: this.correo,
         username: this.username,
         contrasena: hashedPassword,
-        id_role: 3  // El rol de repartidor es '3'
+        id_role: 3,// El rol de repartidor es '3'
+        estado: true
       };
 
       // Register the new delivery person (using lastValueFrom for completion signal)

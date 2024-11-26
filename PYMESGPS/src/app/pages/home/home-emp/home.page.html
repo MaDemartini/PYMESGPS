@@ -46,12 +46,12 @@
   <ion-content>
     <ion-list>
       <ion-item button (click)="goToProfile()">
-          <button slot="start" class="boton-menu" name="person-circle-outline">
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/31/31625.png"
-              class="icon-menu"
-            />
-          </button>
+        <button slot="start" class="boton-menu" name="person-circle-outline">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/31/31625.png"
+            class="icon-menu"
+          />
+        </button>
         <ion-label>Perfil</ion-label>
       </ion-item>
       <ion-item button (click)="goToConfig()">
@@ -87,13 +87,14 @@
 
 <ion-content id="main-content" class="ion-padding">
   <!-- Modal de notificaciones -->
-  <div
-    class="notificaciones-modal"
-    *ngIf="mostrarModalNotificaciones"
-  >
+  <div class="notificaciones-modal" *ngIf="mostrarModalNotificaciones">
     <div class="notificaciones-header">
       <span>Notificaciones</span>
-      <ion-button fill="clear" class="boton-notificacion" (click)="cerrarModalNotificaciones()">
+      <ion-button
+        fill="clear"
+        class="boton-notificacion"
+        (click)="cerrarModalNotificaciones()"
+      >
         <img
           src="https://cdn-icons-gif.flaticon.com/8362/8362307.gif"
           class="icon-notificacion"
@@ -160,56 +161,57 @@
     </ion-list>
   </div>
 
-    <ion-grid>
-      <!-- Emprendedor -->
-      <ion-row *ngIf="emprendedor">
-        <ion-col size="12" class="ion-text-center">
-          <ion-img
-            src="https://cdn-icons-png.flaticon.com/128/5578/5578902.png"
-            alt="Welcome"
-            class="logo-img"
-          ></ion-img>
-          <h2>¡Bienvenido, {{ emprendedorData?.nombre_completo }}!</h2>
-          <p>Gestiona tus productos, lotes y pedidos.</p>
-        </ion-col>
+  <ion-grid>
+    <!-- Emprendedor -->
+    <ion-row *ngIf="emprendedor">
+      <ion-col size="12" class="ion-text-center">
+        <ion-img
+          src="https://cdn-icons-png.flaticon.com/128/5578/5578902.png"
+          alt="Welcome"
+          class="logo-img"
+        ></ion-img>
+        <h2>¡Bienvenido, {{ emprendedorData?.nombre_completo }}!</h2>
+        <p>Gestiona tus productos, lotes y pedidos.</p>
+      </ion-col>
 
-        <!-- Opciones para Emprendedor -->
-        <ion-col size="12">
-          <ion-card button (click)="gestionarSolicitudServicio()">
-            <ion-img
+      <!-- Opciones para Emprendedor -->
+      <ion-col size="12">
+        <ion-card button (click)="gestionarSolicitudServicio()">
+          <ion-img
             class="iconEmprendedores"
             src="https://cdn-icons-gif.flaticon.com/6416/6416398.gif"
             alt="document-outline"
           ></ion-img>
-            <h3>Solicitud de Servicio</h3>
-            <p>Solicita servicios adicionales</p>
-          </ion-card>
-        </ion-col>
-  
-        <ion-col size="6">
-          <ion-card button (click)="gestionarProductos()">
-            <ion-img
+          <h3>Solicitud de Servicio</h3>
+          <p>Solicita servicios adicionales</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="gestionarProductos()">
+          <ion-img
             class="iconEmprendedores"
             src="https://cdn-icons-png.flaticon.com/128/2250/2250803.png"
             alt="document-outline"
           ></ion-img>
-            <h3>Gestionar Productos</h3>
-            <p>Administra productos</p>
-          </ion-card>
-        </ion-col>
-  
-        <ion-col size="6">
-          <ion-card button (click)="gestionarLotes()">
-            <ion-img
+          <h3>Gestionar Productos</h3>
+          <p>Administra productos</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card button (click)="gestionarLotes()">
+          <ion-img
             class="iconEmprendedores"
             src="https://cdn-icons-png.flaticon.com/128/7132/7132915.png"
             alt="document-outline"
           ></ion-img>
-            <h3>Gestionar Lotes</h3>
-            <p>Administra lotes</p>
-          </ion-card>
-        </ion-col>
-  
+          <h3>Gestionar Lotes</h3>
+          <p>Administra lotes</p>
+        </ion-card>
+      </ion-col>
+
+      <!-- 
         <ion-col size="6">
           <ion-card button (click)="verPedidos()">
             <ion-img
@@ -220,20 +222,20 @@
             <h3>Ver Pedidos</h3>
             <p>Revisa pedidos</p>
           </ion-card>
-        </ion-col>
-  
-        <ion-col size="6">
-          <ion-card button (click)="gestionarRepartidores()">
-            <ion-img
+        </ion-col>-->
+
+      <ion-col size="12">
+        <ion-card button (click)="gestionarRepartidores()">
+          <ion-img
             class="iconEmprendedores"
             src="https://cdn-icons-png.flaticon.com/128/3063/3063637.png"
             alt="document-outline"
           ></ion-img>
-            <h3>Gestionar Repartidor</h3>
-            <p>Administra repartidores</p>
-          </ion-card>
-        </ion-col>
-      </ion-row>
+          <h3>Gestionar Repartidor</h3>
+          <p>Administra repartidores</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
     <ion-row *ngIf="repartidor">
       <ion-col size="12" class="ion-text-center">

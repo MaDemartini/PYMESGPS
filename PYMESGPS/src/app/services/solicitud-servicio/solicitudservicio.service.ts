@@ -125,7 +125,7 @@ export class SolicitudServicioService {
       )
       `
     ).set('lote.codigo_seguimiento', `eq.${codigoSeguimiento}`);
-  
+
     return this.apiService.get<SolicitudServicio>('solicitud_servicio', { params }).pipe(
       map((response: HttpResponse<SolicitudServicio>) => {
         const solicitud = response.body;
@@ -136,7 +136,16 @@ export class SolicitudServicioService {
       }),
       catchError(this.handleError)
     );
-  }  
+  }
+
+  // Obtener las solicitudes de servicio realizadas por un emprendedor
+  obtenerSolicitudesPorEmprendedor(id_emprendedor: number): Observable<SolicitudServicio[]> {
+    const params = new HttpParams().set('select', '*').set('id_emprendedor', `eq.${id_emprendedor}`);
+    return this.apiService.get<SolicitudServicio[]>(`${this.path}`, { params }).pipe(
+      map((response) => response.body || []),
+      catchError(this.handleError)
+    );
+  }
 
   // Obtener estados de solicitud de servicio
   obtenerEstadosSolicitud(): Observable<EstadoSolicitudServicio[]> {

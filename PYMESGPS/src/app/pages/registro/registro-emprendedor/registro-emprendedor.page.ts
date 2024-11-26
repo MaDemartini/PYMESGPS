@@ -40,7 +40,8 @@ export class RegistroEmprendedorPage implements OnInit {
         correo: this.correo,
         username: this.username,
         contrasena: hashedPassword,
-        id_role: 2  // El rol de emprendedor es '2'
+        id_role: 2,  // El rol de emprendedor es '2'
+        estado: true,
       };
 
       await lastValueFrom(this.emprendedorService.registrarEmprendedor(nuevoEmprendedor));

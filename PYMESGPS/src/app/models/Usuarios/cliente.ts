@@ -16,4 +16,5 @@ export interface Cliente {
   imagen_perfil?: string; // URL de la imagen de perfil
   latitud?: number; // Coordenada opcional
   longitud?: number; // Coordenada opcional
+  estado: boolean;
 }

@@ -20,6 +20,11 @@
       <ion-label position="floating">Nombre de Usuario</ion-label>
       <ion-input [(ngModel)]="repartidor.username" name="username" required></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-toggle [(ngModel)]="repartidor.estado" name="estado"></ion-toggle>
+    </ion-item>    
+
 
     <!-- Botones -->
     <ion-button expand="full" type="submit" color="primary">Guardar Cambios</ion-button>

@@ -4,4 +4,5 @@ export interface CrearRepartidor {
   username: string;
   contrasena: string;
   id_role: number; 
+  estado: boolean;
 }

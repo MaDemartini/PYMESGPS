@@ -47,12 +47,15 @@ export class RepartidorService {
   }
 
   obtenerRepartidores(): Observable<Repartidor[]> {
-    const params = new HttpParams().set('select', '*');
+    const params = new HttpParams()
+      .set('select', '*')
+      .set('estado', 'eq.true'); // Filtrar por estado activo
     return this.apiService.get<Repartidor[]>(this.path, { params }).pipe(
       map((response) => response.body || []),
       catchError(this.handleError)
     );
   }
+  
 
   registrarRepartidor(repartidor: CrearRepartidor): Observable<Repartidor> {
     return this.apiService.post<Repartidor>(this.path, repartidor).pipe(
@@ -67,10 +70,10 @@ export class RepartidorService {
       catchError(this.handleError)
     );
   }
-
+  
   eliminarRepartidor(id: number): Observable<void> {
-    const data = { estado: 'inactivo' };
-    return this.apiService.put<void>(`${this.path}?id_repartidor=eq.${id}`, data).pipe(
+    const data = { estado: false }; // Cambiar a inactivo
+    return this.apiService.patch<void>(`${this.path}?id_repartidor=eq.${id}`, data).pipe(
       map(() => undefined),
       catchError(this.handleError)
     );
@@ -82,11 +85,19 @@ export class RepartidorService {
       catchError(this.handleError)
     );
   }
-
+  
+  activarRepartidor(id: number): Observable<void> {
+    const data = { estado: true }; // Cambiar a activo
+    return this.apiService.put<void>(`${this.path}?id_repartidor=eq.${id}`, data).pipe(
+      map(() => undefined),
+      catchError(this.handleError)
+    );
+  }
+  
   actualizarImagen(idRepartidor: number, imagenUrl: string): Observable<any> {
     const path = `repartidor?id_repartidor=eq.${idRepartidor}`;
     return this.apiService.patch(path, { imagen_perfil: imagenUrl });
-  }  
+  }
 
   esRepartidor(id_repartidor: number): Observable<boolean> {
     const params = new HttpParams().set('id_repartidor', `eq.${id_repartidor}`);
