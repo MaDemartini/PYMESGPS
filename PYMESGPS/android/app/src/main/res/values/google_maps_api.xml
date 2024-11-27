@@ -1,3 +1,3 @@
 <resources>
-    <string name="google_maps_key" translatable="false">AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug</string>
+    <string name="google_maps_key" translatable="false">@string/maps_api_key</string>
 </resources>
