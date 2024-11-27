@@ -1,39 +1,44 @@
-# Specifies intentionally untracked files to ignore when using Git
-# http://git-scm.com/docs/gitignore
-
+# Archivos temporales y logs
 *~
 *.sw[mnpcod]
 .tmp
 *.tmp
 *.tmp.*
-UserInterfaceState.xcuserstate
-$RECYCLE.BIN/
-
 *.log
 log.txt
+.sourcemaps
+.versions
+coverage
+.history/*
 
-/.sourcemaps
-/.versions
-/coverage
-
-# Ionic
+# Ionic y Capacitor
 /.ionic
 /www
 /platforms
 /plugins
 
-# Compiled output
+# Capacitor y Android Studio
+android/local.properties
+android/.gradle
+android/.idea
+android/build
+android/app/build
+
+# Angular
 /dist
 /tmp
 /out-tsc
-/bazel-out
+/.angular/cache
+/.angular/cache/*
 
-# Node
+# Node.js y npm/yarn
 /node_modules
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
 
-# IDEs and editors
+# IDEs y editores
 .idea/
 .project
 .classpath
@@ -49,23 +54,12 @@ yarn-error.log
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
-# Miscellaneous
-/.angular
-/.angular/cache
-.sass-cache/
-/.nx
-/.nx/cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# Archivos del sistema
 .DS_Store
 Thumbs.db
 
-# Otras configuraciones de .gitignore
+# Otros archivos sensibles
 .env
+*.apk
+*.aab

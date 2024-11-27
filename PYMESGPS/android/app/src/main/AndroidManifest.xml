@@ -51,10 +51,15 @@
         </provider>
 
         <!-- Clave API de Google Maps -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug" />
-            
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/maps_api_key" />
+                
+            <!-- Otras claves si es necesario -->
+            <meta-data
+                android:name="com.google.android.http.API_KEY"
+                android:value="@string/http_api_key" />
+                
     </application>
 
 </manifest>

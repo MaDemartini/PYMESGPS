@@ -1,4 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
@@ -11,7 +14,10 @@ const config: CapacitorConfig = {
       saveToGallery: true,
     },
     CapacitorGoogleMaps: {
-      androidApiKey: 'AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug', 
+      androidApiKey: process.env['ANDROID_API_KEY'] || '',
+    },
+    HttpApi: {
+      apiKey: process.env['HTTP_API_KEY'] || '', // Clave de HTTP si la necesitas en un plugin
     },
   },
 };

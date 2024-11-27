@@ -11,8 +11,18 @@ android {
         versionCode 1
         versionName "1.0"
 
-        // API Key para Google Maps
-        resValue "string", "maps_api_key", "AIzaSyDXQGn9x4xaJ3ih4N3LGIVUq7OUVIiP4ug"
+        // Cargar variables desde local.properties
+        def localProperties = new Properties()
+        def localPropertiesFile = rootProject.file('local.properties')
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.withInputStream { stream ->
+                localProperties.load(stream)
+            }
+        }
+
+        resValue "string", "maps_api_key", localProperties.getProperty('ANDROID_API_KEY', 'default_value')
+        resValue "string", "http_api_key", localProperties.getProperty('HTTP_API_KEY', 'default_value')
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         
