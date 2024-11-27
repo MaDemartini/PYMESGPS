@@ -67,8 +67,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Ignore Android folder
-/android/
-
 # Otras configuraciones de .gitignore
 .env
